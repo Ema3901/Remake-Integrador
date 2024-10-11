@@ -1,2 +1,2 @@
 # Remake-Integrador
-empezamos de 0 integrador
+Reinicio de proyecto integrador

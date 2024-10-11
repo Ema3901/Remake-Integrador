@@ -1,0 +1,92 @@
+/* General */
+body {
+    font-family: "Gruppo", sans-serif;
+}
+
+.gruppo-regular {
+    font-family: "Gruppo", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Logo customizado */
+.logo-text {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.5rem;
+}
+
+/* Navbar */
+.navbar-nav .nav-link {
+    font-size: 18px;
+    text-transform: uppercase;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.navbar-brand {
+    font-family: "Gruppo", sans-serif;
+    font-size: 24px;
+}
+
+.navbar-light .navbar-toggler-icon {
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Hamburger_icon.svg");
+}
+
+/* Carousel */
+.carousel-item {
+    height: 100%;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-caption h2 {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.carousel-caption p {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* Category Boxes */
+.category-box {
+    border: 2px solid #ddd;
+    padding: 20px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.category-box:hover {
+    transform: scale(1.05);
+    border-color: #007bff;
+}
+
+.category-box img {
+    max-height: 150px;
+    margin-bottom: 15px;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: #fff;
+}
+
+footer h5 {
+    color: #fff;
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+footer ul li a:hover {
+    color: #007bff;
+}

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calzado JJ</title>
+    <!-- Bootstrap 5.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts para cursiva del logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Gruppo&family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <!-- Barra superior con búsqueda, logo, y cuentas -->
+            <div class="d-flex justify-content-between align-items-center py-2">
+                <!-- Búsqueda -->
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-search text-muted" style="font-size: 20px;"></i>
+                    <input type="text" class="form-control ms-2" placeholder="Buscar" style="border: none; box-shadow: none; width: 200px;">
+                </div>
+    
+                <!-- Logo centrado -->
+                <div class="text-center">
+                    <img src="logo landscape.png" alt="Calzado JJ" style="height: 80px;">
+                </div>
+    
+                <!-- Iconos de cuenta y favoritos a la derecha -->
+                <div class="d-flex align-items-center">
+                    <a href="sesion.html" class="text-muted me-3">
+                        <i class="fas fa-user" style="font-size: 20px;"></i> 
+                    </a>
+                    <a href="favoritos.html" class="text-muted">
+                        <i class="fas fa-heart" style="font-size: 20px;"></i>
+                    </a>
+                </div>
+            </div>
+    
+            <!-- Línea gris separadora -->
+            <hr class="text-muted" style="margin-top: 0; border: 1px solid lightgray;">
+        </div>
+    
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+    
+                <!-- Menú de navegación centrado -->
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="index.html">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="catalogo.html">Catálogo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="conocenos.html">Sobre Nosotros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="contactanos.html">Contacto</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+<!-- Contenido principal-->
+
+<main class="container my-5">
+    <div class="row">
+        <!-- Thumbnails for product images -->
+        <div class="col-md-1 d-flex flex-column align-items-center justify-content-center">
+            <div class="product-thumbnail-container" style="margin-bottom: 10px;">
+                <img src="ruta/a/imagen1.png" class="img-fluid" alt="Vista 1">
+            </div>
+            <div class="product-thumbnail-container" style="margin-bottom: 10px;">
+                <img src="ruta/a/imagen2.png" class="img-fluid" alt="Vista 2">
+            </div>
+            <div class="product-thumbnail-container" style="margin-bottom: 10px;">
+                <img src="ruta/a/imagen3.png" class="img-fluid" alt="Vista 3">
+            </div>
+            <div class="product-thumbnail-container">
+                <img src="ruta/a/imagen4.png" class="img-fluid" alt="Vista 4">
+            </div>
+        </div>
+
+        <!-- Main product image with arrows -->
+        <div class="col-md-7 position-relative text-center d-flex align-items-center justify-content-center">
+            <button class="btn btn-outline-secondary position-absolute arrow-button arrow-left" style="border-radius: 50%;"><i class="fas fa-chevron-left"></i></button>
+            <div class="product-image-container" style="width: 100%; max-height: 400px; display: flex; justify-content: center; align-items: center;">
+                <img src="ruta/a/imagen_principal.png" class="img-fluid" alt="Imagen principal del producto">
+            </div>
+            <button class="btn btn-outline-secondary position-absolute arrow-button arrow-right" style="border-radius: 50%;"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <!-- Product details -->
+        <div class="col-md-4 p-4" style="border: 1px solid #ccc; border-radius: 10px;">
+            <div class="d-flex justify-content-end">
+                <button class="btn favorite-btn" style="background-color: transparent; border: none;">
+                    <i class="far fa-heart" style="font-size: 24px;"></i>
+                </button>
+            </div>
+            <h5 class="text-muted">Marca Nike</h5>
+            <h2 class="fw-bold">Modelo F1</h2>
+            <p class="text-muted">Tenis de hombre</p>
+
+            <!-- Size options -->
+            <div class="mb-3">
+                <h6>Talla</h6>
+                <div class="d-flex flex-wrap">
+                    <button class="btn btn-outline-dark me-2 mb-2">23 MX</button>
+                    <button class="btn btn-outline-dark me-2 mb-2">24 MX</button>
+                    <button class="btn btn-outline-dark me-2 mb-2">25 MX</button>
+                    <button class="btn btn-outline-dark me-2 mb-2">26 MX</button>
+                    <button class="btn btn-outline-dark me-2 mb-2">27 MX</button>
+                    <button class="btn btn-outline-dark me-2 mb-2">28 MX</button>
+                    <button class="btn btn-outline-dark me-2 mb-2">29 MX</button>
+                    <button class="btn btn-outline-dark me-2 mb-2">30 MX</button>
+                </div>
+            </div>
+
+            <!-- Color options -->
+            <div class="mb-3">
+                <h6>Color</h6>
+                <div class="d-flex">
+                    <button class="btn btn-outline-dark rounded-circle me-2" style="width: 30px; height: 30px; background-color: black;"></button>
+                    <button class="btn btn-outline-dark rounded-circle me-2" style="width: 30px; height: 30px; background-color: white;"></button>
+                    <button class="btn btn-outline-dark rounded-circle me-2" style="width: 30px; height: 30px; background-color: red;"></button>
+                    <button class="btn btn-outline-dark rounded-circle me-2" style="width: 30px; height: 30px; background-color: gray;"></button>
+                    <button class="btn btn-outline-dark rounded-circle" style="width: 30px; height: 30px; background-color: blue;"></button>
+                </div>
+            </div>
+
+            <!-- Product description -->
+            <div>
+                <h6>Descripción:</h6>
+                <p>Marca Nike. Modelo F1. Negro Total.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Divider before related products -->
+    <hr class="my-5">
+
+    <!-- Related products section -->
+    <h5 class="text-center mb-4">Te podría interesar</h5>
+    <div class="row text-center position-relative">
+        <!-- Left arrow button for related products -->
+        <button class="btn btn-outline-secondary position-absolute arrow-button arrow-left" style="border-radius: 50%;"><i class="fas fa-chevron-left"></i></button>
+
+        <!-- Related products -->
+        <div class="col-md-4">
+            <div class="product-related-container">
+                <img src="ruta/a/relacionado1.png" class="img-fluid related-product" alt="Producto relacionado 1">
+            </div>
+            <p class="mt-2">Adidas</p>
+        </div>
+
+        <div class="col-md-4">
+            <div class="product-related-container">
+                <img src="ruta/a/relacionado2.png" class="img-fluid related-product" alt="Producto relacionado 2">
+            </div>
+            <p class="mt-2">Puma</p>
+        </div>
+
+        <div class="col-md-4">
+            <div class="product-related-container">
+                <img src="ruta/a/relacionado3.png" class="img-fluid related-product" alt="Producto relacionado 3">
+            </div>
+            <p class="mt-2">Converse</p>
+        </div>
+
+        <!-- Right arrow button for related products -->
+        <button class="btn btn-outline-secondary position-absolute arrow-button arrow-right" style="border-radius: 50%;"><i class="fas fa-chevron-right"></i></button>
+    </div>
+</main>
+
+<!-- Additional CSS -->
+<style>
+    /* General styles for product thumbnails */
+    .product-thumbnail-container {
+        width: 80px;
+        height: 80px;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .product-thumbnail-container img {
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Main product image container */
+    .product-image-container img {
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Related products container */
+    .product-related-container {
+        width: 100%;
+        height: 200px;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .related-product {
+        object-fit: contain;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* Button hover effect for favorite */
+    .favorite-btn:hover i {
+        color: red;
+    }
+
+    /* Styling for arrow buttons */
+    .arrow-button {
+        background-color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
+
+    .arrow-button i {
+        font-size: 18px;
+    }
+
+    .arrow-left {
+        left: -40px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .arrow-right {
+        right: -40px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+</style>
+
+<!-- Script to toggle favorite button icon -->
+<script>
+    document.querySelectorAll('.favorite-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let icon = this.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas', 'text-danger');
+            } else {
+                icon.classList.remove('fas', 'text-danger');
+                icon.classList.add('far');
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+<!-- Footer -->
+<footer class="bg-dark text-white pt-5 pb-4">
+    <div class="container text-center text-md-start">
+      <div class="row">
+        <!-- Categories -->
+        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+          <h5 class="text-uppercase mb-4 font-weight-bold">Categorías</h5>
+          <p><a href="catalogo.html" class="text-white text-decoration-none">Hombre</a></p>
+          <p><a href="catalogo.html" class="text-white text-decoration-none">Mujer</a></p>
+          <p><a href="catalogo.html" class="text-white text-decoration-none">Unisex</a></p>
+        </div>
+  
+        <!-- Help -->
+        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+          <h5 class="text-uppercase mb-4 font-weight-bold">Ayuda</h5>
+          <p><a href="conocenos.html" class="text-white text-decoration-none">Sobre Nosotros</a></p>
+          <p><a href="contactanos.html" class="text-white text-decoration-none">Contacto</a></p>
+          <p><a href="sesion.html" class="text-white text-decoration-none">Cuenta</a></p>
+        </div>
+  
+        <!-- Contact Info -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+          <h5 class="text-uppercase mb-4 font-weight-bold">Encuéntranos</h5>
+          <p>Reynosa, Tamaulipas, Mexico, Calle Querétaro #25 Col. Los Muros</p>
+          <div>
+            <a href="https://www.facebook.com/JanYJuan.JJ" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/calzado_j_j_/" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+  
+        <!-- Subscribe -->
+      <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h5 class="text-uppercase mb-4 font-weight-bold">Suscríbete</h5>
+        <form>
+          <div class="input-group">
+            <input type="email" class="form-control" placeholder="correo@ejemplo.com">
+          </div>
+          <button class="btn btn-info mt-2 w-100 rounded-pill" type="submit">Suscribirse</button>
+        </form>
+      </div>
+    </div>
+  
+      <!-- Copyright -->
+      <div class="text-center pt-4">
+        <p>© 2024 Calzado JJ. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Font Awesome Integration -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html> 
+
+<!-- Version 0.0.1 -->
