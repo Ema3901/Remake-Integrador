@@ -1,40 +1,109 @@
+/* Variables de diseño */
+:root {
+    --primary-color: #adacc9;
+    --secondary-color: #333;
+    --text-color-light: #fff;
+    --border-color: #ddd;
+    --font-primary: 'Gruppo', sans-serif;
+    --font-secondary: 'Pacifico', cursive;
+}
+
 /* General */
 body {
-    font-family: "Gruppo", sans-serif;
+    font-family: var(--font-primary);
+    background-color: #f5f5f5; /* Fondo neutro */
+    color: var(--secondary-color);
+    line-height: 1.6;
 }
 
-.gruppo-regular {
-    font-family: "Gruppo", sans-serif;
-    font-weight: 400;
-    font-style: normal;
+/* Header con sombra */
+header {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
-/* Logo customizado */
+header .d-flex {
+    align-items: center;
+    justify-content: space-between; /* Asegura la distribución estable de los elementos */
+    flex-wrap: nowrap; /* Evita que los elementos se muevan a una nueva línea */
+}
+
+header .text-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* Asegura que el logo no se encoja */
+    height: 60px; /* Mantén la altura del logo constante */
+}
+
+header .text-center img {
+    height: 100%; /* Mantén el tamaño fijo del logo */
+    display: block;
+}
+
+/* Barra de búsqueda */
+.search-bar {
+    width: 200px;
+    border-radius: 30px;
+    padding: 5px 15px;
+    background-color: #f0f0f0;
+    transition: width 0.3s ease;
+    flex-shrink: 0; /* Evita que se encoja al cambiar el tamaño */
+}
+
+.search-bar:focus {
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid var(--primary-color);
+}
+
+/* Iconos de cuenta, favoritos y carrito */
+.icon-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.icon-links a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: transform 0.2s ease-in-out;
+}
+
+.icon-links a:hover i {
+    transform: scale(1.1);
+    color: var(--primary-color);
+}
+
+/* Texto personalizado */
 .logo-text {
-    font-family: 'Pacifico', cursive;
+    font-family: var(--font-secondary);
     font-size: 2.5rem;
+    text-transform: capitalize;
+    letter-spacing: 0.05em;
 }
 
 /* Navbar */
 .navbar-nav .nav-link {
     font-size: 18px;
     text-transform: uppercase;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0 15px;
 }
 
-.navbar-brand {
-    font-family: "Gruppo", sans-serif;
-    font-size: 24px;
+/* Animación y transición para botones y enlaces */
+button, a.nav-link {
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.navbar-light .navbar-toggler-icon {
-    background-image: url("https://upload.wikimedia.org/wikipedia/commons/b/b2/Hamburger_icon.svg");
+button:hover, a.nav-link:hover {
+    background-color: var(--primary-color);
+    color: white;
 }
 
 /* Carousel */
 .carousel-item {
-    height: 100%;
+    height: auto;
+    min-height: 400px; /* Ajuste de altura mínima */
 }
 
 .carousel-item img {
@@ -56,15 +125,16 @@ body {
 
 /* Category Boxes */
 .category-box {
-    border: 2px solid #ddd;
+    border: 2px solid var(--border-color);
     padding: 20px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease;
     cursor: pointer;
+    background-color: #fff;
 }
 
 .category-box:hover {
     transform: scale(1.05);
-    border-color: #007bff;
+    border-color: var(--primary-color);
 }
 
 .category-box img {
@@ -74,21 +144,101 @@ body {
 
 /* Footer */
 footer {
-    background-color: #333;
-    color: #fff;
+    background-color: var(--secondary-color);
+    color: var(--text-color-light);
+    padding: 40px 0; /* Ajuste de padding para un mayor espaciado */
 }
 
 footer h5 {
-    color: #fff;
+    color: var(--text-color-light);
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
-footer ul li a {
+footer p, footer a {
+    color: var(--text-color-light);
     text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--primary-color); /* Cambio de color al hacer hover */
+}
+
+footer .social-icons a {
+    font-size: 1.5rem;
+    color: var(--text-color-light);
+    margin-right: 15px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+footer .social-icons a:hover {
+    transform: scale(1.2); /* Animación de aumento en hover */
+    color: var(--primary-color); /* Cambio de color en hover */
+}
+
+/* Suscripción */
+footer .input-group {
+    margin-bottom: 10px;
+}
+
+footer .input-group input {
+    border-radius: 50px; /* Borde redondeado completo */
+    padding: 10px;
+    border: 1px solid var(--border-color);
+}
+
+footer .btn-info {
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 50px; /* Borde redondeado del botón */
+    padding: 10px 20px;
+    width: 100%;
+}
+
+footer .btn-info:hover {
+    background-color: #0056b3;
     color: #fff;
 }
 
-footer ul li a:hover {
-    color: #007bff;
+/* Derechos de autor */
+footer .text-center {
+    margin-top: 30px;
+    border-top: 1px solid #444;
+    padding-top: 20px;
+    font-size: 0.9rem;
+    color: #aaa;
 }
 
-/* version 0.0.3
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    footer {
+        text-align: center;
+    }
+
+    footer .social-icons a {
+        margin-right: 10px;
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    footer h5 {
+        font-size: 1.25rem;
+    }
+
+    footer p {
+        font-size: 0.9rem;
+    }
+
+    footer .social-icons a {
+        font-size: 1.2rem;
+    }
+
+    footer .btn-info {
+        padding: 8px 16px;
+    }
+}
+
+/* version 0.0.4
