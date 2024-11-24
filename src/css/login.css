@@ -1,0 +1,107 @@
+/* Estilos específicos para la página de inicio de sesión */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+.login-card {
+    background: linear-gradient(135deg, #ffffff, #f1f1f1); /* Fondo degradado suave */
+    color: #333;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15); /* Sombra pronunciada */
+    max-width: 400px;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+    transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
+    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+.login-card h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    color: var(--primary-color); /* Color primario */
+    font-family: var(--font-secondary); /* Fuente secundaria del diseño */
+}
+
+.login-card .form-label {
+    font-weight: bold;
+    color: #555; /* Color neutral */
+    font-family: var(--font-primary);
+}
+
+.login-card .form-control {
+    border-radius: 12px;
+    background-color: #ffffff; /* Fondo blanco */
+    color: #333;
+    border: 1px solid #ddd;
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card .form-control:focus {
+    border-color: var(--primary-color); /* Bordes primarios al enfoque */
+    box-shadow: 0 0 8px rgba(173, 172, 201, 0.5); /* Efecto luminoso */
+}
+
+.login-card .btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 25px;
+    font-family: var(--font-primary);
+    font-weight: bold;
+    padding: 12px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.login-card .btn:hover {
+    background-color: var(--secondary-color);
+    color: #fff;
+    transform: scale(1.05); /* Ligero zoom */
+}
+
+.login-card .text-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-family: var(--font-primary);
+    font-size: 0.9rem;
+}
+
+.login-card .text-link:hover {
+    text-decoration: underline;
+}
+
+.alert {
+    border-radius: 10px;
+    font-family: var(--font-primary);
+    padding: 10px;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.login-card {
+    animation: fadeIn 0.5s ease-in-out;
+}

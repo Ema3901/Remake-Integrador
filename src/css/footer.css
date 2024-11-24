@@ -1,0 +1,84 @@
+/* Footer específico */
+footer {
+    background-color: #2c2c2c;
+    color: #fff;
+    padding-top: 40px;
+    padding-bottom: 30px;
+}
+
+footer a {
+    color: #adacc9;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+footer a:hover {
+    color: #ffd700;
+    text-decoration: underline;
+}
+
+footer h5 {
+    font-family: var(--font-secondary);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+footer .social-icons a {
+    font-size: 1.2rem;
+    margin: 0 10px;
+    color: #fff;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+footer .social-icons a:hover {
+    color: #ffd700;
+    transform: scale(1.2);
+}
+
+footer form .input-group input {
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    padding: 10px;
+    width: calc(100% - 50px);
+    margin-right: -3px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+footer form .input-group input:focus {
+    border-color: #adacc9;
+}
+
+footer form button {
+    border-radius: 50px;
+    background-color: #adacc9;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+footer form button:hover {
+    background-color: #ffd700;
+}
+
+@media (max-width: 768px) {
+    footer .row > div {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    footer .social-icons {
+        justify-content: center;
+    }
+
+    footer form .input-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    footer form button {
+        width: 100%;
+    }
+}

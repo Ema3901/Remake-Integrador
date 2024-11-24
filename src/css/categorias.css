@@ -1,0 +1,67 @@
+/* ============================================================
+   ESTILOS DE LA SECCIÓN DE CATEGORÍAS
+   ============================================================ */
+
+/* Contenedor principal de categorías */
+.categorias {
+    padding: 2rem 0;
+}
+
+/* Caja de categoría */
+.category-box {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.category-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Imagen de categoría */
+.category-box img {
+    width: 100%;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.category-box:hover img {
+    transform: scale(1.1);
+}
+
+/* Fondo oscuro superpuesto */
+.category-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 10px;
+}
+
+.category-box:hover .category-overlay {
+    opacity: 1;
+}
+
+/* Título de la categoría */
+.category-title {
+    color: var(--text-color-light);
+    font-family: var(--font-secondary);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+/* ============================================================
+   FIN DE ESTILOS DE CATEGORÍAS
+   ============================================================ */

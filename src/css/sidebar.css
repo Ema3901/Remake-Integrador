@@ -1,0 +1,98 @@
+/* Estilos para la barra lateral */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    z-index: 2; /* Por encima del contenido principal */
+    overflow-y: auto;
+}
+
+.sidebar.collapsed {
+    width: 0;
+    overflow: hidden;
+}
+
+.sidebar .list-group-item {
+    border: none;
+    padding: 10px 20px;
+}
+
+.sidebar .list-group-item a {
+    text-decoration: none;
+    color: #333;
+}
+
+.sidebar .list-group-item a:hover {
+    color: #007bff;
+}
+
+/* Botón de toggle para la barra lateral */
+#toggleSidebar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+}
+
+/* Ajuste del contenido principal cuando la barra lateral está presente */
+#mainContent {
+    margin-left: 250px; /* Ancho de la barra lateral */
+    transition: margin-left 0.3s ease;
+    padding: 20px;
+    min-height: calc(100vh - 120px); /* Altura total menos la del footer y header */
+    background-color: #f9f9f9;
+}
+
+#mainContent.expanded {
+    margin-left: 0; /* Cuando la barra lateral está colapsada */
+}
+
+/* Estilos para el footer: evitar que se vea afectado por la barra lateral */
+footer {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    background-color: #212529;
+    color: white;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.sidebar + footer {
+    margin-left: 0;
+}
+
+.sidebar:not(.collapsed) + footer {
+    margin-left: 250px; /* Ancho de la barra lateral */
+}
+
+/* Ajuste de las transiciones */
+footer {
+    transition: margin-left 0.3s ease;
+}
+
+/* Responsivo: cuando el ancho de la ventana es pequeño */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .sidebar.collapsed {
+        display: none;
+    }
+
+    #mainContent {
+        margin-left: 0;
+    }
+
+    footer {
+        margin-left: 0;
+    }
+}

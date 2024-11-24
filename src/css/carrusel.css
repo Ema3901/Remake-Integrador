@@ -1,0 +1,24 @@
+/* Carrusel */
+.carousel-inner img {
+    height: auto;
+    max-height: 75vh; /* Ajusta la altura máxima para pantallas pequeñas */
+    object-fit: cover; /* Asegura que las imágenes se adapten correctamente */
+}
+
+/* Controladores */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1);
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+    opacity: 1;
+}
+
+/* Transición más rápida */
+.carousel-item {
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}

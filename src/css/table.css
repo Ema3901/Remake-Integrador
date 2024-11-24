@@ -1,0 +1,112 @@
+/* table.css */
+
+/* Variables de diseño */
+:root {
+    --table-bg: #f9f9f9;
+    --table-header-bg: var(--primary-color);
+    --table-header-text: #fff;
+    --table-border-color: #ddd;
+    --table-row-hover-bg: #ececec;
+}
+
+/* Tabla general */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--table-bg);
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo de las celdas de encabezado */
+table th {
+    background-color: var(--table-header-bg);
+    color: var(--table-header-text);
+    font-weight: bold;
+    text-align: left;
+    padding: 12px;
+    font-size: 1.1em;
+    border-bottom: 2px solid var(--table-border-color);
+}
+
+/* Estilo de las celdas de datos */
+table td {
+    padding: 10px;
+    color: var(--secondary-color);
+    border-bottom: 1px solid var(--table-border-color);
+    font-size: 0.95em;
+    vertical-align: middle;
+}
+
+/* Imagen en las celdas */
+table td img {
+    width: 50px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Filas en estado hover */
+table tr:hover {
+    background-color: var(--table-row-hover-bg);
+}
+
+/* Botones de acción dentro de las celdas */
+table td a {
+    text-decoration: none;
+    color: var(--primary-color);
+    padding: 5px 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    font-size: 0.85em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estado hover para los botones */
+table td a:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* Botón de visualización de variantes */
+button {
+    margin-top: 5px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #6b6b9e;
+}
+
+/* Tabla de variantes */
+.variant-container {
+    display: none;
+    margin-top: 10px;
+}
+
+.variant-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.variant-container th,
+.variant-container td {
+    padding: 8px;
+    border: 1px solid var(--table-border-color);
+    text-align: left;
+    font-size: 0.9em;
+}
+
+.variant-container th {
+    background-color: var(--table-header-bg);
+    color: var(--table-header-text);
+}
