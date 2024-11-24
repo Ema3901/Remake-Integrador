@@ -58,74 +58,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <link rel="stylesheet" href="/src/css/style.css">
-    <link rel="stylesheet" href="/src/css/login.css">
+    <link rel="stylesheet" href="/src/css/auth.css">
 
 </head>
-<body>
-
     <!-- Header -->
     <?php include __DIR__ . '/../../src/include/header.php'; ?>
 
+<body class="auth-page">
+
     <!-- Contenido principal -->
-    <main class="container my-5 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
-        <div class="col-md-6 col-lg-5">
-            <div class="card bg-dark text-white p-5 shadow-lg rounded" style="border-radius: 20px;">
-                <h2 class="text-center mb-4" style="letter-spacing: 1px; font-weight: bold;">Crear cuenta</h2>
+    <main class="auth-container">
+    <div class="auth-card">
+        <h2>Crear cuenta</h2>
 
-                <!-- Formulario de registro -->
-                <form action="registro.php" method="POST">
-                    <div class="mb-4">
-                        <label for="username" class="form-label">
-                            <i class="fas fa-user" aria-hidden="true"></i> Usuario
-                        </label>
-                        <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Ingresa tu usuario" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="name" class="form-label">
-                            <i class="fas fa-user-tag" aria-hidden="true"></i> Nombre
-                        </label>
-                        <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Ingresa tu nombre" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="surname" class="form-label">
-                            <i class="fas fa-user-tag" aria-hidden="true"></i> Apellido
-                        </label>
-                        <input type="text" class="form-control form-control-lg" id="surname" name="surname" placeholder="Ingresa tu apellido" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="email" class="form-label">
-                            <i class="fas fa-envelope" aria-hidden="true"></i> Correo
-                        </label>
-                        <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="Ingresa tu correo" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="password" class="form-label">
-                            <i class="fas fa-lock" aria-hidden="true"></i> Contraseña
-                        </label>
-                        <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Ingresa tu contraseña" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="password-confirm" class="form-label">
-                            <i class="fas fa-lock" aria-hidden="true"></i> Repetir contraseña
-                        </label>
-                        <input type="password" class="form-control form-control-lg" id="password-confirm" name="password_confirmation" placeholder="Repite tu contraseña" required>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-info btn-block btn-lg" style="border-radius: 30px;">Crear cuenta</button>
-                    </div>
-                </form>
-
-                <!-- Enlace para iniciar sesión -->
-                <div class="text-center mt-4">
-                    <p>¿Ya tienes cuenta? <a href="/pages/store/sesion.php" class="text-info">Inicia sesión</a></p>
-                </div>
-
-                <?php if (isset($error_message) && !empty($error_message)): ?>
-                    <div class="alert alert-danger mt-3"><?= htmlspecialchars($error_message) ?></div>
-                <?php endif; ?>
+        <!-- Formulario de registro -->
+        <form action="registro.php" method="POST">
+            <div class="mb-4">
+                <label for="username" class="form-label">
+                    <i class="fas fa-user"></i> Usuario
+                </label>
+                <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Ingresa tu usuario" required>
             </div>
+            <div class="mb-4">
+                <label for="name" class="form-label">
+                    <i class="fas fa-user-tag"></i> Nombre
+                </label>
+                <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Ingresa tu nombre" required>
+            </div>
+            <div class="mb-4">
+                <label for="surname" class="form-label">
+                    <i class="fas fa-user-tag"></i> Apellido
+                </label>
+                <input type="text" class="form-control form-control-lg" id="surname" name="surname" placeholder="Ingresa tu apellido" required>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="form-label">
+                    <i class="fas fa-envelope"></i> Correo
+                </label>
+                <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="Ingresa tu correo" required>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="form-label">
+                    <i class="fas fa-lock"></i> Contraseña
+                </label>
+                <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+            </div>
+            <div class="mb-4">
+                <label for="password-confirm" class="form-label">
+                    <i class="fas fa-lock"></i> Repetir contraseña
+                </label>
+                <input type="password" class="form-control form-control-lg" id="password-confirm" name="password_confirmation" placeholder="Repite tu contraseña" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-info btn-block btn-lg">Crear cuenta</button>
+            </div>
+        </form>
+
+        <!-- Enlace para iniciar sesión -->
+        <div class="text-center mt-4">
+            <p>¿Ya tienes cuenta? <a href="/pages/store/sesion.php" class="text-link">Inicia sesión</a></p>
         </div>
-    </main>
+
+        <!-- Mostrar mensajes de error -->
+        <?php if (isset($error_message) && !empty($error_message)): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars($error_message) ?></div>
+        <?php endif; ?>
+    </div>
+</main>
+
 
     <!-- Footer -->
     <?php include __DIR__ . '/../../src/include/footer.php'; ?>

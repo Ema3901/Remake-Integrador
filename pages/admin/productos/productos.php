@@ -6,7 +6,7 @@ $sql = "CALL SP_GET_PRODUCTS()";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$stmt->closeCursor(); // Importante para liberar recursos al usar procedimientos almacenados
+$stmt->closeCursor(); // Liberar recursos
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -14,13 +14,17 @@ $stmt->closeCursor(); // Importante para liberar recursos al usar procedimientos
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Productos | Panel Admin</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/src/css/style.css">
     <link rel="stylesheet" href="/src/css/admin.css">
+    <link rel="stylesheet" href="/src/css/crud.css">
 </head>
 <body>
+    
+<!-- Header -->
+<?php include __DIR__ . '/../../../src/include/header.php'; ?>
+
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Gestión de Productos</h2>
@@ -33,7 +37,6 @@ $stmt->closeCursor(); // Importante para liberar recursos al usar procedimientos
                 </button>
             </div>
         </div>
-
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
@@ -58,8 +61,8 @@ $stmt->closeCursor(); // Importante para liberar recursos al usar procedimientos
                         <td>$<?= number_format($product['price'], 2) ?></td>
                         <td><?= htmlspecialchars($product['description']) ?></td>
                         <td>
-                            <button class="btn btn-sm btn-warning editProduct">Editar</button>
-                            <button class="btn btn-sm btn-danger deleteProduct">Eliminar</button>
+                            <a href="editar.php?id=<?= $product['id_shoe'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                            <button class="btn btn-sm btn-danger deleteProduct" data-id="<?= $product['id_shoe'] ?>">Eliminar</button>
                         </td>
                     </tr>
                     <tr class="product-details" style="display: none;">
@@ -82,7 +85,6 @@ $stmt->closeCursor(); // Importante para liberar recursos al usar procedimientos
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Variaciones se cargarán dinámicamente con JS -->
                                     </tbody>
                                 </table>
                             </div>
@@ -93,34 +95,28 @@ $stmt->closeCursor(); // Importante para liberar recursos al usar procedimientos
         </table>
     </div>
 
+<!-- footer -->
+<?php include __DIR__ . '/../../../src/include/footer.php'; ?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    // Expande/colapsa detalles del producto y carga variaciones dinámicamente
-    document.querySelectorAll('.expandable').forEach(cell => {
-        cell.addEventListener('click', () => {
-            const row = cell.closest('tr'); // Fila principal del producto
-            const detailsRow = row.nextElementSibling; // Fila de detalles
+        // Expandir detalles y cargar variaciones dinámicamente
+        document.querySelectorAll('.expandable').forEach(cell => {
+            cell.addEventListener('click', () => {
+                const row = cell.closest('tr');
+                const detailsRow = row.nextElementSibling;
 
-            if (detailsRow.style.display === 'none') {
-                // Mostrar detalles y cargar variaciones
-                detailsRow.style.display = 'table-row';
+                if (detailsRow.style.display === 'none') {
+                    detailsRow.style.display = 'table-row';
+                    const productId = row.getAttribute('data-id');
+                    const variationsTable = detailsRow.querySelector('tbody');
 
-                const productId = row.getAttribute('data-id');
-                const variationsTable = detailsRow.querySelector('tbody');
-
-                // Evitar recargar si ya están cargadas
-                if (variationsTable.innerHTML.trim() === '') {
-                    fetch(`fetch_variations.php?id=${productId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log("Respuesta recibida:", data); // Depuración
-
-                            // Manejo de datos
-                            if (data.success) {
-                                variationsTable.innerHTML = ''; // Limpiar tabla
-
-                                if (data.variations.length > 0) {
-                                    // Agregar filas con las variaciones
+                    if (variationsTable.innerHTML.trim() === '') {
+                        fetch(`fetch_variations.php?id=${productId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success && data.variations.length > 0) {
+                                    variationsTable.innerHTML = '';
                                     data.variations.forEach(variation => {
                                         const tr = document.createElement('tr');
                                         tr.innerHTML = `
@@ -129,86 +125,82 @@ $stmt->closeCursor(); // Importante para liberar recursos al usar procedimientos
                                             <td>${variation.stock_local}</td>
                                             <td>${variation.stock_tianguis}</td>
                                             <td>
-                                                <button class="btn btn-sm btn-warning editVariation" data-id="${variation.id_varition}">Editar</button>
                                                 <button class="btn btn-sm btn-danger deleteVariation" data-id="${variation.id_varition}">Eliminar</button>
                                             </td>
                                         `;
                                         variationsTable.appendChild(tr);
                                     });
+                                    setupDeleteVariation();
                                 } else {
-                                    // Si no hay variaciones
-                                    variationsTable.innerHTML = `
-                                        <tr>
-                                            <td colspan="5" class="text-center">No hay variaciones disponibles</td>
-                                        </tr>
-                                    `;
+                                    variationsTable.innerHTML = `<tr><td colspan="5" class="text-center">No hay variaciones disponibles</td></tr>`;
                                 }
+                            })
+                            .catch(error => console.error('Error al cargar las variaciones:', error));
+                    }
+                } else {
+                    detailsRow.style.display = 'none';
+                }
+            });
+        });
 
-                                // Configurar botones de edición y eliminación
-                                setupEditVariation();
-                                setupDeleteVariation();
+        // Configurar eliminación de variaciones
+        function setupDeleteVariation() {
+            document.querySelectorAll('.deleteVariation').forEach(button => {
+                button.addEventListener('click', () => {
+                    const variationId = button.getAttribute('data-id');
+                    if (confirm(`¿Estás seguro de que deseas eliminar la variación con ID ${variationId}?`)) {
+                        fetch('delete_variation.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: variationId })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.message);
+                                const row = button.closest('tr');
+                                row.parentNode.removeChild(row);
                             } else {
-                                // Mostrar error si no se recibieron variaciones correctamente
-                                variationsTable.innerHTML = `
-                                    <tr>
-                                        <td colspan="5" class="text-center text-danger">
-                                            ${data.message || 'Error al cargar las variaciones'}
-                                        </td>
-                                    </tr>
-                                `;
+                                alert(`Error al eliminar: ${data.message}`);
                             }
                         })
                         .catch(error => {
-                            console.error('Error al cargar las variaciones:', error);
-                            variationsTable.innerHTML = `
-                                <tr>
-                                    <td colspan="5" class="text-center text-danger">Error al cargar las variaciones</td>
-                                </tr>
-                            `;
+                            console.error('Error:', error);
+                            alert('Hubo un problema al intentar eliminar la variación.');
                         });
-                }
-            } else {
-                // Ocultar detalles
-                detailsRow.style.display = 'none';
-            }
-        });
-    });
-
-    // Configura la edición de una variación (pendiente de implementar)
-    function setupEditVariation() {
-        document.querySelectorAll('.editVariation').forEach(button => {
-            button.addEventListener('click', event => {
-                const variationId = button.getAttribute('data-id');
-                alert(`Editar variación con ID: ${variationId} (pendiente de implementación)`);
+                    }
+                });
             });
-        });
-    }
+        }
 
-    // Configura la eliminación de una variación
-    function setupDeleteVariation() {
-        document.querySelectorAll('.deleteVariation').forEach(button => {
-            button.addEventListener('click', event => {
-                const variationId = button.getAttribute('data-id');
-                if (confirm(`¿Estás seguro de que deseas eliminar la variación con ID ${variationId}?`)) {
-                    fetch(`delete_variation.php`, {
+        // Configurar el botón de "Actualizar"
+        document.getElementById('refreshTable').addEventListener('click', () => {
+            location.reload();
+        });
+
+        // Configurar eliminación de productos
+        document.querySelectorAll('.deleteProduct').forEach(button => {
+            button.addEventListener('click', () => {
+                const productId = button.getAttribute('data-id');
+                if (confirm(`¿Estás seguro de que deseas eliminar el producto con ID ${productId}?`)) {
+                    fetch('delete_product.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id: variationId })
+                        body: JSON.stringify({ id: productId })
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Variación eliminada correctamente');
-                            location.reload();
-                        } else {
-                            alert('Error al eliminar la variación: ' + data.message);
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.message);
+                                button.closest('tr').remove();
+                            } else {
+                                alert(`Error al eliminar: ${data.message}`);
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
                 }
             });
         });
-    }
-</script>
+    </script>
 </body>
 </html>
