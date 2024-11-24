@@ -120,7 +120,7 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
                     echo '        </div>';
                     echo '        <div class="card-body">';
                     echo '            <p class="card-text"><strong>' . $brand_name . '</strong> - ' . $model_name . '</p>';
-                    echo '            <p class="fw-bold"><a href="producto.php?id=' . $id_shoe . '" class="text-decoration-none">Ver Producto</a></p>';
+                    echo '            <p class="fw-bold"><a href="detalleProducto.php?id=' . $id_shoe . '" class="text-decoration-none">Ver Producto</a></p>';
                     echo '        </div>';
                     echo '    </div>';
                     echo '</div>';

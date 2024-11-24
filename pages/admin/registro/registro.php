@@ -14,14 +14,10 @@
     <!-- Bootstrap 5.3 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="/src/include/bootstrap5_3/bootstrap.min.css">
-
 
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <!-- Google Fonts para el logo -->
-<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/src/css/style.css">
@@ -103,7 +99,7 @@
     <!-- Header -->
     <?php
 // Incluir el header
-include __DIR__ . '/../../src/include/header.php';
+include __DIR__ . '/../../../src/include/header.php';
 ?>
 
     <div class="container-fluid">
@@ -155,49 +151,7 @@ include __DIR__ . '/../../src/include/header.php';
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white pt-5 pb-4 mt-auto">
-        <div class="container text-center text-md-start">
-            <div class="row">
-                <!-- Categorías -->
-                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 font-weight-bold">Categorías</h5>
-                    <p><a href="/pages/store/catalogo.php" class="text-white">Hombre</a></p>
-                    <p><a href="/pages/store/catalogo.php" class="text-white">Mujer</a></p>
-                    <p><a href="/pages/store/catalogo.php" class="text-white">Unisex</a></p>
-                </div>
-                <!-- Ayuda -->
-                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 font-weight-bold">Ayuda</h5>
-                    <p><a href="/pages/store/conocenos.php" class="text-white">Sobre Nosotros</a></p>
-                    <p><a href="/pages/store/contactanos.php" class="text-white">Contacto</a></p>
-                    <p><a href="/pages/store/sesion.php" class="text-white">Cuenta</a></p>
-                </div>
-                <!-- Encuéntranos -->
-                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 font-weight-bold">Encuéntranos</h5>
-                    <p>Reynosa, Tamaulipas, México, Calle Querétaro #25 Col. Los Muros</p>
-                    <div>
-                        <a href="https://www.facebook.com/JanYJuan.JJ" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/calzado_j_j_/" class="text-white me-3"><i class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/528994952565" class="text-white me-3"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-                <!-- Suscríbete -->
-                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <h5 class="text-uppercase mb-4 font-weight-bold">Suscríbete</h5>
-                    <form>
-                        <div class="input-group">
-                            <input type="email" class="form-control" placeholder="correo@ejemplo.com">
-                        </div>
-                        <button class="btn btn-info mt-2 w-100" type="submit">Suscribirse</button>
-                    </form>
-                </div>
-            </div>
-            <div class="text-center pt-4">
-                <p>© 2024 Calzado JJ. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
+<?php include __DIR__ . '/../../../src/include/footer.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

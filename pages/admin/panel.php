@@ -43,14 +43,14 @@ include __DIR__ . '/../../src/include/header.php';
                     <i class="fas fa-chart-line"></i> Resumen
                 </button>
                 <div class="collapse" id="submenu1">
-                    <a class="nav-link" href="/pages/admin/registro.php"><i class="fas fa-clipboard-list"></i> Registro</a>
+                    <a class="nav-link" href="/pages/admin/registro/registro.php"><i class="fas fa-clipboard-list"></i> Registro</a>
                 </div>
                 <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu2" aria-expanded="false">
                     <i class="fas fa-cogs"></i> Administración
                 </button>
                 <div class="collapse" id="submenu2">
-                    <a class="nav-link" href="/pages/admin/cuentas.php"><i class="fas fa-users"></i> Usuarios</a>
-                    <a class="nav-link" href="/pages/admin/inventario/crud.php"><i class="fas fa-boxes"></i> Inventario</a>
+                    <a class="nav-link" href="/pages/admin/usuarios/cuentas.php"><i class="fas fa-users"></i> Usuarios</a>
+                    <a class="nav-link" href="/pages/admin/productos/productos.php"><i class="fas fa-boxes"></i> Inventario</a>
                 </div>
             </nav>
         </div>

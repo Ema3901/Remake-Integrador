@@ -31,7 +31,7 @@
     <!-- Header -->
     <?php
 // Incluir el header
-include __DIR__ . '/../src/include/header.php';
+include __DIR__ . '/../../src/include/header.php';
 ?>
 
 <!-- Contenido principal-->
