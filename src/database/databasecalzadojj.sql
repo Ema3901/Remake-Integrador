@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-11-2024 a las 22:53:34
+-- Tiempo de generación: 24-11-2024 a las 08:59:21
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -25,6 +25,104 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteUser` (IN `p_id_user` INT)   BEGIN
+    DELETE FROM users WHERE id_user = p_id_user;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertUser` (IN `p_user_name` VARCHAR(50), IN `p_name` VARCHAR(50), IN `p_last_name` VARCHAR(50), IN `p_id_range` INT, IN `p_password` VARCHAR(200), IN `p_email` VARCHAR(70))   BEGIN
+    INSERT INTO users (user_namee, namee, last_name, id_range, passwordd, email_address)
+    VALUES (p_user_name, p_name, p_last_name, p_id_range, p_password, p_email);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELETE_PRODUCT` (IN `p_id_shoe` INT)   BEGIN
+    DELETE FROM shoes_variations WHERE id_shoe = p_id_shoe;
+    DELETE FROM shoes WHERE id_shoe = p_id_shoe;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELETE_VARIATION` (IN `p_id_varition` INT)   BEGIN
+    DELETE FROM shoes_variations WHERE id_varition = p_id_varition;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GET_PRODUCTS` ()   BEGIN
+    SELECT 
+        s.id_shoe,
+        b.brands AS brand,
+        g.genre AS gender,
+        s.model_name,
+        s.price,
+        s.descriptionn AS description,
+        s.img_main,
+        s.img_profile,
+        s.img_front,
+        s.img_rear
+    FROM 
+        shoes s
+    JOIN 
+        brands b ON s.id_brand = b.id_brand
+    JOIN 
+        genres g ON s.id_genre = g.id_genre;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GET_PRODUCT_BY_ID` (IN `p_id_shoe` INT)   BEGIN
+    -- Obtener los datos del zapato
+    SELECT 
+        s.id_shoe,
+        s.id_brand,
+        s.id_genre,
+        s.model_name,
+        s.price,
+        s.descriptionn,
+        s.img_main,
+        s.img_profile,
+        s.img_front,
+        s.img_rear,
+        b.brands AS brand_name,
+        g.genre AS genre_name
+    FROM 
+        shoes s
+    JOIN 
+        brands b ON s.id_brand = b.id_brand
+    JOIN 
+        genres g ON s.id_genre = g.id_genre
+    WHERE 
+        s.id_shoe = p_id_shoe;
+
+    -- Obtener las variaciones del zapato
+    SELECT 
+        sv.id_varition,
+        sv.id_size,
+        sz.sizeMX AS size_name,
+        sv.id_color,
+        c.color AS color_name,
+        sv.stock_local,
+        sv.stock_tianguis
+    FROM 
+        shoes_variations sv
+    JOIN 
+        sizes sz ON sv.id_size = sz.id_size
+    JOIN 
+        colors c ON sv.id_color = c.id_color
+    WHERE 
+        sv.id_shoe = p_id_shoe;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GET_VARIATIONS` (IN `p_id_shoe` INT)   BEGIN
+    SELECT 
+        sv.id_varition,
+        sz.sizeMX AS size,
+        c.color,
+        sv.stock_local,
+        sv.stock_tianguis
+    FROM 
+        shoes_variations sv
+    JOIN 
+        sizes sz ON sv.id_size = sz.id_size
+    JOIN 
+        colors c ON sv.id_color = c.id_color
+    WHERE 
+        sv.id_shoe = p_id_shoe;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_INSERT_NEW_PRODUCT` (IN `p_id_brand` INT, IN `p_model_name` VARCHAR(50), IN `p_price` DECIMAL(10,2), IN `p_description` VARCHAR(100), IN `p_img_main` VARCHAR(300), IN `p_img_profile` VARCHAR(300), IN `p_img_front` VARCHAR(300), IN `p_img_rear` VARCHAR(300), IN `p_id_genre` INT, IN `p_variations` JSON)   BEGIN
     -- Declarar variables
     DECLARE last_shoe_id INT;
@@ -76,12 +174,48 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGISTER_NEW_USER` (IN `p_userna
     END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATE_PRODUCT` (IN `p_id_shoe` INT, IN `p_id_brand` INT, IN `p_id_genre` INT, IN `p_model_name` VARCHAR(50), IN `p_price` DECIMAL(10,2), IN `p_description` VARCHAR(100), IN `p_img_main` VARCHAR(300), IN `p_img_profile` VARCHAR(300), IN `p_img_front` VARCHAR(300), IN `p_img_rear` VARCHAR(300))   BEGIN
+    UPDATE shoes
+    SET 
+        id_brand = p_id_brand,
+        id_genre = p_id_genre,
+        model_name = p_model_name,
+        price = p_price,
+        descriptionn = p_description,
+        img_main = p_img_main,
+        img_profile = p_img_profile,
+        img_front = p_img_front,
+        img_rear = p_img_rear
+    WHERE id_shoe = p_id_shoe;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATE_VARIATION` (IN `p_id_varition` INT, IN `p_id_size` INT, IN `p_id_color` INT, IN `p_stock_local` INT, IN `p_stock_tianguis` INT)   BEGIN
+    UPDATE shoes_variations
+    SET 
+        id_size = p_id_size,
+        id_color = p_id_color,
+        stock_local = p_stock_local,
+        stock_tianguis = p_stock_tianguis
+    WHERE id_varition = p_id_varition;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_VALIDATE_USER` (IN `p_username` VARCHAR(50), IN `p_password` VARCHAR(200))   BEGIN
     -- Buscar el usuario por su nombre de usuario
     SELECT id_user, user_namee, id_range, passwordd
     FROM users
     WHERE user_namee = p_username
     LIMIT 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUser` (IN `p_id_user` INT, IN `p_user_name` VARCHAR(50), IN `p_name` VARCHAR(50), IN `p_last_name` VARCHAR(50), IN `p_id_range` INT, IN `p_password` VARCHAR(200), IN `p_email` VARCHAR(70))   BEGIN
+    UPDATE users
+    SET user_namee = p_user_name,
+        namee = p_name,
+        last_name = p_last_name,
+        id_range = p_id_range,
+        passwordd = p_password,
+        email_address = p_email
+    WHERE id_user = p_id_user;
 END$$
 
 DELIMITER ;
@@ -119,29 +253,30 @@ INSERT INTO `brands` (`id_brand`, `brands`) VALUES
 
 CREATE TABLE `colors` (
   `id_color` int(11) NOT NULL,
-  `color` varchar(50) DEFAULT NULL
+  `color` varchar(50) DEFAULT NULL,
+  `color_code` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `colors`
 --
 
-INSERT INTO `colors` (`id_color`, `color`) VALUES
-(1, 'Negro'),
-(2, 'Blanco'),
-(3, 'Azul rey'),
-(4, 'Azul celeste'),
-(5, 'Rojo'),
-(6, 'Vino'),
-(7, 'Naranja'),
-(8, 'Verde militar'),
-(9, 'Dorado'),
-(10, 'Amarillo'),
-(11, 'Verde'),
-(12, 'Rosa'),
-(13, 'Menta'),
-(14, 'Fucsia'),
-(15, 'Gris');
+INSERT INTO `colors` (`id_color`, `color`, `color_code`) VALUES
+(1, 'Negro', '#000000'),
+(2, 'Blanco', '#FFFFFF'),
+(3, 'Azul rey', '#0033A0'),
+(4, 'Azul celeste', '#87CEEB'),
+(5, 'Rojo', '#FF0000'),
+(6, 'Vino', '#800020'),
+(7, 'Naranja', '#FFA500'),
+(8, 'Verde militar', '#4B5320'),
+(9, 'Dorado', '#FFD700'),
+(10, 'Amarillo', '#FFFF00'),
+(11, 'Verde', '#008000'),
+(12, 'Rosa', '#FFC0CB'),
+(13, 'Menta', '#98FF98'),
+(14, 'Fucsia', '#FF00FF'),
+(15, 'Gris', '#808080');
 
 -- --------------------------------------------------------
 
@@ -247,7 +382,17 @@ CREATE TABLE `shoes` (
 --
 
 INSERT INTO `shoes` (`id_shoe`, `id_brand`, `id_genre`, `model_name`, `price`, `descriptionn`, `img_main`, `img_profile`, `img_front`, `img_rear`) VALUES
-(12, 1, 3, 'test procedimiento', 9999.00, 'test de procedimiento e insercion con formulario', 'src/images/uploads/productos/6740f440db731_zapato1.jpeg', 'src/images/uploads/productos/6740f440dc266_zapato2.jpeg', 'src/images/uploads/productos/6740f440dcc6c_zapato3.jpeg', 'src/images/uploads/productos/6740f440dd3d5_zapato4.jpeg');
+(12, 1, 3, 'test procedimiento', 9999.00, 'test de procedimiento e insercion con formulario', 'C:\\xampp\\htdocs\\src\\images\\uploads674272ecbdd9c_scrappy.jpg', 'C:\\xampp\\htdocs\\src\\images\\uploads674272ecbdd9c_scrappy.jpg', 'C:\\xampp\\htdocs\\src\\images\\uploads674272ecbdd9c_scrappy.jpg', 'C:\\xampp\\htdocs\\src\\images\\uploads674272ecbdd9c_scrappy.jpg'),
+(13, 1, 1, 'Air Max 2024', 1500.00, 'Comodidad y estilo para correr.', NULL, NULL, NULL, NULL),
+(14, 2, 2, 'Ultraboost X', 1800.00, 'Innovación para el máximo rendimiento.', NULL, NULL, NULL, NULL),
+(15, 3, 3, 'RS-X Hard Drive', 1400.00, 'Estilo futurista y comodidad.', NULL, NULL, NULL, NULL),
+(16, 4, 3, 'Chuck Taylor Classic', 1300.00, 'Un clásico que nunca pasa de moda.', NULL, NULL, NULL, NULL),
+(17, 5, 2, 'Guess Active Sneakers', 2000.00, 'Estilo urbano con un toque de lujo.', NULL, NULL, NULL, NULL),
+(18, 6, 1, 'Tommy Street Runner', 1600.00, 'Calzado deportivo con un diseño moderno.', NULL, NULL, NULL, NULL),
+(19, 7, 3, 'Gucci Evolution', 7500.00, 'Lujo y comodidad en un solo modelo.', NULL, NULL, NULL, NULL),
+(20, 8, 1, 'Balenciaga Dynamics', 8500.00, 'Un diseño único para destacar.', NULL, NULL, NULL, NULL),
+(21, 1, 2, 'Zoom Fly Elite', 2200.00, 'Perfectos para maratones y largas distancias.', NULL, NULL, NULL, NULL),
+(22, 2, 3, 'Superstar Classic', 1200.00, 'Diseño icónico que trasciende generaciones.', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -269,9 +414,27 @@ CREATE TABLE `shoes_variations` (
 --
 
 INSERT INTO `shoes_variations` (`id_varition`, `id_shoe`, `id_size`, `id_color`, `stock_local`, `stock_tianguis`) VALUES
-(8, 12, 1, 1, 87, 456),
-(9, 12, 7, 1, 576, 34),
-(10, 12, 2, 7, 96, 3547);
+(10, 12, 2, 7, 96, 3547),
+(20, 13, 9, 1, 20, 10),
+(21, 13, 10, 2, 25, 15),
+(22, 14, 7, 3, 18, 12),
+(23, 14, 8, 4, 20, 10),
+(24, 15, 11, 5, 22, 14),
+(25, 15, 12, 6, 19, 11),
+(26, 16, 9, 7, 30, 20),
+(27, 16, 10, 8, 25, 15),
+(28, 17, 11, 9, 15, 8),
+(29, 17, 12, 10, 12, 6),
+(30, 18, 9, 11, 10, 5),
+(31, 18, 10, 12, 8, 4),
+(32, 19, 11, 13, 5, 3),
+(33, 19, 12, 14, 4, 2),
+(34, 20, 9, 1, 15, 8),
+(35, 20, 10, 2, 10, 5),
+(36, 21, 11, 3, 20, 10),
+(37, 21, 12, 4, 18, 9),
+(38, 22, 9, 5, 12, 6),
+(39, 22, 10, 6, 10, 5);
 
 -- --------------------------------------------------------
 
@@ -327,8 +490,26 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `user_namee`, `namee`, `last_name`, `id_range`, `passwordd`, `email_address`) VALUES
-(1, 'gem', 'gema', 'vega', 1, '123', 'gemarubio@gmail.com'),
-(2, 'test de cliente', 'Emanuel', 'Vazquez', 3, '$2y$10$bjIhna2wQYM0TE5MMBGdF.HsGGLLKykLpjSid9i/n3wRivwu4vWra', 'emanuel.vazquez@uttn.mx');
+(5, 'admin1', 'admin', 'admin', 1, '$2y$10$tpUSpC/kp/GVR4akLuURx.XOWktb/VKzBJQhURpi7W5tBFcoVRh46', 'admin@gmail.com'),
+(6, 'gema_admin', 'Gema', 'Admin', 1, 'password123', 'gema.admin@example.com'),
+(7, 'juan_admin', 'Juan', 'Admin', 1, 'password123', 'juan.admin@example.com'),
+(8, 'employee1', 'Pedro', 'Lopez', 2, 'password123', 'pedro.lopez@example.com'),
+(9, 'employee2', 'Maria', 'Gomez', 2, 'password123', 'maria.gomez@example.com'),
+(10, 'employee3', 'Carlos', 'Hernandez', 2, 'password123', 'carlos.hernandez@example.com'),
+(11, 'employee4', 'Lucia', 'Martinez', 2, 'password123', 'lucia.martinez@example.com'),
+(12, 'employee5', 'Jorge', 'Perez', 2, 'password123', 'jorge.perez@example.com'),
+(13, 'client1', 'Ana', 'Rodriguez', 3, 'password123', 'ana.rodriguez@example.com'),
+(14, 'client2', 'Luis', 'Garcia', 3, 'password123', 'luis.garcia@example.com'),
+(15, 'client3', 'Sofia', 'Ramirez', 3, 'password123', 'sofia.ramirez@example.com'),
+(16, 'client4', 'Miguel', 'Sanchez', 3, 'password123', 'miguel.sanchez@example.com'),
+(17, 'client5', 'Laura', 'Vargas', 3, 'password123', 'laura.vargas@example.com'),
+(18, 'client6', 'Daniel', 'Gutierrez', 3, 'password123', 'daniel.gutierrez@example.com'),
+(19, 'client7', 'Isabel', 'Mendoza', 3, 'password123', 'isabel.mendoza@example.com'),
+(20, 'client8', 'Ricardo', 'Ortega', 3, 'password123', 'ricardo.ortega@example.com'),
+(21, 'client9', 'Carmen', 'Rivera', 3, 'password123', 'carmen.rivera@example.com'),
+(22, 'client10', 'Oscar', 'Nunez', 3, 'password123', 'oscar.nunez@example.com'),
+(23, 'client11', 'Elena', 'Blanco', 3, 'password123', 'elena.blanco@example.com'),
+(24, 'client12', 'Francisco', 'Cruz', 3, 'password123', 'francisco.cruz@example.com');
 
 --
 -- Índices para tablas volcadas
@@ -459,13 +640,13 @@ ALTER TABLE `sales`
 -- AUTO_INCREMENT de la tabla `shoes`
 --
 ALTER TABLE `shoes`
-  MODIFY `id_shoe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_shoe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `shoes_variations`
 --
 ALTER TABLE `shoes_variations`
-  MODIFY `id_varition` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_varition` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT de la tabla `sizes`
@@ -477,7 +658,7 @@ ALTER TABLE `sizes`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Restricciones para tablas volcadas
