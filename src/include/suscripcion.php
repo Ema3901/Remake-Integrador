@@ -41,12 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Enviar correo
             $mail->send();
-            echo 'success'; // Respuesta de éxito
+            header('Location: https://calzadojj.net');
+            exit;
         } catch (Exception $e) {
-            echo "error: {$mail->ErrorInfo}"; // Respuesta de error
+            echo "Error al enviar el correo: {$mail->ErrorInfo}";
         }
     } else {
-        echo 'error: Correo inválido.'; // Respuesta de correo inválido
+        echo 'Correo inválido.';
     }
 }
 ?>
