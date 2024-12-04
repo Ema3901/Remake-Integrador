@@ -59,5 +59,4 @@
     </div>
 </footer>
 
-<script src="../js/suscripcion.js"></script>
 
