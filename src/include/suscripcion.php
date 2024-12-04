@@ -41,8 +41,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Enviar correo
             $mail->send();
-            header('Location: https://calzadojj.net');
-            exit;
+
+            // Mostrar el mensaje de éxito en la misma página
+            echo '<div id="mensajeExito" style="position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; display: none;">
+                    El correo se mandó con éxito
+                  </div>';
+
+            // Mostrar el mensaje con JavaScript
+            echo '<script>
+                    document.getElementById("mensajeExito").style.display = "block";
+                    setTimeout(function() {
+                        document.getElementById("mensajeExito").style.display = "none";
+                    }, 3000); // El mensaje desaparecerá después de 3 segundos
+                  </script>';
+
         } catch (Exception $e) {
             echo "Error al enviar el correo: {$mail->ErrorInfo}";
         }
