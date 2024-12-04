@@ -1,4 +1,0 @@
-- Cambiar base de datos al ingles
-- Actualizar imagenes de index
-- Mejorar animaciones
-- Mucho jale y poco tiempo

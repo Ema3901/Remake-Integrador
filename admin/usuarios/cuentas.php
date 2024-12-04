@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 // Fetch users with their ranges
 $sql = "SELECT u.id_user, u.user_namee, u.namee, u.last_name, u.email_address, r.rangee 
@@ -23,11 +23,12 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/src/css/style.css">
     <link rel="stylesheet" href="/src/css/admin.css">
+    <link rel="stylesheet" href="/src/css/crud.css">
 </head>
 <body>
 
     <!-- Footer -->
-    <?php include __DIR__ . '/../../../src/include/header.php'; ?>
+    <?php include __DIR__ . '/../../src/include/header.php'; ?>
 
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -39,6 +40,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <button class="btn btn-secondary" id="refreshTable">
                     <i class="fas fa-sync-alt"></i> Actualizar
                 </button>
+                <a href="/admin/panel.php" class="btn btn-danger">Regresar</a>
             </div>
         </div>
 
@@ -123,7 +125,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
         <!-- Footer -->
-<?php include __DIR__ . '/../../../src/include/footer.php'; ?>
+<?php include __DIR__ . '/../../src/include/footer.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>

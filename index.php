@@ -35,27 +35,27 @@
 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <a href="/pages/store/detalleProducto.php">
+            <a href="/store/detalleProducto.php?id=12">
                 <img src="/src/images/index/carrusel/carrusel1.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
-            <a href="/pages/store/detalleProducto.php">
+            <a href="/store/detalleProducto.php?id=13">
                 <img src="/src/images/index/carrusel/carrusel2.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
-            <a href="/pages/store/detalleProducto.php">
+            <a href="/store/detalleProducto.php?id=14">
                 <img src="/src/images/index/carrusel/carrusel3.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
-            <a href="/pages/store/detalleProducto.php">
+            <a href="/store/detalleProducto.php?id=15">
                 <img src="/src/images/index/carrusel/carrusel4.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
-            <a href="/pages/store/detalleProducto.php">
+            <a href="/store/detalleProducto.php?id=16">
                 <img src="/src/images/index/carrusel/carrusel5.png" class="d-block w-100" alt="Nuevas colecciones para hombre">
             </a>
         </div>
@@ -77,7 +77,7 @@
 <div class="container my-5 text-center categorias">
     <div class="row">
         <div class="col-md-4">
-            <div class="category-box" onclick="window.location.href='/pages/store/catalogo.php?genero=1'">
+            <div class="category-box" onclick="window.location.href='/store/catalogo.php?genero=1'">
                 <img src="/src/images/index/acceso/hombres.png" alt="Categoría Hombre" class="img-fluid">
                 <div class="category-overlay">
                     <h3 class="category-title">Hombres</h3>
@@ -85,7 +85,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="category-box" onclick="window.location.href='/pages/store/catalogo.php?genero=3'">
+            <div class="category-box" onclick="window.location.href='/store/catalogo.php?genero=3'">
                 <img src="/src/images/index/acceso/Unisex.png" alt="Categoría Unisex" class="img-fluid">
                 <div class="category-overlay">
                     <h3 class="category-title">Unisex</h3>
@@ -93,7 +93,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="category-box" onclick="window.location.href='/pages/store/catalogo.php?genero=2'">
+            <div class="category-box" onclick="window.location.href='/store/catalogo.php?genero=2'">
                 <img src="/src/images/index/acceso/mujeres.png" alt="Categoría Mujer" class="img-fluid">
                 <div class="category-overlay">
                     <h3 class="category-title">Mujeres</h3>
@@ -108,7 +108,6 @@
     <?php include __DIR__ . '/src/include/footer.php'; ?>
 
     <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous" defer></script>
 
 <!-- Scripts de Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

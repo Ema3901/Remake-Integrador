@@ -1,5 +1,7 @@
 <?php
-include_once __DIR__ . '/../../src/database/db.php';
+session_start(); // Iniciar la sesión para manejar el carrito
+
+include_once __DIR__ . '/../src/database/db.php';
 
 // Obtener el ID del producto
 $id_producto = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -46,18 +48,6 @@ $stmt_colores = $pdo->prepare($query_colores);
 $stmt_colores->execute(['id' => $id_producto]);
 $colores = $stmt_colores->fetchAll(PDO::FETCH_ASSOC);
 
-// Consultar productos relacionados utilizando otra característica (por ejemplo, precio similar)
-$query_relacionados = "SELECT id_shoe, model_name, img_main 
-FROM shoes 
-WHERE id_shoe != :id 
-ORDER BY ABS(price - :precio) ASC 
-LIMIT 3";
-$stmt_relacionados = $pdo->prepare($query_relacionados);
-$stmt_relacionados->execute([
-    'id' => $id_producto,
-    'precio' => $producto['precio']
-]);
-$productos_relacionados = $stmt_relacionados->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +63,7 @@ $productos_relacionados = $stmt_relacionados->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <!-- Header -->
-    <?php include __DIR__ . '/../../src/include/header.php'; ?>
+    <?php include __DIR__ . '/../src/include/header.php'; ?>
 
     <!-- Contenido principal -->
     <main class="container my-5">
@@ -100,54 +90,48 @@ $productos_relacionados = $stmt_relacionados->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- Product details -->
             <div class="col-md-4">
-                <h2><?= htmlspecialchars($producto['modelo']) ?></h2>
-                <p class="fw-bold">$<?= number_format($producto['precio'], 2) ?></p>
+                <h3><?= htmlspecialchars($producto['modelo']) ?></h3>
                 <p><?= htmlspecialchars($producto['descripcion']) ?></p>
+                <h4>$<?= number_format($producto['precio'], 2) ?></h4>
 
-                <div class="mb-3">
-                    <h6>Tallas disponibles</h6>
-                    <div class="d-flex flex-wrap">
-                        <?php foreach ($tallas as $talla): ?>
-                            <button class="btn btn-outline-dark me-2 mb-2"><?= htmlspecialchars($talla['talla']) ?> MX</button>
-                        <?php endforeach; ?>
+                <!-- Form to add product to the cart -->
+                <form action="/admin/carrito/carrito.php" method="POST">
+                    <div class="mb-3">
+                        <h6>Tallas disponibles</h6>
+                        <select name="talla" class="form-select" required>
+                            <?php foreach ($tallas as $talla): ?>
+                                <option value="<?= htmlspecialchars($talla['talla']) ?>"><?= htmlspecialchars($talla['talla']) ?> MX</option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-                </div>
 
-                <div class="mb-3">
-                    <h6>Colores disponibles</h6>
-                    <div class="d-flex">
-                        <?php foreach ($colores as $color): ?>
-                            <button 
-                                class="btn btn-outline-dark rounded-circle me-2" 
-                                style="width: 30px; height: 30px; background-color: <?= htmlspecialchars($color['codigo']) ?>; border: 1px solid #000;"
-                                title="<?= htmlspecialchars($color['nombre']) ?>"
-                            ></button>
-                        <?php endforeach; ?>
+                    <div class="mb-3">
+                        <h6>Colores disponibles</h6>
+                        <div class="d-flex">
+                            <?php foreach ($colores as $color): ?>
+                                <label class="me-2">
+                                    <input type="radio" name="color" value="<?= htmlspecialchars($color['codigo']) ?>" style="display:none;" required>
+                                    <span class="btn btn-outline-dark rounded-circle" style="width: 30px; height: 30px; background-color: <?= htmlspecialchars($color['codigo']) ?>; border: 1px solid #000;" title="<?= htmlspecialchars($color['nombre']) ?>"></span>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                </div>
+
+                    <button type="submit" class="btn btn-success">Agregar al carrito</button>
+
+                    <!-- Información oculta -->
+                    <input type="hidden" name="id_producto" value="<?= $producto['id_shoe'] ?>">
+                    <input type="hidden" name="modelo" value="<?= htmlspecialchars($producto['modelo']) ?>">
+                    <input type="hidden" name="precio" value="<?= $producto['precio'] ?>">
+                </form>
             </div>
-        </div>
-
-        <!-- Related products -->
-        <hr class="my-5">
-        <h5 class="text-center mb-4">Te podría interesar</h5>
-        <div class="row">
-            <?php foreach ($productos_relacionados as $relacionado): ?>
-                <div class="col-md-4">
-                    <div class="product-related-container">
-                        <a href="detalleProducto.php?id=<?= $relacionado['id_shoe'] ?>">
-                            <img src="/<?= htmlspecialchars($relacionado['img_main']) ?>" class="img-fluid" alt="<?= htmlspecialchars($relacionado['model_name']) ?>">
-                        </a>
-                    </div>
-                    <p><?= htmlspecialchars($relacionado['model_name']) ?></p>
-                </div>
-            <?php endforeach; ?>
         </div>
     </main>
 
     <!-- Footer -->
-    <?php include __DIR__ . '/../../src/include/footer.php'; ?>
+    <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
+    <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>

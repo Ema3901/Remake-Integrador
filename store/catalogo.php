@@ -2,10 +2,13 @@
 // catalogo.php - Página principal del catálogo de productos
 
 // Incluir el archivo de conexión
-include __DIR__ . '/../../src/database/db.php';
+include __DIR__ . '/../src/database/db.php';
 
 // Obtener filtro de género de la URL
 $id_genero = isset($_GET['genero']) ? intval($_GET['genero']) : 0;
+
+// Obtener el término de búsqueda de la URL
+$search_term = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Título del catálogo
 $titulo_catalogo = "Todos los productos";
@@ -23,7 +26,7 @@ if ($id_genero > 0) {
     $stmt_genero->closeCursor(); // Liberar el recurso
 }
 
-// Consulta dinámica de productos
+// Consulta dinámica de productos con búsqueda
 $sql_productos = "
     SELECT 
         s.id_shoe, 
@@ -32,11 +35,13 @@ $sql_productos = "
         b.brands AS brand_name
     FROM shoes s
     LEFT JOIN brands b ON s.id_brand = b.id_brand
-    WHERE ? = 0 OR s.id_genre = ?
+    WHERE (? = 0 OR s.id_genre = ?) 
+    AND s.model_name LIKE ?
 ";
 $stmt_productos = $pdo->prepare($sql_productos);
 $stmt_productos->bindParam(1, $id_genero, PDO::PARAM_INT);
 $stmt_productos->bindParam(2, $id_genero, PDO::PARAM_INT);
+$stmt_productos->bindValue(3, '%' . $search_term . '%', PDO::PARAM_STR); // Agregar búsqueda con LIKE
 $stmt_productos->execute();
 $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -61,7 +66,7 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <!-- Header -->
-    <?php include __DIR__ . '/../../src/include/header.php'; ?>
+    <?php include __DIR__ . '/../src/include/header.php'; ?>
 
     <!-- Contenido principal -->
     <main class="container my-5">
@@ -90,8 +95,8 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
 
             <!-- Buscador -->
             <div class="col-md-4 text-end">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Buscar productos" aria-label="Buscar">
+                <form class="d-flex" role="search" method="get" action="catalogo.php">
+                    <input class="form-control me-2" type="search" name="search" value="<?= htmlspecialchars($search_term) ?>" placeholder="Buscar productos" aria-label="Buscar">
                     <button class="btn btn-outline-info" type="submit">Buscar</button>
                 </form>
             </div>
@@ -114,8 +119,7 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
                     echo '    <div class="card border-0">';
                     echo '        <div class="product-placeholder position-relative">';
                     echo '            <img src="' . $img_main . '" class="img-fluid product-image" alt="' . $model_name . '">';
-                    echo '            <button class="btn btn-outline-light position-absolute top-0 end-0 m-2 favorite-btn">';
-                    echo '                <i class="far fa-heart"></i>';
+
                     echo '            </button>';
                     echo '        </div>';
                     echo '        <div class="card-body">';
@@ -126,14 +130,14 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
                     echo '</div>';
                 }
             } else {
-                echo '<p class="text-center">No se encontraron productos para esta categoría.</p>';
+                echo '<p class="text-center">No se encontraron productos para esta búsqueda.</p>';
             }
             ?>
         </div>
     </main>
 
     <!-- Footer -->
-    <?php include __DIR__ . '/../../src/include/footer.php'; ?>
+    <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

@@ -14,22 +14,16 @@
     border-radius: 10px;
     cursor: pointer;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.category-box:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem; /* Añadir margen entre filas */
 }
 
 /* Imagen de categoría */
 .category-box img {
-    width: 100%;
+    width: 100%; /* Las imágenes ocuparán el 100% del ancho de su contenedor */
+    height: 100%;
     border-radius: 10px;
+    object-fit: cover;
     transition: transform 0.3s ease-in-out;
-}
-
-.category-box:hover img {
-    transform: scale(1.1);
 }
 
 /* Fondo oscuro superpuesto */
@@ -56,12 +50,12 @@
 .category-title {
     color: var(--text-color-light);
     font-family: var(--font-secondary);
-    font-size: 1.5rem;
+    font-size: 1.2rem; /* Reducción del tamaño del texto */
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     margin: 0;
 }
 
 /* ============================================================
-   FIN DE ESTILOS DE CATEGORÍAS
+   MEDIA QUERIES PARA DISPOSITIVOS MÓVILES
    ============================================================ */

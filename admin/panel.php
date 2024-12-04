@@ -30,30 +30,40 @@
     <!-- Header -->
     <?php
 // Incluir el header
-include __DIR__ . '/../../src/include/header.php';
+include __DIR__ . '/../src/include/header.php';
 ?>
 
     <!-- Main content -->
     <div class="container-fluid">
+        <!-- Sidebar --><!-- Sidebar -->
         <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <nav class="nav flex-column">
-                <a class="nav-link" href="/pages/admin/panel.php"><i class="fas fa-tachometer-alt"></i> <span>Panel</span></a>
-                <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu1" aria-expanded="false">
-                    <i class="fas fa-chart-line"></i> Resumen
-                </button>
-                <div class="collapse" id="submenu1">
-                    <a class="nav-link" href="/pages/admin/registro/registro.php"><i class="fas fa-clipboard-list"></i> Registro</a>
-                </div>
-                <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu2" aria-expanded="false">
-                    <i class="fas fa-cogs"></i> Administración
-                </button>
-                <div class="collapse" id="submenu2">
-                    <a class="nav-link" href="/pages/admin/usuarios/cuentas.php"><i class="fas fa-users"></i> Usuarios</a>
-                    <a class="nav-link" href="/pages/admin/productos/productos.php"><i class="fas fa-boxes"></i> Inventario</a>
-                </div>
-            </nav>
+<div class="sidebar" id="sidebar">
+    <nav class="nav flex-column">
+        <a class="nav-link" href="/admin/panel.php">
+            <i class="fas fa-tachometer-alt"></i> <span>Panel</span>
+        </a>
+        <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu1" aria-expanded="false">
+            <i class="fas fa-chart-line"></i> Resumen
+        </button>
+        <div class="collapse" id="submenu1">
+            <a class="nav-link" href="/admin/registro/registro.php">
+                <i class="fas fa-clipboard-list"></i> Registro
+            </a>
         </div>
+        <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu2" aria-expanded="false">
+            <i class="fas fa-cogs"></i> Administración
+        </button>
+        <div class="collapse" id="submenu2">
+            <a class="nav-link" href="/admin/usuarios/cuentas.php">
+                <i class="fas fa-users"></i> Usuarios
+            </a>
+            <a class="nav-link" href="/admin/productos/productos.php">
+                <i class="fas fa-boxes"></i> Inventario
+            </a>
+        </div>
+    </nav>
+</div>
+
 
         <!-- Content -->
         <div class="content">
@@ -131,16 +141,16 @@ include __DIR__ . '/../../src/include/header.php';
                 <!-- Categorías -->
                 <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h5 class="text-uppercase mb-4 font-weight-bold">Categorías</h5>
-                    <p><a href="/pages/store/catalogo.php" class="text-white">Hombre</a></p>
-                    <p><a href="/pages/store/catalogo.php" class="text-white">Mujer</a></p>
-                    <p><a href="/pages/store/catalogo.php" class="text-white">Unisex</a></p>
+                    <p><a href="/store/catalogo.php" class="text-white">Hombre</a></p>
+                    <p><a href="/store/catalogo.php" class="text-white">Mujer</a></p>
+                    <p><a href="/store/catalogo.php" class="text-white">Unisex</a></p>
                 </div>
                 <!-- Ayuda -->
                 <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                     <h5 class="text-uppercase mb-4 font-weight-bold">Ayuda</h5>
-                    <p><a href="/pages/store/conocenos.php" class="text-white">Sobre Nosotros</a></p>
-                    <p><a href="/pages/store/contactanos.php" class="text-white">Contacto</a></p>
-                    <p><a href="/pages/store/sesion.php" class="text-white">Cuenta</a></p>
+                    <p><a href="/store/conocenos.php" class="text-white">Sobre Nosotros</a></p>
+                    <p><a href="/store/contactanos.php" class="text-white">Contacto</a></p>
+                    <p><a href="/store/sesion.php" class="text-white">Cuenta</a></p>
                 </div>
                 <!-- Encuéntranos -->
                 <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
@@ -170,7 +180,7 @@ include __DIR__ . '/../../src/include/header.php';
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
-    <script src="/src/js/panel.js" defer></script>
+    <script src="/src/js/sidebar.js"></script>
 </body>
 </html>
 

@@ -22,3 +22,10 @@
 .carousel-item {
     transition: transform 1s ease-in-out, opacity 1s ease-in-out;
 }
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .carousel-inner img {
+        max-height: 60vh; /* Hacemos que el carrusel sea más pequeño en pantallas pequeñas */
+    }
+}

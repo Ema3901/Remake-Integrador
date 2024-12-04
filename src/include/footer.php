@@ -5,17 +5,17 @@
             <!-- Categorías -->
             <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                 <h5 class="text-uppercase mb-4 font-weight-bold">Categorías</h5>
-                <p><a href="/pages/store/catalogo.php?genero=1" class="text-white text-decoration-none">Hombre</a></p>
-                <p><a href="/pages/store/catalogo.php?genero=2" class="text-white text-decoration-none">Mujer</a></p>
-                <p><a href="/pages/store/catalogo.php?genero=3" class="text-white text-decoration-none">Unisex</a></p>
+                <p><a href="/store/catalogo.php?genero=1" class="text-white text-decoration-none">Hombre</a></p>
+                <p><a href="/store/catalogo.php?genero=2" class="text-white text-decoration-none">Mujer</a></p>
+                <p><a href="/store/catalogo.php?genero=3" class="text-white text-decoration-none">Unisex</a></p>
             </div>
 
             <!-- Ayuda -->
             <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
                 <h5 class="text-uppercase mb-4 font-weight-bold">Ayuda</h5>
-                <p><a href="/pages/store/conocenos.php" class="text-white text-decoration-none">Sobre Nosotros</a></p>
-                <p><a href="/pages/store/contactanos.php" class="text-white text-decoration-none">Contacto</a></p>
-                <p><a href="/pages/store/sesion.php" class="text-white text-decoration-none">Cuenta</a></p>
+                <p><a href="/store/conocenos.php" class="text-white text-decoration-none">Sobre Nosotros</a></p>
+                <p><a href="/store/contactanos.php" class="text-white text-decoration-none">Contacto</a></p>
+                <p><a href="/store/sesion.php" class="text-white text-decoration-none">Cuenta</a></p>
             </div>
 
             <!-- Encuéntranos -->
@@ -38,10 +38,10 @@
             <!-- Suscríbete -->
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
                 <h5 class="text-uppercase mb-4 font-weight-bold">Suscríbete</h5>
-                <form>
-                    <div class="input-group">
-                        <input type="email" class="form-control" placeholder="correo@ejemplo.com" required>
-                    </div>
+                <form action="/src/include/suscripcion.php" method="POST">
+            <div class="input-group">
+                    <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" required>
+                </div>
                     <button class="btn btn-info mt-2 w-100 rounded-pill" type="submit">Suscribirse</button>
                 </form>
             </div>

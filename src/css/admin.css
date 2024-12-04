@@ -1,74 +1,70 @@
-
-.container-fluid {
-    flex: 1;
-    display: flex;
-}
-
+/* Sidebar */
 .sidebar {
     position: sticky;
     top: 0;
-    height: calc(100vh - 100px);
+    height: 100vh;
     width: 250px;
     background-color: #f8f9fa;
     overflow-y: auto;
+    transition: transform 0.3s ease;
+    overflow-x: hidden; /* Asegura que no haya barra de desplazamiento horizontal */
 }
 
-.content {
-    flex: 1;
-    padding: 20px;
-    margin-left: 260px;
-}
-
-.charts-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.chart-box {
-    width: 48%;
-}
-
-.total-sales {
-    font-size: 1rem;
-    font-weight: bold;
-    margin-top: 10px;
-    text-align: center;
-}
-
-.ventas-recientes {
-    margin-top: 20px;
-}
-
-.ventas-recientes table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.ventas-recientes th, .ventas-recientes td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.ventas-recientes .action-icons {
-    display: flex;
-    justify-content: center;
-}
-
-.action-icons i {
+/* Botón de alternar Sidebar (solo en pantallas pequeñas) */
+.sidebar-toggle-btn {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: #fff;
+    border: none;
+    font-size: 24px;
+    padding: 10px;
     cursor: pointer;
-    margin: 0 5px;
+    z-index: 9999;
 }
 
-.action-icons i:hover {
-    color: #e74c3c; /* Un rojo más suave */
-    transition: color 0.3s ease;
+/* Modificaciones cuando el sidebar está activo */
+.sidebar.active {
+    transform: translateX(0);
+    width: 250px;
 }
 
+/* Menu items */
+.nav-link {
+    color: #333;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
 
+.nav-link:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.nav-link i {
+    margin-right: 10px;
+}
+
+/* Submenus */
+.collapse {
+    padding-left: 20px;
+    display: none;
+}
+
+.collapse.show {
+    display: block;
+}
+
+.collapse .nav-link {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+}
+
+/* Toggle buttons */
 .btn-toggle {
     width: 100%;
     background: none;
@@ -76,41 +72,41 @@
     text-align: left;
     padding: 0.5rem 1rem;
     color: #333;
+    font-size: 1rem;
 }
 
+/* Media Query para pantallas pequeñas */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 0;
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+    }
 
+    .sidebar.active {
+        transform: translateX(0);
+        width: 250px;
+    }
 
+    .sidebar-toggle-btn {
+        display: block;
+    }
 
-
-
-.table th, .table td {
-    vertical-align: middle;
-    text-align: center;
+    .content {
+        margin-left: 0;
+        padding-left: 10px;
+    }
 }
 
-.btn {
-    margin: 0 5px;
+/* Ajuste en el contenedor principal */
+.content {
+    margin-left: 0;  /* Elimina cualquier margen extra */
+    padding-left: 15px;  /* Ajusta el padding para que no esté tan separado */
 }
 
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+/* Modificación del Sidebar para que ocupe todo el alto y no tenga espacio extra */
+.sidebar.active {
+    transform: translateX(0);
+    width: 250px;
 }
-
-.btn-warning {
-    background-color: #ffc107;
-    border-color: #ffc107;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-.btn:hover {
-    opacity: 0.9;
-}
-
-
-/* version 0.0.5
-
