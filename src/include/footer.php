@@ -35,17 +35,22 @@
                 </div>
             </div>
 
-            <!-- Suscríbete -->
-            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h5 class="text-uppercase mb-4 font-weight-bold">Suscríbete</h5>
-                <form action="/src/include/suscripcion.php" method="POST">
-            <div class="input-group">
-                    <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" required>
-                </div>
-                    <button class="btn btn-info mt-2 w-100 rounded-pill" type="submit">Suscribirse</button>
-                </form>
-            </div>
+<!-- Suscríbete -->
+<div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+    <h5 class="text-uppercase mb-4 font-weight-bold">Suscríbete</h5>
+    <form id="formSuscripcion" method="POST">
+        <div class="input-group">
+            <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" required>
         </div>
+        <button class="btn btn-info mt-2 w-100 rounded-pill" type="submit">Suscribirse</button>
+    </form>
+</div>
+
+<!-- Contenedor del mensaje de éxito (pop-up) -->
+<div id="mensajeExito" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px;">
+    El correo se mandó con éxito.
+</div>
+
 
         <!-- Derechos de autor -->
         <div class="text-center pt-4">
@@ -53,3 +58,6 @@
         </div>
     </div>
 </footer>
+
+<script src="../js/suscripcion.js"></script>
+

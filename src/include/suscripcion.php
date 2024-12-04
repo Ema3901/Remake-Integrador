@@ -4,8 +4,6 @@ use PHPMailer\PHPMailer\Exception;
 
 include '../../vendor/autoload.php'; // Incluye el autoloader de Composer
 
-$mensajeExito = ''; // Variable para mostrar el mensaje de éxito
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email']; // Recibe el correo desde el formulario
 
@@ -43,34 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Enviar correo
             $mail->send();
-
-            // Asignar el mensaje de éxito a la variable para mostrarlo en la página
-            $mensajeExito = 'El correo se mandó con éxito.';
+            echo 'success'; // Respuesta de éxito
         } catch (Exception $e) {
-            $mensajeExito = "Error al enviar el correo: {$mail->ErrorInfo}";
+            echo "error: {$mail->ErrorInfo}"; // Respuesta de error
         }
     } else {
-        $mensajeExito = 'Correo inválido.';
+        echo 'error: Correo inválido.'; // Respuesta de correo inválido
     }
 }
 ?>
-
-<!-- El formulario de suscripción -->
-<form method="POST" action="">
-    <label for="email">Correo Electrónico:</label>
-    <input type="email" name="email" id="email" required>
-    <button type="submit">Suscribirse</button>
-</form>
-
-<!-- Mostrar el mensaje de éxito o error si existe -->
-<?php if ($mensajeExito): ?>
-    <div id="mensajeExito" style="position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; display: block;">
-        <?php echo $mensajeExito; ?>
-    </div>
-    <script>
-        // El mensaje desaparece después de 3 segundos
-        setTimeout(function() {
-            document.getElementById("mensajeExito").style.display = "none";
-        }, 3000); 
-    </script>
-<?php endif; ?>
