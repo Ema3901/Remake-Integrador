@@ -86,7 +86,7 @@
         </div>
         <div class="col-md-4">
             <div class="category-box" onclick="window.location.href='/store/catalogo.php?genero=3'">
-                <img src="/src/images/index/acceso/Unisex.png" alt="Categoría Unisex" class="img-fluid">
+                <img src="/src/images/index/acceso/unisex.png" alt="Categoría Unisex" class="img-fluid">
                 <div class="category-overlay">
                     <h3 class="category-title">Unisex</h3>
                 </div>
