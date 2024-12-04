@@ -41,7 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Enviar correo
             $mail->send();
-            echo 'Correo enviado con éxito.';
+            header('Location: https://calzadojj.net');
+            exit;
         } catch (Exception $e) {
             echo "Error al enviar el correo: {$mail->ErrorInfo}";
         }
