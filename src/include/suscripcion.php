@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->Subject = 'Gracias por suscribirte al boletín de ofertas'; // Asunto
 
             // Agregar imagen incrustada utilizando __DIR__
-            $rutaImagen = __DIR__ . '../src/images/promos/promo1.jpg'; // Cambia 'carpeta_imagenes' por el nombre de tu carpeta
+            $rutaImagen = __DIR__ . '/../images/promos/promo1.jpg'; // Cambia 'carpeta_imagenes' por el nombre de tu carpeta
             $mail->addEmbeddedImage($rutaImagen, 'imagenPromocion'); // Etiqueta 'imagenPromocion' para usar en HTML
 
             // Cuerpo del correo con la imagen como enlace
