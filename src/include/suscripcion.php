@@ -2,7 +2,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php'; // Incluye el autoloader de Composer
+include '../../vendor/autoload.php'; // Incluye el autoloader de Composer
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email']; // Recibe el correo desde el formulario
