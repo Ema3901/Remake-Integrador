@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="d-flex justify-content-end">
                 <a href="cuentas.php" class="btn btn-secondary mt-3 me-3">Cancelar</a>
-                <a href="javascript:history.back()" class="btn btn-secondary mt-3 me-3">Regresar</a> <!-- Botón Regresar -->
+                <a href="/usuarios/cuentas.php" class="btn btn-secondary mt-3 me-3">Regresar</a> <!-- Botón Regresar -->
                 <button type="submit" class="btn btn-primary mt-3">Agregar Usuario</button>
             </div>
         </form>
