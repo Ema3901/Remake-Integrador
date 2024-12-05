@@ -111,6 +111,7 @@ function saveImage($file, $destination) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/src/css/style.css">
 </head>
+<main style="min-height: 53.5vh;">
 <body>
     <div class="container my-5">
         <h2>Editar Producto</h2>
@@ -228,6 +229,7 @@ function saveImage($file, $destination) {
             <a href="/admin/productos/productos.php" class="btn btn-danger mt-3">Cancelar</a>
         </form>
     </div>
+</main>
     <script>
         document.getElementById('addVariation').addEventListener('click', function () {
             const variations = document.getElementById('variations');

@@ -102,6 +102,7 @@
 </div>
 
     <!-- Footer -->
+</main>
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
 <!-- Font Awesome Integration -->

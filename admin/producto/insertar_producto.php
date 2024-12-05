@@ -104,12 +104,14 @@ function saveImage($file, $destination) {
 </head>
 <body>
         <!-- Footer -->
+</main>
         <?php include __DIR__ . '/../../../src/include/header.php'; ?>
 
     <div class="d-flex">
         
 
-        <!-- Main Content -->
+        <!-- Main content -->
+<main style="min-height: 53.5vh;">
         <main class="container-fluid my-5" id="mainContent">
     <main class="container my-5">
         <h2>Agregar Nuevo Producto</h2>
@@ -220,6 +222,7 @@ function saveImage($file, $destination) {
     </main>
 
     <!-- Footer -->
+</main>
     <?php include __DIR__ . '/../../../src/include/footer.php'; ?>
 
     <!-- Font Awesome -->

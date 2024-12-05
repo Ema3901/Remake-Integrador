@@ -36,7 +36,8 @@
 include __DIR__ . '/../src/include/header.php';
 ?>
 
-    <!-- Contenido principal -->
+    <!-- Main content -->
+<main style="min-height: 53.5vh;">
     <main class="container my-5">
         <!-- Primera Sección: ¿Quiénes Somos? -->
         <section class="row mb-5">
@@ -80,6 +81,7 @@ include __DIR__ . '/../src/include/header.php';
     </main>
 
     <!-- Footer -->
+</main>
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
     <!-- Font Awesome Integration -->

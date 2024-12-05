@@ -76,7 +76,8 @@ index.php');
     <!-- Header -->
     <?php include __DIR__ . '/src/header.php'; ?>
 
-    <!-- Contenido principal -->
+    <!-- Main content -->
+<main style="min-height: 53.5vh;">
     <main class="auth-container">
         <div class="auth-card">
             <h2>Inicia Sesión</h2>
@@ -110,6 +111,7 @@ index.php');
     </main>
 
     <!-- Footer -->
+</main>
     <?php include __DIR__ . '/src/footer.php'; ?>
 </body>
 </html>

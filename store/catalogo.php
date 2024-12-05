@@ -70,7 +70,8 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
     <!-- Header -->
     <?php include __DIR__ . '/../src/include/header.php'; ?>
 
-    <!-- Contenido principal -->
+    <!-- Main content -->
+<main style="min-height: 53.5vh;">
     <main class="container my-5">
         <!-- Filtros de categoría y buscador -->
         <div class="row mb-4 align-items-center">
@@ -139,6 +140,7 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
     </main>
 
     <!-- Footer -->
+</main>
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
     <!-- Font Awesome Integration -->
