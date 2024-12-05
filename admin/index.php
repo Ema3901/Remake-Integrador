@@ -15,15 +15,14 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
-
 </head>
-<body>
+<body class="d-flex flex-column" style="min-height: 100vh;">
 
     <!-- Header -->
     <?php include __DIR__ . '/src/header.php'; ?>
 
     <!-- Main content -->
-    <main style="height: auto;">
+    <main class="flex-grow-1">
         <div> Hola rellena todo </div>
     </main>
 
