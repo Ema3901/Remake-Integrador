@@ -4,7 +4,7 @@
 include __DIR__ . '/../../src/database/db.php';
 
 // Ruta base para guardar imágenes
-$imageBasePath = __DIR__ . "/../../../src/images/uploads";
+$imageBasePath = __DIR__ . "/../src/uploads";
 
 // Verificar si se recibió un ID de producto
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
