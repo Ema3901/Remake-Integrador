@@ -20,9 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Obtener los resultados
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Depuración: Verifica los datos que devuelve la base de datos
-        var_dump($user); // Esto mostrará los datos recuperados desde la base de datos
-
         // Cerrar el cursor del primer statement antes de ejecutar el segundo
         $stmt->closeCursor();
 
@@ -37,8 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Redirigir al usuario según su rol
                 if ($user['id_range'] == 1 || $user['id_range'] == 2) {
                     // Administrador o Empleado
-                    header('Location: /
-index.php');
+                    header('Location: /index.php');
                 } else {
                     // Cliente
                     header('Location: /index.php');
