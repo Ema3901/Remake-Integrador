@@ -130,7 +130,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php include __DIR__ . '/../src/footer.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/admin/src/js/cuentas.js"></script>
+    <script src="/src/js/cuentas.js"></script>
     
 </body>
 </html>
