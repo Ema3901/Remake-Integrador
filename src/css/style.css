@@ -5,26 +5,22 @@
     --text-color-light: #fff;
     --border-color: #ddd;
     --font-primary: 'Gruppo', sans-serif;
-    --font-secondary: 'Playfair Display', serif; /* Cambia por Lora si lo prefieres */
+    --font-secondary: 'Playfair Display', serif;
 }
 
 /* General */
 html, body {
-    height: 100%;
-    margin: 0;
+    height: 100%; /* Asegura que la altura de todo el documento sea del 100% */
+    margin: 0; /* Elimina márgenes predeterminados */
+}
+
+body {
     font-family: var(--font-primary);
     background-color: #f5f5f5;
     color: var(--secondary-color);
     line-height: 1.6;
     display: flex;
-    flex-direction: column; /* Para apilar los elementos verticalmente */
-}
-
-/* Body (estructura de flexbox) */
-body {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    flex-direction: column; /* Alineación vertical de los elementos */
 }
 
 /* Header */
@@ -45,24 +41,24 @@ header {
 
 /* Centrado de la columna del logo */
 .logo-container {
-    height: 100%; /* Asegura que ocupe toda la altura disponible */
-    display: flex; /* Activa flexbox para centrar el contenido */
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Buscador */
 .search-form {
     display: flex;
     align-items: center;
-    width: auto; /* Cambiamos a auto para respetar el tamaño del input */
-    max-width: 300px; /* Limita el ancho total del buscador */
-    margin: 0 auto; /* Centrarlo opcionalmente */
+    width: auto;
+    max-width: 300px;
+    margin: 0 auto;
 }
 
 .search-input {
-    flex: none; /* Evita que crezca automáticamente */
-    width: 200px; /* Ancho específico del campo de texto */
+    flex: none;
+    width: 200px;
     border: 1px solid var(--border-color);
     border-radius: 20px 0 0 20px;
     padding: 5px 10px;
@@ -75,7 +71,7 @@ header {
 }
 
 .btn-search {
-    flex: none; /* Asegúrate que el botón no crezca */
+    flex: none;
     border-radius: 0 20px 20px 0;
     background-color: var(--primary-color);
     color: white;
@@ -114,7 +110,7 @@ header {
 /* Categorías */
 .category-box img {
     width: 100%;
-    height: auto;  /* Aseguramos que las imágenes mantengan su aspecto */
+    height: auto;
 }
 
 .category-box:hover img {
@@ -122,14 +118,12 @@ header {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Título de la categoría */
 .category-title {
-    font-size: 1.2rem;  /* Reducimos el tamaño de la fuente */
-    letter-spacing: 1px; /* Menos espaciado entre letras */
-    font-weight: bold;  /* Hacemos el título un poco más prominente */
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    font-weight: bold;
 }
 
-/* Caja de categoría */
 .category-box {
     position: relative;
     overflow: hidden;
@@ -158,33 +152,30 @@ header {
     opacity: 1;
 }
 
-/* Main content (Flexbox) */
+/* Main content */
 main {
-    flex-grow: 1; /* Esto hace que el main ocupe el espacio restante */
-    padding: 20px;
-    background-color: #f4f4f4;
+    flex: 1; /* Hace que main ocupe todo el espacio restante disponible */
 }
 
-/* Footer (pegado al final de la página) */
+/* Footer */
 footer {
     background-color: #333;
-    color: white;
+    color: #fff;
     text-align: center;
-    padding: 10px;
-    margin-top: auto; /* Esto empuja el footer hacia el final */
+    padding: 20px;
 }
 
 /* Responsividad */
 @media (max-width: 768px) {
     .category-title {
-        font-size: 1rem; /* Reducimos aún más el tamaño en pantallas pequeñas */
+        font-size: 1rem;
     }
 
     .category-box img {
-        max-height: 150px;  /* Las imágenes serán más pequeñas en pantallas pequeñas */
+        max-height: 150px;
     }
 
     footer .social-icons a {
-        font-size: 1.2rem;  /* Reducimos aún más los iconos en pantallas pequeñas */
+        font-size: 1.2rem;
     }
 }
