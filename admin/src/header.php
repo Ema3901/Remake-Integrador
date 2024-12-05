@@ -68,7 +68,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 <!-- Si el usuario ha iniciado sesión -->
                 <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['user_namee']); ?></p>
                 <a href="/
-panel.php" class="btn btn-success w-100 mb-2">Acceder al Panel</a>
+index.php" class="btn btn-success w-100 mb-2">Acceder al Panel</a>
                 <a href="/src/include/logout.php" class="btn btn-danger w-100">Cerrar sesión</a>
             <?php else: ?>
                 <!-- Si el usuario no ha iniciado sesión -->

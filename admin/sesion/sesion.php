@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($user['id_range'] == 1 || $user['id_range'] == 2) {
                     // Administrador o Empleado
                     header('Location: /
-panel.php');
+index.php');
                 } else {
                     // Cliente
                     header('Location: /index.php');

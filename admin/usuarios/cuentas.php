@@ -41,7 +41,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <i class="fas fa-sync-alt"></i> Actualizar
                 </button>
                 <a href="/
-panel.php" class="btn btn-danger">Regresar</a>
+index.php" class="btn btn-danger">Regresar</a>
             </div>
         </div>
 

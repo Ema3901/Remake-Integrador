@@ -107,7 +107,7 @@ include __DIR__ . '/../../src/include/header.php';
         <div class="sidebar" id="sidebar">
             <nav class="nav flex-column">
                 <a class="nav-link" href="/
-panel.php"><i class="fas fa-tachometer-alt"></i> <span>Panel</span></a>
+index.php"><i class="fas fa-tachometer-alt"></i> <span>Panel</span></a>
                 <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu1" aria-expanded="false">
                     <i class="fas fa-chart-line"></i> Resumen
                 </button>

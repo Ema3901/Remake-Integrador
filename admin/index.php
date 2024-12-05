@@ -38,7 +38,7 @@ include __DIR__ . '/src/header.php';
 <div class="sidebar" id="sidebar">
     <nav class="nav flex-column">
         <a class="nav-link" href="/
-panel.php">
+index.php">
             <i class="fas fa-tachometer-alt"></i> <span>Panel</span>
         </a>
         <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu1" aria-expanded="false">

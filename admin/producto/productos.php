@@ -101,7 +101,7 @@ $stmt->closeCursor(); // Liberar recursos
     <div class="sidebar" id="sidebar">
         <nav class="nav flex-column">
             <a class="nav-link" href="/
-panel.php"><i class="fas fa-tachometer-alt"></i> <span>Panel</span></a>
+index.php"><i class="fas fa-tachometer-alt"></i> <span>Panel</span></a>
             <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu1" aria-expanded="false">
                 <i class="fas fa-chart-line"></i> Resumen
             </button>
@@ -133,7 +133,7 @@ producto/productos.php"><i class="fas fa-boxes"></i> Inventario</a>
                     <i class="fas fa-sync-alt"></i> Actualizar
                 </button>
                 <a href="/
-panel.php" class="btn btn-danger">Regresar</a>
+index.php" class="btn btn-danger">Regresar</a>
             </div>
         </div>
 
