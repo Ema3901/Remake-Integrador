@@ -74,7 +74,7 @@ index.php');
 </head>
 <body class="auth-page">
     <!-- Header -->
-    <?php include __DIR__ . '/src/header.php'; ?>
+    <?php include __DIR__ . '/../src/header.php'; ?>
 
     <!-- Contenido principal -->
     <main class="auth-container">
@@ -97,11 +97,6 @@ index.php');
                     <button type="submit" class="btn btn-info btn-block btn-lg">Iniciar Sesión</button>
                 </div>
             </form>
-
-            <!-- Enlaces y mensajes -->
-            <div class="text-center mt-3">
-                <a href="/store/registro.php" class="text-link">¿No tienes cuenta? Regístrate</a>
-            </div>
             
             <?php if (!empty($error_message)): ?>
                 <div class="alert alert-danger mt-3"><?= htmlspecialchars($error_message) ?></div>
@@ -110,6 +105,6 @@ index.php');
     </main>
 
     <!-- Footer -->
-    <?php include __DIR__ . '/src/footer.php'; ?>
+    <?php include __DIR__ . '/../src/footer.php'; ?>
 </body>
 </html>
