@@ -104,7 +104,6 @@ function saveImage($file, $destination) {
 </head>
 <body>
         <!-- Footer -->
-</main>
         <?php include __DIR__ . '/../../../src/include/header.php'; ?>
 
     <div class="d-flex">
@@ -222,7 +221,6 @@ function saveImage($file, $destination) {
     </main>
 
     <!-- Footer -->
-</main>
     <?php include __DIR__ . '/../../../src/include/footer.php'; ?>
 
     <!-- Font Awesome -->

@@ -100,29 +100,6 @@
      <?php include __DIR__ . '/src/header.php'; ?>
 
     <div class="container-fluid">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <nav class="nav flex-column">
-                <a class="nav-link" href="/
-index.php"><i class="fas fa-tachometer-alt"></i> <span>Panel</span></a>
-                <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu1" aria-expanded="false">
-                    <i class="fas fa-chart-line"></i> Resumen
-                </button>
-                <div class="collapse" id="submenu1">
-                    <a class="nav-link" href="/
-registro/registro.php"><i class="fas fa-clipboard-list"></i> Registro</a>
-                </div>
-                <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu2" aria-expanded="false">
-                    <i class="fas fa-cogs"></i> Administración
-                </button>
-                <div class="collapse" id="submenu2">
-                    <a class="nav-link" href="/
-usuarios/cuentas.php"><i class="fas fa-users"></i> Usuarios</a>
-                    <a class="nav-link" href="/
-producto/productos.php"><i class="fas fa-boxes"></i> Inventario</a>
-                </div>
-            </nav>
-        </div>
 
         <!-- Content -->
         <div class="content">
@@ -152,7 +129,6 @@ producto/productos.php"><i class="fas fa-boxes"></i> Inventario</a>
     </div>
 
     <!-- Footer -->
-</main>
     <?php include __DIR__ . '/src/footer.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

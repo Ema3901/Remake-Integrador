@@ -61,8 +61,7 @@ $stmt_recomendados->closeCursor();
     <!-- Header -->
     <?php include __DIR__ . '/../src/include/header.php'; ?>
 
-    <!-- Main content -->
-<main style="min-height: 53.5vh;">
+    <!-- Contenido principal -->
     <main class="container my-5">
         <div class="row">
             <!-- Thumbnails -->
@@ -140,7 +139,6 @@ $stmt_recomendados->closeCursor();
     </main>
 
     <!-- Footer -->
-</main>
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
     <!-- Font Awesome Integration -->

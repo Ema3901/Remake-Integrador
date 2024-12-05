@@ -29,8 +29,7 @@
     <!-- Header -->
     <?php include __DIR__ . '/src/include/header.php'; ?>
 
-    <!-- Main content -->
-<main style="min-height: 53.5vh;">
+    <!-- Contenido principal -->
 
 <!-- Carrusel -->
 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
@@ -106,7 +105,6 @@
 
 
     <!-- Footer -->
-</main>
     <?php include __DIR__ . '/src/include/footer.php'; ?>
 
 
