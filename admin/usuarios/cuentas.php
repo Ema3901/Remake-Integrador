@@ -1,10 +1,8 @@
 <?php
 include __DIR__ . '/../../src/database/db.php';
 
-// Fetch users with their ranges
-$sql = "SELECT u.id_user, u.user_namee, u.namee, u.last_name, u.email_address, r.rangee 
-        FROM users u
-        JOIN ranges r ON u.id_range = r.id_range";
+// Llamar al procedimiento almacenado
+$sql = "CALL GetUsersWithRanges()";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -130,7 +128,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </main>
         <!-- Footer -->
         <?php include __DIR__ . '/../src/footer.php'; ?>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/admin/src/js/cuentas.js"></script>
