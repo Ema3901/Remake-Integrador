@@ -40,6 +40,9 @@ if (!isset($_SESSION['user_id'])) {
     <?php include __DIR__ . '/src/header.php'; ?>
 
     <!-- Main content -->
+     <main>
+        <div> "Hola" </div>
+     </main>
 
     <!-- Footer -->
     <?php include __DIR__ . '/src/footer.php'; ?>
