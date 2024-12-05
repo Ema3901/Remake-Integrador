@@ -95,7 +95,7 @@ function saveImage($file, $destination) {
     $targetFile = $destination . $fileName;
 
     if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-        return "src/images/uploads/productos/" . $fileName;
+        return "src/uploads/" . $fileName;
     } else {
         throw new Exception("Error al subir el archivo: " . $file['name']);
     }
@@ -111,6 +111,10 @@ function saveImage($file, $destination) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/src/css/style.css">
 </head>
+
+<!-- Header -->
+<?php include __DIR__ . '/../src/header.php'; ?>
+
 <main style="min-height: 53.5vh;">
 <body>
     <div class="container my-5">
@@ -230,6 +234,10 @@ function saveImage($file, $destination) {
         </form>
     </div>
 </main>
+
+<!-- footer -->
+<?php include __DIR__ . '/../src/footer.php'; ?>
+
     <script>
         document.getElementById('addVariation').addEventListener('click', function () {
             const variations = document.getElementById('variations');
