@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 try {
     $sql = "SELECT u.id_user, u.user_namee, u.namee, u.last_name, u.email_address, r.rangee 

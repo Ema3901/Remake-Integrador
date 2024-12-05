@@ -1,6 +1,6 @@
 <?php
 // Incluye el archivo de conexión a la base de datos
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 // Verifica que se haya recibido el parámetro `id` mediante el método DELETE
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {

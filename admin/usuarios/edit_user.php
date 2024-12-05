@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 // Verifica que los datos se envíen mediante POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 // Verifica si se recibe el ID del usuario
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {

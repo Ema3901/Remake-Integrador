@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 $sql = "SELECT id_range, rangee FROM ranges";
 $stmt = $pdo->prepare($sql);
