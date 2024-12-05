@@ -9,11 +9,22 @@
 }
 
 /* General */
-body {
+html, body {
+    height: 100%;
+    margin: 0;
     font-family: var(--font-primary);
     background-color: #f5f5f5;
     color: var(--secondary-color);
     line-height: 1.6;
+    display: flex;
+    flex-direction: column; /* Para apilar los elementos verticalmente */
+}
+
+/* Body (estructura de flexbox) */
+body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 /* Header */
@@ -39,7 +50,6 @@ header {
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
 }
-
 
 /* Buscador */
 .search-form {
@@ -70,17 +80,6 @@ header {
     background-color: var(--primary-color);
     color: white;
     padding: 5px 15px;
-}
-
-.search-input:focus {
-    border-color: var(--primary-color);
-}
-
-.btn-search {
-    border-radius: 0 20px 20px 0;
-    background-color: var(--primary-color);
-    color: white;
-    padding: 5px 10px;
 }
 
 /* Iconos */
@@ -157,6 +156,22 @@ header {
 
 .category-box:hover .category-overlay {
     opacity: 1;
+}
+
+/* Main content (Flexbox) */
+main {
+    flex-grow: 1; /* Esto hace que el main ocupe el espacio restante */
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+/* Footer (pegado al final de la página) */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: auto; /* Esto empuja el footer hacia el final */
 }
 
 /* Responsividad */
