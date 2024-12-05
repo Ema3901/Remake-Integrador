@@ -158,7 +158,7 @@ $productos_recomendados = $stmt_recomendados->fetchAll(PDO::FETCH_ASSOC);
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($producto_recomendado['modelo']) ?></h5>
                                 <p class="card-text">$<?= number_format($producto_recomendado['precio'], 2) ?></p>
-                                <a href="producto.php?id=<?= $producto_recomendado['id_shoe'] ?>" class="btn btn-primary">Ver producto</a>
+                                <a href="detalleProducto.php?id=<?= $producto_recomendado['id_shoe'] ?>" class="btn btn-primary">Ver producto</a>
                             </div>
                         </div>
                     </div>
