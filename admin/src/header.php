@@ -29,13 +29,16 @@ if (session_status() == PHP_SESSION_NONE) {
                             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                                 <ul class="navbar-nav">
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" href="/index.php">Inicio</a>
+                                        <a class="nav-link text-dark" href="/index.php">Panel</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" href="/producto/productos.php">Productos</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" href="/usuarios/cuentas.php">Usuarios</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" href="https://calzadojj.net" target="_blank">Tienda</a>
                                     </li>
                                     <li>
                                         <a href="javascript:void(0);" id="loginModalTrigger" data-bs-toggle="modal" data-bs-target="#loginModal" class="text-muted me-3" aria-label="Cuenta de usuario"><i class="fas fa-user"></i></a>
