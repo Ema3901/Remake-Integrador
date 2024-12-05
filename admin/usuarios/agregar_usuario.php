@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <!-- Formulario para agregar usuario -->
-        <form method="POST" action="">
+        <form method="POST" action="" id="add-user-form">
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
@@ -125,14 +125,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="d-flex justify-content-end">
                 <a href="cuentas.php" class="btn btn-secondary mt-3 me-3">Cancelar</a>
                 <a href="cuentas.php" class="btn btn-secondary mt-3 me-3">Regresar</a>
-                <button type="submit" class="btn btn-primary mt-3">Agregar Usuario</button>
+                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#confirmationModal">Agregar Usuario</button>
             </div>
         </form>
     </div>
     </main>
 
-        <!-- Footer -->
-        <?php include __DIR__ . '/../src/footer.php'; ?>
+    <!-- Modal de Confirmación -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirmación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de agregar este usuario?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <?php include __DIR__ . '/../src/footer.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
