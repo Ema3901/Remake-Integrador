@@ -9,57 +9,33 @@ if ($id_producto <= 0) {
     die("Producto no encontrado.");
 }
 
-// Consultar los detalles del producto
-$query_producto = "SELECT 
-    s.id_shoe, 
-    s.model_name AS modelo, 
-    s.price AS precio, 
-    s.descriptionn AS descripcion, 
-    s.img_main AS img_principal, 
-    s.img_profile AS img_perfil, 
-    s.img_front AS img_frontal, 
-    s.img_rear AS img_trasera
-FROM shoes s
-WHERE s.id_shoe = :id";
-
-$stmt = $pdo->prepare($query_producto);
+// Consultar los detalles del producto usando un procedimiento almacenado
+$stmt = $pdo->prepare("CALL GetProductDetails(:id)");
 $stmt->execute(['id' => $id_producto]);
 $producto = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt->closeCursor(); // Es necesario cerrar el cursor para usar otra consulta
 
 if (!$producto) {
     die("Producto no encontrado.");
 }
 
-// Consultar las tallas disponibles
-$query_tallas = "SELECT sz.sizeMX AS talla
-FROM shoes_variations sv
-JOIN sizes sz ON sv.id_size = sz.id_size
-WHERE sv.id_shoe = :id";
-$stmt_tallas = $pdo->prepare($query_tallas);
+// Consultar las tallas disponibles usando un procedimiento almacenado
+$stmt_tallas = $pdo->prepare("CALL GetAvailableSizes(:id)");
 $stmt_tallas->execute(['id' => $id_producto]);
 $tallas = $stmt_tallas->fetchAll(PDO::FETCH_ASSOC);
+$stmt_tallas->closeCursor();
 
-// Consultar los colores disponibles (incluyendo color_code)
-$query_colores = "SELECT c.color AS nombre, c.color_code AS codigo
-FROM shoes_variations sv
-JOIN colors c ON sv.id_color = c.id_color
-WHERE sv.id_shoe = :id";
-$stmt_colores = $pdo->prepare($query_colores);
+// Consultar los colores disponibles usando un procedimiento almacenado
+$stmt_colores = $pdo->prepare("CALL GetAvailableColors(:id)");
 $stmt_colores->execute(['id' => $id_producto]);
 $colores = $stmt_colores->fetchAll(PDO::FETCH_ASSOC);
+$stmt_colores->closeCursor();
 
-// Consultar productos aleatorios para recomendaciones
-$query_recomendados = "SELECT 
-    s.id_shoe, 
-    s.model_name AS modelo, 
-    s.price AS precio, 
-    s.img_main AS img_principal 
-FROM shoes s 
-ORDER BY RAND() LIMIT 4"; // Muestra 4 productos aleatorios
-$stmt_recomendados = $pdo->prepare($query_recomendados);
+// Consultar productos aleatorios para recomendaciones usando un procedimiento almacenado
+$stmt_recomendados = $pdo->prepare("CALL GetRecommendedProducts()");
 $stmt_recomendados->execute();
 $productos_recomendados = $stmt_recomendados->fetchAll(PDO::FETCH_ASSOC);
-
+$stmt_recomendados->closeCursor();
 ?>
 
 <!DOCTYPE html>
@@ -139,11 +115,6 @@ $productos_recomendados = $stmt_recomendados->fetchAll(PDO::FETCH_ASSOC);
                         <?php endforeach; ?>
                     </div>
                 </div>
-
-                <!-- Información oculta -->
-                <input type="hidden" name="id_producto" value="<?= $producto['id_shoe'] ?>">
-                <input type="hidden" name="modelo" value="<?= htmlspecialchars($producto['modelo']) ?>">
-                <input type="hidden" name="precio" value="<?= $producto['precio'] ?>">
             </div>
         </div>
 
@@ -165,7 +136,6 @@ $productos_recomendados = $stmt_recomendados->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             </div>
         </div>
-
     </main>
 
     <!-- Footer -->
@@ -173,8 +143,6 @@ $productos_recomendados = $stmt_recomendados->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Font Awesome Integration -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-    <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
