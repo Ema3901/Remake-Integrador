@@ -31,7 +31,6 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
 
     <!-- Exclusive Footer CSS -->
-    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
 
 <body>
