@@ -18,20 +18,14 @@
                 <p><a href="/store/sesion.php" class="text-white text-decoration-none">Cuenta</a></p>
             </div>
 
-            <!-- Encuéntranos -->
+            <!-- Contact Info -->
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
                 <h5 class="text-uppercase mb-4 font-weight-bold">Encuéntranos</h5>
-                <p>Reynosa, Tamaulipas, México, Calle Querétaro #25 Col. Los Muros</p>
-                <div class="social-icons mt-3">
-                    <a href="https://www.facebook.com/JanYJuan.JJ" class="text-white me-3" >
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://www.instagram.com/calzado_j_j_/" class="text-white me-3" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://wa.me/528998733689" class="text-white me-3" aria-label="WhatsApp">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
+                <p>Reynosa, Tamaulipas, Mexico, Calle Querétaro #25 Col. Los Muros</p>
+                <div>
+                    <a href="https://www.facebook.com/JanYJuan.JJ" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/calzado_j_j_/" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
 
