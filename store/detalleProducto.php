@@ -48,6 +48,18 @@ $stmt_colores = $pdo->prepare($query_colores);
 $stmt_colores->execute(['id' => $id_producto]);
 $colores = $stmt_colores->fetchAll(PDO::FETCH_ASSOC);
 
+// Consultar productos aleatorios para recomendaciones
+$query_recomendados = "SELECT 
+    s.id_shoe, 
+    s.model_name AS modelo, 
+    s.price AS precio, 
+    s.img_main AS img_principal 
+FROM shoes s 
+ORDER BY RAND() LIMIT 4"; // Muestra 4 productos aleatorios
+$stmt_recomendados = $pdo->prepare($query_recomendados);
+$stmt_recomendados->execute();
+$productos_recomendados = $stmt_recomendados->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -134,6 +146,26 @@ $colores = $stmt_colores->fetchAll(PDO::FETCH_ASSOC);
                 <input type="hidden" name="precio" value="<?= $producto['precio'] ?>">
             </div>
         </div>
+
+        <!-- Productos recomendados -->
+        <div class="container my-5">
+            <h4>Productos recomendados</h4>
+            <div class="row">
+                <?php foreach ($productos_recomendados as $producto_recomendado): ?>
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <img src="/<?= htmlspecialchars($producto_recomendado['img_principal']) ?>" class="card-img-top" alt="<?= htmlspecialchars($producto_recomendado['modelo']) ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($producto_recomendado['modelo']) ?></h5>
+                                <p class="card-text">$<?= number_format($producto_recomendado['precio'], 2) ?></p>
+                                <a href="producto.php?id=<?= $producto_recomendado['id_shoe'] ?>" class="btn btn-primary">Ver producto</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
     </main>
 
     <!-- Footer -->
