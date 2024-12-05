@@ -23,6 +23,9 @@
 
     <!-- Exclusive panel CSS-->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/admin.css">
+
+        <!-- Exclusive Footer CSS -->
+        <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
 
 <body>
