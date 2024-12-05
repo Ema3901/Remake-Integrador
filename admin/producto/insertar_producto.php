@@ -5,7 +5,7 @@
 include __DIR__ . '/../../src/database/db.php';
 
 // Ruta base para guardar imágenes
-$imageBasePath = __DIR__ . "/../../../src/images/uploads";
+$imageBasePath = __DIR__ . "uploads";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_brand = intval($_POST['id_brand']);
