@@ -10,7 +10,6 @@ try {
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
 
-    // Depuración: Mostrar los resultados antes de proceder
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if ($products === false) {
         throw new Exception("No se obtuvieron productos.");
@@ -22,17 +21,6 @@ try {
     // Si hay algún error, capturarlo y mostrarlo
     $error_message = "Error al ejecutar la consulta: " . $e->getMessage();
     $products = []; // Asegurar que no falle la parte de mostrar la tabla
-}
-
-// Depuración: Verificar si estamos obteniendo datos
-if ($error_message) {
-    echo "<div style='color: red;'>$error_message</div>";
-} else {
-    echo "<div style='color: green;'>Consulta ejecutada con éxito.</div>";
-    // Ver los productos (para depuración)
-    echo "<pre>";
-    var_dump($products);
-    echo "</pre>";
 }
 ?>
 
