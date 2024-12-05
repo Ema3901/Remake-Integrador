@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
 
     <!-- Exclusive panel CSS-->
-    <link rel="stylesheet" href="https://administracion.calzadojj.net/src/css/admin.css">
+    <link rel="stylesheet" href="https://calzadojj.net/src/css/admin.css">
 </head>
 
 <body>
