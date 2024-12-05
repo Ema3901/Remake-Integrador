@@ -10,8 +10,8 @@
 
 /* General */
 html, body {
-    height: 100%; /* Hace que el documento ocupe toda la altura de la ventana */
-    margin: 0;
+    height: 100%; /* Asegura que todo el documento ocupe la altura total de la ventana */
+    margin: 0; /* Elimina márgenes predeterminados */
 }
 
 /* Body y Contenedor */
@@ -20,8 +20,8 @@ body {
     background-color: #f5f5f5;
     color: var(--secondary-color);
     line-height: 1.6;
-    display: flex;
-    flex-direction: column; /* Organiza los elementos en columna */
+    display: flex; /* Usamos flexbox para organización vertical */
+    flex-direction: column; /* Colocamos los elementos de arriba hacia abajo */
     min-height: 100vh; /* Asegura que el body ocupe al menos la altura de la ventana */
 }
 
@@ -156,8 +156,8 @@ header {
 
 /* Main content */
 main {
-    flex-grow: 1; /* Permite que el main ocupe el espacio restante */
-    padding-bottom: 50px; /* Asegura que el footer no se solape con el contenido */
+    flex-grow: 1; /* Permite que main ocupe el espacio restante */
+    padding: 20px; /* Asegura que haya un pequeño espacio de margen */
 }
 
 /* Footer */
