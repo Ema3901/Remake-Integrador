@@ -37,11 +37,8 @@ if (session_status() == PHP_SESSION_NONE) {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" href="https://calzadojj.net" target="_blank">Tienda</a>
                                 </li>
-                                <!-- Botón de inicio de sesión sin recuadro -->
                                 <li class="nav-item">
-                                    <a href="javascript:void(0);" id="loginModalTrigger" data-bs-toggle="modal" data-bs-target="#loginModal" class="nav-link text-muted d-flex align-items-center" aria-label="Cuenta de usuario">
-                                        <i class="fas fa-user me-2"></i> Mi Cuenta
-                                    </a>
+                                    <a href="javascript:void(0);" id="loginModalTrigger" data-bs-toggle="modal" data-bs-target="#loginModal" class="nav-link text-muted d-flex align-items-center" aria-label="Cuenta de usuario"><i class="fas fa-user me-2"></i> Mi Cuenta</a>
                                 </li>
                             </ul>
                         </div>
