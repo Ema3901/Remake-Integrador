@@ -13,7 +13,7 @@ if (session_status() == PHP_SESSION_NONE) {
             <div class="col-12 d-flex justify-content-between align-items-center">
                 <!-- Logo a la izquierda -->
                 <a href="/index.php" class="logo-container">
-                    <img src="/src/images/logo/logo_landscape.png" alt="Logo de Calzado JJ" class="logo-header">
+                    <img src="https://calzadojj.net/src/images/logo/logo_landscape.png" alt="Logo de Calzado JJ" class="logo-header">
                 </a>
                 <!-- Iconos y barra de navegación a la derecha -->
                 <div class="d-flex justify-content-end">
