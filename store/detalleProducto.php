@@ -95,18 +95,6 @@ $colores = $stmt_colores->fetchAll(PDO::FETCH_ASSOC);
                 <p><?= htmlspecialchars($producto['descripcion']) ?></p>
                 <h4>$<?= number_format($producto['precio'], 2) ?></h4>
 
-                <!-- Form to add product to the cart -->
-                <form action="/
-carrito/carrito.php" method="POST">
-                    <div class="mb-3">
-                        <h6>Tallas disponibles</h6>
-                        <select name="talla" class="form-select" required>
-                            <?php foreach ($tallas as $talla): ?>
-                                <option value="<?= htmlspecialchars($talla['talla']) ?>"><?= htmlspecialchars($talla['talla']) ?> MX</option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
                     <div class="mb-3">
                         <h6>Colores disponibles</h6>
                         <div class="d-flex">
