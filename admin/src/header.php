@@ -37,9 +37,6 @@ if (session_status() == PHP_SESSION_NONE) {
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" href="/usuarios/cuentas.php">Usuarios</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" href="/store/contactanos.php">Sesion</a>
-                                    </li>
                                     <li>
                                         <a href="javascript:void(0);" id="loginModalTrigger" data-bs-toggle="modal" data-bs-target="#loginModal" class="text-muted me-3" aria-label="Cuenta de usuario"><i class="fas fa-user"></i></a>
                                     </li>
