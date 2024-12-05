@@ -32,6 +32,9 @@ if (session_status() == PHP_SESSION_NONE) {
                                     <a class="nav-link text-dark" href="/usuarios/cuentas.php">Usuarios</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/venta/punto_de_venta.php">Punto de venta</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link text-dark" href="https://calzadojj.net" target="_blank">Tienda</a>
                                 </li>
                                 <!-- Botón de inicio de sesión sin recuadro -->
