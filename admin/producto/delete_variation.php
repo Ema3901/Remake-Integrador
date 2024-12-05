@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 // Verificar si se recibe el ID de la variación
 $data = json_decode(file_get_contents('php://input'), true);

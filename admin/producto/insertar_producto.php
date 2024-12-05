@@ -2,7 +2,7 @@
 // insertar_producto.php - Página para insertar nuevos productos
 
 // Incluir el archivo de conexión
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 // Ruta base para guardar imágenes
 $imageBasePath = __DIR__ . "/../../../src/images/uploads";

@@ -1,7 +1,7 @@
 <?php
 // editar.php - Página para editar productos existentes
 
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 // Ruta base para guardar imágenes
 $imageBasePath = __DIR__ . "/../../../src/images/uploads";
