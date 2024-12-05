@@ -22,7 +22,7 @@
     <?php include __DIR__ . '/src/header.php'; ?>
 
     <!-- Main content -->
-    <main style="min-height: 100vh;">
+    <main style="min-height: 80vh;">
         <div> Hola rellena todo </div>
     </main>
 
