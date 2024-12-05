@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 // Obtener los productos usando el procedimiento almacenado
 $sql = "CALL sp_get_products()";  // Llamar al procedimiento con el nuevo nombre
