@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost"; // Cambia esto si es necesario
-$username = "root";        // Usuario de tu servidor
-$password = "";            // Contraseña de tu servidor
-$database = "databasecalzadojj"; // Nombre de tu base de datos
+$username = "u864758327_DevCalzadoJJ";        // Usuario de tu servidor
+$password = "calzadoJJ_marsopa69";            // Contraseña de tu servidor
+$database = "u864758327_CalzadoJJ"; // Nombre de tu base de datos
 
 try {
     // Crear conexión usando PDO
