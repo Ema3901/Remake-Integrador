@@ -21,7 +21,6 @@
     <link rel="stylesheet" href="/src/css/style.css">
     <link rel="stylesheet" href="/src/css/footer.css">
     <link rel="stylesheet" href="/src/css/carrusel.css">
-    <link rel="stylesheet" href="/src/css/footer.css">
     <link rel="stylesheet" href="/src/css/categorias.css">
 
 </head>
