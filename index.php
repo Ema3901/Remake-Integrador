@@ -107,7 +107,9 @@
     <!-- Footer -->
     <?php include __DIR__ . '/src/include/footer.php'; ?>
 
-    <!-- Font Awesome -->
+
+<!-- Font Awesome Integration -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <!-- Scripts de Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
