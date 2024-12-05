@@ -225,7 +225,8 @@ function saveImage($file, $destination) {
             </div>
             <button type="button" class="btn btn-secondary mt-3" id="addVariation">Agregar Variación</button>
             <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
-            <a href="/admin/productos/productos.php" class="btn btn-danger mt-3">Cancelar</a>
+            <a href="/
+productos/productos.php" class="btn btn-danger mt-3">Cancelar</a>
         </form>
     </div>
     <script>

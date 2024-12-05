@@ -40,7 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Redirigir al usuario según su rol
                 if ($user['id_range'] == 1 || $user['id_range'] == 2) {
                     // Administrador o Empleado
-                    header('Location: /admin/panel.php');
+                    header('Location: /
+panel.php');
                 } else {
                     // Cliente
                     header('Location: /index.php');

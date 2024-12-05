@@ -37,14 +37,16 @@ include __DIR__ . '/src/header.php';
         <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <nav class="nav flex-column">
-        <a class="nav-link" href="/admin/panel.php">
+        <a class="nav-link" href="/
+panel.php">
             <i class="fas fa-tachometer-alt"></i> <span>Panel</span>
         </a>
         <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu1" aria-expanded="false">
             <i class="fas fa-chart-line"></i> Resumen
         </button>
         <div class="collapse" id="submenu1">
-            <a class="nav-link" href="/admin/registro/registro.php">
+            <a class="nav-link" href="/
+registro/registro.php">
                 <i class="fas fa-clipboard-list"></i> Registro
             </a>
         </div>
@@ -52,10 +54,12 @@ include __DIR__ . '/src/header.php';
             <i class="fas fa-cogs"></i> Administración
         </button>
         <div class="collapse" id="submenu2">
-            <a class="nav-link" href="/admin/usuarios/cuentas.php">
+            <a class="nav-link" href="/
+usuarios/cuentas.php">
                 <i class="fas fa-users"></i> Usuarios
             </a>
-            <a class="nav-link" href="/admin/productos/productos.php">
+            <a class="nav-link" href="/
+productos/productos.php">
                 <i class="fas fa-boxes"></i> Inventario
             </a>
         </div>

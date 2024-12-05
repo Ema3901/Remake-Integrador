@@ -96,7 +96,8 @@ $colores = $stmt_colores->fetchAll(PDO::FETCH_ASSOC);
                 <h4>$<?= number_format($producto['precio'], 2) ?></h4>
 
                 <!-- Form to add product to the cart -->
-                <form action="/admin/carrito/carrito.php" method="POST">
+                <form action="/
+carrito/carrito.php" method="POST">
                     <div class="mb-3">
                         <h6>Tallas disponibles</h6>
                         <select name="talla" class="form-select" required>
