@@ -156,7 +156,7 @@ header {
 
 /* Main content */
 main {
-    flex-grow: 1; /* Permite que main ocupe el espacio restante */
+    flex: 1; /* Hace que main ocupe todo el espacio restante */
     padding: 20px; /* Asegura que haya un pequeño espacio de margen */
 }
 
@@ -168,6 +168,7 @@ footer {
     padding: 20px;
     position: relative;
     width: 100%; /* Asegura que el footer ocupe todo el ancho */
+    margin-top: auto; /* Este cambio hace que el footer se empuje al fondo */
 }
 
 /* Responsividad */
