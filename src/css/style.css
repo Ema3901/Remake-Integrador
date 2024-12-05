@@ -14,14 +14,6 @@ body {
     background-color: #f5f5f5;
     color: var(--secondary-color);
     line-height: 1.6;
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Asegura que el body ocupe toda la pantalla */
-}
-
-html, body {
-    height: 100%;
-    margin: 0;
 }
 
 /* Header */
@@ -47,6 +39,7 @@ header {
     justify-content: center; /* Centra horizontalmente */
     align-items: center; /* Centra verticalmente */
 }
+
 
 /* Buscador */
 .search-form {
@@ -77,6 +70,17 @@ header {
     background-color: var(--primary-color);
     color: white;
     padding: 5px 15px;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+}
+
+.btn-search {
+    border-radius: 0 20px 20px 0;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 10px;
 }
 
 /* Iconos */
@@ -168,18 +172,4 @@ header {
     footer .social-icons a {
         font-size: 1.2rem;  /* Reducimos aún más los iconos en pantallas pequeñas */
     }
-}
-
-/* Estilos para el Main y Footer */
-main {
-    flex-grow: 1; /* Esto hace que el contenido ocupe el espacio restante */
-    padding: 20px;
-    background-color: #f4f4f4;
-}
-
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px;
 }
