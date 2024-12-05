@@ -32,13 +32,13 @@ if (session_status() == PHP_SESSION_NONE) {
                                         <a class="nav-link text-dark" href="/index.php">Inicio</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" href="/store/catalogo.php">Catálogo</a>
+                                        <a class="nav-link text-dark" href="/producto/productos.php">Productos</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" href="/store/conocenos.php">Sobre Nosotros</a>
+                                        <a class="nav-link text-dark" href="/usuarios/cuentas.php">Usuarios</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" href="/store/contactanos.php">Contacto</a>
+                                        <a class="nav-link text-dark" href="/store/contactanos.php">Sesion</a>
                                     </li>
                                     <li>
                                         <a href="javascript:void(0);" id="loginModalTrigger" data-bs-toggle="modal" data-bs-target="#loginModal" class="text-muted me-3" aria-label="Cuenta de usuario"><i class="fas fa-user"></i></a>
