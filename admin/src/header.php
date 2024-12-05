@@ -1,4 +1,4 @@
-<li?php
+<?php
 // Comprobar si la sesión ya ha sido iniciada
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
