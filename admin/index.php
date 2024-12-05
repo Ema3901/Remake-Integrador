@@ -42,7 +42,8 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Main content -->
      <main>
 
-     
+        <div> Hola rellena todo </div>
+
      </main>
 
     <!-- Footer -->
