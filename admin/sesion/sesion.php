@@ -4,6 +4,12 @@ include __DIR__ . '/../../src/database/db.php';
 
 session_start();
 
+// Si ya hay una sesión activa, redirigir al panel
+if (isset($_SESSION['user_id'])) {
+    header('Location: /index.php');  // Cambia esto por la URL de tu panel
+    exit();
+}
+
 $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
