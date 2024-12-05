@@ -15,7 +15,7 @@
                 <h5 class="text-uppercase mb-4 font-weight-bold">Ayuda</h5>
                 <p><a href="/store/conocenos.php" class="text-white text-decoration-none">Sobre Nosotros</a></p>
                 <p><a href="/store/contactanos.php" class="text-white text-decoration-none">Contacto</a></p>
-                <p><a href="/store/sesion.php" class="text-white text-decoration-none">Cuenta</a></p>
+                <p><a href="/index.php" class="text-white text-decoration-none">Inicio</a></p>
             </div>
 
             <!-- Contact Info -->
