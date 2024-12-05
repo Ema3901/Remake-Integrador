@@ -12,10 +12,9 @@
 html, body {
     height: 100%; /* Asegura que la altura de todo el documento sea del 100% */
     margin: 0; /* Elimina márgenes predeterminados */
-    display: flex;
-    flex-direction: column; /* Alineación vertical de los elementos */
 }
 
+/* Body y Contenedor */
 body {
     font-family: var(--font-primary);
     background-color: #f5f5f5;
@@ -23,7 +22,7 @@ body {
     line-height: 1.6;
     display: flex;
     flex-direction: column; /* Alineación vertical de los elementos */
-    min-height: 100vh; /* Asegura que el body ocupe el 100% de la altura de la pantalla */
+    min-height: 100vh; /* Hace que el body ocupe toda la altura de la ventana */
 }
 
 /* Header */
@@ -157,7 +156,7 @@ header {
 
 /* Main content */
 main {
-    flex-grow: 1; /* Hace que main ocupe todo el espacio restante disponible */
+    flex: 1; /* Permite que el main crezca y ocupe el espacio disponible */
 }
 
 /* Footer */
@@ -166,7 +165,8 @@ footer {
     color: #fff;
     text-align: center;
     padding: 20px;
-    margin-top: auto; /* Asegura que el footer se mantenga en la parte inferior si el contenido es pequeño */
+    position: relative;
+    bottom: 0; /* Asegura que esté al fondo si hay poco contenido */
 }
 
 /* Responsividad */
