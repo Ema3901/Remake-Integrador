@@ -16,13 +16,13 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
 </head>
-<body style="min-height: 100vh;">
+<body>
 
     <!-- Header -->
     <?php include __DIR__ . '/src/header.php'; ?>
 
     <!-- Main content -->
-    <main class="flex-grow-1">
+    <main style="min-height: 100vh;">
         <div> Hola rellena todo </div>
     </main>
 
