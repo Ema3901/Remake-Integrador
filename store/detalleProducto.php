@@ -107,8 +107,6 @@ $colores = $stmt_colores->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-success">Agregar al carrito</button>
-
                     <!-- Información oculta -->
                     <input type="hidden" name="id_producto" value="<?= $producto['id_shoe'] ?>">
                     <input type="hidden" name="modelo" value="<?= htmlspecialchars($producto['modelo']) ?>">
