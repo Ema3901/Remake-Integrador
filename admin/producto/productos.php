@@ -1,13 +1,41 @@
 <?php
 include __DIR__ . '/../../src/database/db.php';
 
-// Obtener los productos usando el procedimiento almacenado
-$sql = "CALL sp_get_products()";  // Llamar al procedimiento con el nuevo nombre
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$stmt->closeCursor(); // Liberar recursos
+// Inicializar la variable de error
+$error_message = '';
+
+try {
+    // Obtener los productos usando el procedimiento almacenado
+    $sql = "CALL sp_get_products()";  // Llamar al procedimiento con el nuevo nombre
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    // Depuración: Mostrar los resultados antes de proceder
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if ($products === false) {
+        throw new Exception("No se obtuvieron productos.");
+    }
+
+    $stmt->closeCursor(); // Liberar recursos
+
+} catch (Exception $e) {
+    // Si hay algún error, capturarlo y mostrarlo
+    $error_message = "Error al ejecutar la consulta: " . $e->getMessage();
+    $products = []; // Asegurar que no falle la parte de mostrar la tabla
+}
+
+// Depuración: Verificar si estamos obteniendo datos
+if ($error_message) {
+    echo "<div style='color: red;'>$error_message</div>";
+} else {
+    echo "<div style='color: green;'>Consulta ejecutada con éxito.</div>";
+    // Ver los productos (para depuración)
+    echo "<pre>";
+    var_dump($products);
+    echo "</pre>";
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -61,6 +89,12 @@ $stmt->closeCursor(); // Liberar recursos
             </div>
         </div>
 
+        <?php if (!empty($error_message)): ?>
+            <div class="alert alert-danger">
+                <strong>Error!</strong> <?= $error_message ?>
+            </div>
+        <?php endif; ?>
+
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
@@ -74,47 +108,53 @@ $stmt->closeCursor(); // Liberar recursos
                 </tr>
             </thead>
             <tbody id="productsTableBody">
-                <?php foreach ($products as $product): ?>
-                    <tr data-id="<?= $product['product_id'] ?>" class="product-row">
-                        <td><?= $product['product_id'] ?></td>
-                        <td class="expandable" style="cursor: pointer;">
-                            <?= htmlspecialchars($product['model']) ?>
-                        </td>
-                        <td><?= htmlspecialchars($product['brand']) ?></td>
-                        <td><?= htmlspecialchars($product['gender']) ?></td>
-                        <td>$<?= number_format($product['price'], 2) ?></td>
-                        <td><?= htmlspecialchars($product['description']) ?></td>
-                        <td>
-                            <a href="editar.php?id=<?= $product['product_id'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                            <button class="btn btn-sm btn-danger deleteProduct" data-id="<?= $product['product_id'] ?>">Eliminar</button>
-                        </td>
+                <?php if (!empty($products)): ?>
+                    <?php foreach ($products as $product): ?>
+                        <tr data-id="<?= $product['product_id'] ?>" class="product-row">
+                            <td><?= $product['product_id'] ?></td>
+                            <td class="expandable" style="cursor: pointer;">
+                                <?= htmlspecialchars($product['model']) ?>
+                            </td>
+                            <td><?= htmlspecialchars($product['brand']) ?></td>
+                            <td><?= htmlspecialchars($product['gender']) ?></td>
+                            <td>$<?= number_format($product['price'], 2) ?></td>
+                            <td><?= htmlspecialchars($product['description']) ?></td>
+                            <td>
+                                <a href="editar.php?id=<?= $product['product_id'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                                <button class="btn btn-sm btn-danger deleteProduct" data-id="<?= $product['product_id'] ?>">Eliminar</button>
+                            </td>
+                        </tr>
+                        <tr class="product-details" style="display: none;">
+                            <td colspan="7">
+                                <div>
+                                    <h5>Imágenes:</h5>
+                                    <img src="<?= $product['main_image'] ?>" alt="Imagen Principal" style="max-height: 100px;">
+                                    <img src="<?= $product['profile_image'] ?>" alt="Imagen Perfil" style="max-height: 100px;">
+                                    <img src="<?= $product['front_image'] ?>" alt="Imagen Frontal" style="max-height: 100px;">
+                                    <img src="<?= $product['rear_image'] ?>" alt="Imagen Trasera" style="max-height: 100px;">
+                                    <h5>Variaciones:</h5>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Talla</th>
+                                                <th>Color</th>
+                                                <th>Stock Local</th>
+                                                <th>Stock Tianguis</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7" class="text-center">No se encontraron productos.</td>
                     </tr>
-                    <tr class="product-details" style="display: none;">
-                        <td colspan="7">
-                            <div>
-                                <h5>Imágenes:</h5>
-                                <img src="<?= $product['main_image'] ?>" alt="Imagen Principal" style="max-height: 100px;">
-                                <img src="<?= $product['profile_image'] ?>" alt="Imagen Perfil" style="max-height: 100px;">
-                                <img src="<?= $product['front_image'] ?>" alt="Imagen Frontal" style="max-height: 100px;">
-                                <img src="<?= $product['rear_image'] ?>" alt="Imagen Trasera" style="max-height: 100px;">
-                                <h5>Variaciones:</h5>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Talla</th>
-                                            <th>Color</th>
-                                            <th>Stock Local</th>
-                                            <th>Stock Tianguis</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
