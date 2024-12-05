@@ -36,7 +36,7 @@
         <!-- Formulario de contacto -->
         <div class="col-md-6 mb-4">
             <h4>Envíanos un mensaje</h4>
-            <form id="contactForm" action="/src/includes/send_email.php" method="POST">
+            <form id="contactForm" action="/src/include/send_email.php" method="POST">
                 <div class="mb-3">
                     <label for="email" class="form-label">
                         <i class="fas fa-envelope"></i> Correo electrónico
