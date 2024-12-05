@@ -5,7 +5,7 @@
 include __DIR__ . '/../../src/database/db.php';
 
 // Ruta base para guardar imágenes
-$imageBasePath = __DIR__ . "uploads";
+$imageBasePath = __DIR__ . "/uploads";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_brand = intval($_POST['id_brand']);
@@ -214,7 +214,7 @@ function saveImage($file, $destination) {
             </div>
             <button type="button" class="btn btn-secondary mt-3" id="addVariation">Agregar Variación</button>
             <button type="submit" class="btn btn-primary mt-3">Guardar Producto</button>
-            <a href="/admin/productos/productos.php" class="btn btn-danger mt-3">Regresar</a>
+            <a href="/producto/productos.php" class="btn btn-danger mt-3">Regresar</a>
             
         </form>
     </main>
