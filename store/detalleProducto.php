@@ -61,6 +61,13 @@ $colores = $stmt_colores->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/src/css/style.css">
     <link rel="stylesheet" href="/src/css/footer.css">
+    <script>
+        function textToSpeech() {
+            const description = document.getElementById("product-description").textContent;
+            const utterance = new SpeechSynthesisUtterance(description);
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
 </head>
 <body>
     <!-- Header -->
@@ -92,26 +99,39 @@ $colores = $stmt_colores->fetchAll(PDO::FETCH_ASSOC);
             <!-- Product details -->
             <div class="col-md-4">
                 <h3><?= htmlspecialchars($producto['modelo']) ?></h3>
-                <p><?= htmlspecialchars($producto['descripcion']) ?></p>
+                <p id="product-description"><?= htmlspecialchars($producto['descripcion']) ?></p>
                 <h4>$<?= number_format($producto['precio'], 2) ?></h4>
 
-                    <div class="mb-3">
-                        <h6>Colores disponibles</h6>
-                        <div class="d-flex">
-                            <?php foreach ($colores as $color): ?>
-                                <label class="me-2">
-                                    <input type="radio" name="color" value="<?= htmlspecialchars($color['codigo']) ?>" style="display:none;" required>
-                                    <span class="btn btn-outline-dark rounded-circle" style="width: 30px; height: 30px; background-color: <?= htmlspecialchars($color['codigo']) ?>; border: 1px solid #000;" title="<?= htmlspecialchars($color['nombre']) ?>"></span>
-                                </label>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
+                <!-- Botón Text to Speech -->
+                <button class="btn btn-outline-primary mt-3" onclick="textToSpeech()">
+                    <i class="fas fa-volume-up"></i> Leer descripción
+                </button>
 
-                    <!-- Información oculta -->
-                    <input type="hidden" name="id_producto" value="<?= $producto['id_shoe'] ?>">
-                    <input type="hidden" name="modelo" value="<?= htmlspecialchars($producto['modelo']) ?>">
-                    <input type="hidden" name="precio" value="<?= $producto['precio'] ?>">
-                </form>
+                <div class="mb-3 mt-4">
+                    <h6>Tallas disponibles</h6>
+                    <ul>
+                        <?php foreach ($tallas as $talla): ?>
+                            <li><?= htmlspecialchars($talla['talla']) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+
+                <div class="mb-3">
+                    <h6>Colores disponibles</h6>
+                    <div class="d-flex">
+                        <?php foreach ($colores as $color): ?>
+                            <label class="me-2">
+                                <input type="radio" name="color" value="<?= htmlspecialchars($color['codigo']) ?>" style="display:none;" required>
+                                <span class="btn btn-outline-dark rounded-circle" style="width: 30px; height: 30px; background-color: <?= htmlspecialchars($color['codigo']) ?>; border: 1px solid #000;" title="<?= htmlspecialchars($color['nombre']) ?>"></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- Información oculta -->
+                <input type="hidden" name="id_producto" value="<?= $producto['id_shoe'] ?>">
+                <input type="hidden" name="modelo" value="<?= htmlspecialchars($producto['modelo']) ?>">
+                <input type="hidden" name="precio" value="<?= $producto['precio'] ?>">
             </div>
         </div>
     </main>
