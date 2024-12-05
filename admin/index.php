@@ -16,9 +16,6 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
 
-    <!-- Exclusive panel CSS-->
-    <link rel="stylesheet" href="https://calzadojj.net/src/css/admin.css">
-
     <!-- Exclusive Footer CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
@@ -29,41 +26,6 @@
     <?php include __DIR__ . '/src/header.php'; ?>
 
     <!-- Main content -->
-    <div class="container-fluid">
-        <!-- Sidebar -->
-<div class="sidebar" id="sidebar">
-    <nav class="nav flex-column">
-        <a class="nav-link" href="/
-index.php">
-            <i class="fas fa-tachometer-alt"></i> <span>Panel</span>
-        </a>
-        <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu1" aria-expanded="false">
-            <i class="fas fa-chart-line"></i> Resumen
-        </button>
-        <div class="collapse" id="submenu1">
-            <a class="nav-link" href="/
-registro/registro.php">
-                <i class="fas fa-clipboard-list"></i> Registro
-            </a>
-        </div>
-        <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu2" aria-expanded="false">
-            <i class="fas fa-cogs"></i> Administración
-        </button>
-        <div class="collapse" id="submenu2">
-            <a class="nav-link" href="/
-usuarios/cuentas.php">
-                <i class="fas fa-users"></i> Usuarios
-            </a>
-            <a class="nav-link" href="/
-productos/productos.php">
-                <i class="fas fa-boxes"></i> Inventario
-            </a>
-        </div>
-    </nav>
-</div>
-
-
-        <!-- Content -->
 
     <!-- Footer -->
     <?php include __DIR__ . '/src/footer.php'; ?>
