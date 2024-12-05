@@ -8,6 +8,7 @@ $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $stmt->closeCursor(); // Liberar recursos
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,79 +18,6 @@ $stmt->closeCursor(); // Liberar recursos
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/src/css/style.css">
-    <link rel="stylesheet" href="/src/css/admin.css">
-    <link rel="stylesheet" href="/src/css/crud.css">
-    <style>
-        body {
-            font-family: "Gruppo", sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .container-fluid {
-            flex: 1;
-            display: flex;
-        }
-
-        .sidebar {
-            position: sticky;
-            top: 0;
-            height: calc(100vh - 100px);
-            width: 250px;
-            background-color: #f8f9fa;
-            overflow-y: auto;
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-            margin-left: 260px; /* Ajuste para el sidebar */
-        }
-
-        footer {
-            background-color: #333;
-            color: #fff;
-        }
-
-        footer a {
-            text-decoration: none;
-            color: #fff;
-        }
-
-        .btn-toggle {
-            width: 100%;
-            background: none;
-            border: none;
-            text-align: left;
-            padding: 0.5rem 1rem;
-            color: #333;
-        }
-
-        .btn-toggle:hover {
-            background-color: #e9ecef;
-        }
-
-        .download-link {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            background-color: #f8f9fa;
-        }
-
-        .download-link:hover {
-            background-color: #e9ecef;
-        }
-
-        .download-link i {
-            color: #007bff;
-        }
-    </style>
 </head>
 <body>
     
