@@ -144,8 +144,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <!-- Aquí cambiaremos el tipo de botón para que haga submit -->
-                    <button type="submit" class="btn btn-primary">Confirmar</button>
+                    <!-- Aquí cambiamos a un botón con un ID específico para enviar el formulario -->
+                    <button type="button" class="btn btn-primary" id="confirm-button">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -156,5 +156,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para enviar el formulario al hacer clic en Confirmar -->
+    <script>
+        document.getElementById('confirm-button').addEventListener('click', function() {
+            document.getElementById('add-user-form').submit();  // Enviar el formulario
+        });
+    </script>
 </body>
 </html>
