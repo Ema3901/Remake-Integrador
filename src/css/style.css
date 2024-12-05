@@ -25,6 +25,49 @@ header {
     padding: 10px 0;
 }
 
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Aseguramos que html y body ocupen toda la altura */
+html, body {
+    height: 100%;
+}
+
+/* Contenedor principal con flexbox */
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* El body ocupa toda la altura de la pantalla */
+}
+
+/* Header (puedes darle el estilo que desees) */
+header {
+    background-color: #4CAF50;
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
+
+/* Contenido principal que ocupa el espacio restante */
+main {
+    flex-grow: 1; /* Ocupa el espacio restante */
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+/* Footer siempre al final */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+
 /* Logo */
 .logo-header {
     max-height: 50px;
