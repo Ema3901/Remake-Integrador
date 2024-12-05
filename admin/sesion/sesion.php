@@ -33,10 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user['id_user'];
                 $_SESSION['user_role'] = $user['id_range'];
                 $_SESSION['user_namee'] = $user['user_namee']; // Guardar el nombre de usuario en la sesión
-
-                // Depuración: Verifica que el valor de la sesión se haya asignado correctamente
-                var_dump($_SESSION); // Verifica los valores de la sesión después del inicio de sesión
-
+                
                 // Redirigir al usuario según su rol
                 if ($user['id_range'] == 1 || $user['id_range'] == 2) {
                     // Administrador o Empleado
