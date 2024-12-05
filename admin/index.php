@@ -1,17 +1,3 @@
-<?php 
-/* inicio de comentada
-session_start();
-
-// Verifica si la sesión está iniciada, por ejemplo, revisando si existe una variable de sesión como 'user_id'
-if (!isset($_SESSION['user_id'])) {
-    // Si la sesión no está iniciada, redirige al usuario a la página de cuentas
-    header('Location: /usuarios/usuario.php');
-    exit; // Asegúrate de detener la ejecución del código después de la redirección
-}
-    Comento todo antes porque no tengo procedimients*/
-?>
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,21 +16,16 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
 
-    <!-- Exclusive Footer CSS -->
-    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
-
 <body>
 
     <!-- Header -->
     <?php include __DIR__ . '/src/header.php'; ?>
 
     <!-- Main content -->
-     <main>
-
+    <main>
         <div> Hola rellena todo </div>
-
-     </main>
+    </main>
 
     <!-- Footer -->
     <?php include __DIR__ . '/src/footer.php'; ?>
@@ -53,6 +34,3 @@ if (!isset($_SESSION['user_id'])) {
     <script src="/src/js/sidebar.js"></script>
 </body>
 </html>
-
-
-<!-- version 0.0.5 -->
