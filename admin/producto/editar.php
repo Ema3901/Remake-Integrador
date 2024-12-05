@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Actualizar producto
-        $sql = "CALL SP_UPDATE_PRODUCT(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "CALL SP_UPDATE_PRODUCT(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             $id_product, $id_brand, $model_name, $price, $description,
