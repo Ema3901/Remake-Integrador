@@ -74,7 +74,7 @@ index.php');
 </head>
 <body class="auth-page">
     <!-- Header -->
-    <?php include __DIR__ . '/../../src/include/header.php'; ?>
+    <?php include __DIR__ . '/src/header.php'; ?>
 
     <!-- Contenido principal -->
     <main class="auth-container">
@@ -110,6 +110,6 @@ index.php');
     </main>
 
     <!-- Footer -->
-    <?php include __DIR__ . '/../../src/include/footer.php'; ?>
+    <?php include __DIR__ . '/src/footer.php'; ?>
 </body>
 </html>

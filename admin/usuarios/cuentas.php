@@ -27,8 +27,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    <!-- Footer -->
-    <?php include __DIR__ . '/../../src/include/header.php'; ?>
+    <!-- Header -->
+    <?php include __DIR__ . '/src/header.php'; ?>
 
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -41,7 +41,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <i class="fas fa-sync-alt"></i> Actualizar
                 </button>
                 <a href="/
-index.php" class="btn btn-danger">Regresar</a>
+panel.php" class="btn btn-danger">Regresar</a>
             </div>
         </div>
 
@@ -126,7 +126,7 @@ index.php" class="btn btn-danger">Regresar</a>
     </div>
 
         <!-- Footer -->
-<?php include __DIR__ . '/../../src/include/footer.php'; ?>
+        <?php include __DIR__ . '/src/footer.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>

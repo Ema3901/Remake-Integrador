@@ -94,7 +94,7 @@ $stmt->closeCursor(); // Liberar recursos
 <body>
     
 <!-- Header -->
-<?php include __DIR__ . '/../../../src/include/header.php'; ?>
+<?php include __DIR__ . '/src/header.php'; ?>
 
 <!-- Sidebar -->
 <div class="container-fluid">
@@ -197,7 +197,7 @@ index.php" class="btn btn-danger">Regresar</a>
 </div>
 
 <!-- Footer -->
-<?php include __DIR__ . '/../../../src/include/footer.php'; ?>
+<?php include __DIR__ . '/src/footer.php'; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
