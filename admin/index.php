@@ -41,7 +41,8 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Main content -->
      <main>
-        <div> "Hola" </div>
+
+     
      </main>
 
     <!-- Footer -->
