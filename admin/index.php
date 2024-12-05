@@ -16,7 +16,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
 </head>
-<body class="d-flex flex-column" style="min-height: 100vh;">
+<body style="min-height: 100vh;">
 
     <!-- Header -->
     <?php include __DIR__ . '/src/header.php'; ?>
