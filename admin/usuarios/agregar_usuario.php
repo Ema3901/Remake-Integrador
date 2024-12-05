@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
     <!-- Header -->
-    <?php include __DIR__ . '/src/header.php'; ?>
+    <?php include __DIR__ . '/../src/header.php'; ?>
 
 
     <div class="container my-5">
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
         <!-- Header -->
-        <?php include __DIR__ . '/src/footer.php'; ?>
+        <?php include __DIR__ . '/../src/footer.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
