@@ -5,7 +5,7 @@
 include __DIR__ . '/../../src/database/db.php';
 
 // Ruta base para guardar imágenes
-$imageBasePath = __DIR__ . "/src/uploads";
+$imageBasePath = __DIR__ . "/admin/src/uploads";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_brand = intval($_POST['id_brand']);
@@ -69,7 +69,7 @@ function saveImage($file, $destination) {
 
     if (move_uploaded_file($file['tmp_name'], $targetFile)) {
         // Retornar la ruta relativa
-        return "/src/uploads" . $fileName;
+        return "/admin/src/uploads" . $fileName;
     } else {
         throw new Exception("Error al subir el archivo: " . $file['name']);
     }
