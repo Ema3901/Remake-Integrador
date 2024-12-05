@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda de Zapatos | Calzado JJ</title>
+    <title>Administracion | Calzado JJ</title>
 
     <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
-
-    <!-- Meta para SEO -->
-    <meta name="description" content="Tienda de calzado JJ. Venta de zapatos para hombre, mujer y unisex en Reynosa, Tamaulipas. Descubre nuestras colecciones.">
-    <meta name="keywords" content="zapatos, calzado, venta de calzado, tienda de zapatos, Reynosa, hombre, mujer, unisex">
     
     <!-- Bootstrap 5.3 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -24,8 +20,8 @@
     <!-- Exclusive panel CSS-->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/admin.css">
 
-        <!-- Exclusive Footer CSS -->
-        <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
+    <!-- Exclusive Footer CSS -->
+    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
 
 <body>
@@ -38,7 +34,6 @@ include __DIR__ . '/src/header.php';
 
     <!-- Main content -->
     <div class="container-fluid">
-        <!-- Sidebar --><!-- Sidebar -->
         <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <nav class="nav flex-column">

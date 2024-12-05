@@ -1,4 +1,4 @@
-<?php
+<li?php
 // Comprobar si la sesión ya ha sido iniciada
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -40,6 +40,9 @@ if (session_status() == PHP_SESSION_NONE) {
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" href="/store/contactanos.php">Contacto</a>
                                     </li>
+                                    <li>
+                                        <a href="javascript:void(0);" id="loginModalTrigger" data-bs-toggle="modal" data-bs-target="#loginModal" class="text-muted me-3" aria-label="Cuenta de usuario"><i class="fas fa-user"></i></a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -50,17 +53,6 @@ if (session_status() == PHP_SESSION_NONE) {
         <hr class="text-muted mt-0">
     </div>
 </header>
-
-
-
-
-
-
-
-<a href="javascript:void(0);" id="loginModalTrigger" data-bs-toggle="modal" data-bs-target="#loginModal" class="text-muted me-3" aria-label="Cuenta de usuario">
-                    <i class="fas fa-user"></i>
-                </a>
-
                 
 <!-- Modal de Inicio/Cierre de sesión -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
