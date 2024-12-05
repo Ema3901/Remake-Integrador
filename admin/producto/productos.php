@@ -22,28 +22,7 @@ $stmt->closeCursor(); // Liberar recursos
 <body>
     
 <!-- Header -->
-<?php include __DIR__ . '/../../../src/include/header.php'; ?>
-
-<!-- Sidebar -->
-<div class="container-fluid">
-    <div class="sidebar" id="sidebar">
-        <nav class="nav flex-column">
-            <a class="nav-link" href="/admin/panel.php"><i class="fas fa-tachometer-alt"></i> <span>Panel</span></a>
-            <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu1" aria-expanded="false">
-                <i class="fas fa-chart-line"></i> Resumen
-            </button>
-            <div class="collapse" id="submenu1">
-                <a class="nav-link" href="/admin/registro/registro.php"><i class="fas fa-clipboard-list"></i> Registro</a>
-            </div>
-            <button class="btn btn-toggle" data-bs-toggle="collapse" data-bs-target="#submenu2" aria-expanded="false">
-                <i class="fas fa-cogs"></i> Administración
-            </button>
-            <div class="collapse" id="submenu2">
-                <a class="nav-link" href="/admin/usuarios/cuentas.php"><i class="fas fa-users"></i> Usuarios</a>
-                <a class="nav-link" href="/admin/producto/productos.php"><i class="fas fa-boxes"></i> Inventario</a>
-            </div>
-        </nav>
-    </div>
+<?php include __DIR__ . '/../src/header.php'; ?>
 
     <!-- Content -->
     <div class="content">
@@ -119,8 +98,8 @@ $stmt->closeCursor(); // Liberar recursos
     </div>
 </div>
 
-<!-- Footer -->
-<?php include __DIR__ . '/../../../src/include/footer.php'; ?>
+<!-- Header -->
+<?php include __DIR__ . '/../src/footer.php'; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
