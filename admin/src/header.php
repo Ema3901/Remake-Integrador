@@ -41,7 +41,7 @@ if (session_status() == PHP_SESSION_NONE) {
                                         <a class="nav-link text-dark" href="https://calzadojj.net" target="_blank">Tienda</a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0);" id="loginModalTrigger" data-bs-toggle="modal" data-bs-target="#loginModal" class="text-muted me-3" aria-label="Cuenta de usuario"><i class="fas fa-user"></i></a>
+                                        <a href="javascript:void(0);" id="loginModalTrigger" data-bs-toggle="modal" data-bs-target="#loginModal" " aria-label="Cuenta de usuario"><i class="fas fa-user"></i></a>
                                     </li>
                                 </ul>
                             </div>
