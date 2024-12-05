@@ -144,6 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <!-- Aquí cambiaremos el tipo de botón para que haga submit -->
                     <button type="submit" class="btn btn-primary">Confirmar</button>
                 </div>
             </div>
