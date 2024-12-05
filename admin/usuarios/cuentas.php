@@ -32,7 +32,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Header -->
     <?php include __DIR__ . '/../src/header.php'; ?>
-    <main>
+    <main style="min-height: 53.5vh;">
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Gestión de Usuarios</h2>
