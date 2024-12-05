@@ -6,7 +6,7 @@ $error_message = '';
 
 try {
     // Obtener los productos usando el procedimiento almacenado
-    $sql = "CALL sp_GetPoducts()";  // Llamar al procedimiento con el nuevo nombre
+    $sql = "CALL SP_GetPoducts()";  // Llamar al procedimiento con el nuevo nombre
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
 
