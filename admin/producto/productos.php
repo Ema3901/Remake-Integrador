@@ -46,7 +46,7 @@ $stmt->closeCursor(); // Liberar recursos
                 <button class="btn btn-secondary" id="refreshTable">
                     <i class="fas fa-sync-alt"></i> Actualizar
                 </button>
-                <a href="/admin/panel.php" class="btn btn-danger">Regresar</a>
+                <a href="/index.php" class="btn btn-danger">Regresar</a>
             </div>
         </div>
 
