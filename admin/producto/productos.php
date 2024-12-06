@@ -56,7 +56,6 @@ $stmt->closeCursor(); // Liberar recursos
             <button class="btn btn-secondary" id="refreshTable">
                 <i class="fas fa-sync-alt"></i> Actualizar
             </button>
-            <a href="/index.php" class="btn btn-danger">Regresar</a>
         </div>
     </div>
 
@@ -207,6 +206,67 @@ $stmt->closeCursor(); // Liberar recursos
             }
         });
     });
+
+    // Función para actualizar la tabla de productos
+    document.getElementById('refreshTable').addEventListener('click', () => {
+        fetch('fetch_products.php')  // Asegúrate de que este archivo devuelva los productos en formato JSON
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const tableBody = document.getElementById('productsTableBody');
+                    tableBody.innerHTML = '';  // Limpiar la tabla existente
+
+                    data.products.forEach(product => {
+                        const tr = document.createElement('tr');
+                        tr.setAttribute('data-id', product.id_shoe);
+                        tr.classList.add('product-row');
+                        tr.innerHTML = `
+                            <td>${product.id_shoe}</td>
+                            <td class="expandable" style="cursor: pointer;">
+                                ${product.model_name}
+                            </td>
+                            <td>${product.brand}</td>
+                            <td>${product.gender}</td>
+                            <td>$${product.price}</td>
+                            <td>${product.description}</td>
+                            <td>
+                                <a href="editar.php?id=${product.id_shoe}" class="btn btn-sm btn-warning">Editar</a>
+                                <button class="btn btn-sm btn-danger deleteProduct" data-id="${product.id_shoe}">Eliminar</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+
+                    // Reconfigurar el comportamiento de eliminar productos
+                    setupDeleteProduct();
+                } else {
+                    alert('Error al actualizar los productos.');
+                }
+            })
+            .catch(error => console.error('Error al actualizar la tabla de productos:', error));
+    });
+
+    // Configurar el comportamiento de eliminar productos
+    function setupDeleteProduct() {
+        document.querySelectorAll('.deleteProduct').forEach(button => {
+            button.addEventListener('click', () => {
+                const productId = button.getAttribute('data-id');
+                if (confirm('¿Estás seguro de eliminar este producto?')) {
+                    fetch(`delete_product.php?id=${productId}`, {
+                        method: 'POST'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            button.closest('tr').remove();
+                        } else {
+                            alert('Error al eliminar el producto.');
+                        }
+                    });
+                }
+            });
+        });
+    }
 </script>
 </body>
 </html>
