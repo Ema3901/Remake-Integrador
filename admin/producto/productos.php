@@ -23,7 +23,7 @@ $stmt->closeCursor(); // Liberar recursos
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administracion | Calzado JJ</title>
+    <title>Administración | Calzado JJ</title>
 
     <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
     
@@ -35,181 +35,87 @@ $stmt->closeCursor(); // Liberar recursos
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
-
-    <!-- Exclusive Footer CSS -->
-    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
-
-    <style>
-        /* Nuevo estilo para la tabla de productos */
-.product-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 8px;
-    margin-top: 20px;
-    overflow: hidden;
-}
-
-.product-table th, .product-table td {
-    padding: 12px 16px;
-    text-align: center;
-    border: 1px solid var(--border-color);
-}
-
-.product-table th {
-    background-color: var(--primary-color);
-    color: var(--text-color-light);
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.product-table td {
-    background-color: #fff;
-    color: var(--secondary-color);
-    font-size: 0.95rem;
-}
-
-/* Filas alternadas para mejorar la legibilidad */
-.product-table tr:nth-child(even) td {
-    background-color: #f9f9f9;
-}
-
-/* Efecto hover en las filas */
-.product-table tr:hover td {
-    background-color: #f1f1f1;
-    cursor: pointer;
-}
-
-/* Estilo de los botones dentro de la tabla */
-.product-table button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-
-.product-table button:hover {
-    background-color: #7c7aa3;
-}
-
-/* Tabla de variaciones */
-.product-details .product-table {
-    margin-top: 20px;
-}
-
-.product-details .product-table th {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.product-details .product-table td {
-    background-color: white;
-}
-
-/* Responsividad: Ajustar el tamaño de la tabla en pantallas pequeñas */
-@media (max-width: 768px) {
-    .product-table {
-        font-size: 0.9rem;
-    }
-
-    .product-table th, .product-table td {
-        padding: 8px;
-    }
-
-    .product-details .product-table {
-        margin-top: 15px;
-    }
-
-    /* Contenedor de la tabla con desplazamiento horizontal */
-    .table-wrapper {
-        overflow-x: auto;
-    }
-}
-
-    </style>
 </head>
 <body>
     
 <!-- Header -->
 <?php include __DIR__ . '/../src/header.php'; ?>
 
-    <!-- Content -->
-    <div class="content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Gestión de Productos</h2>
-            <div>
-                <button class="btn btn-primary" onclick="window.location.href='insertar_producto.php'">
-                    <i class="fas fa-plus"></i> Añadir Producto
-                </button>
-                <button class="btn btn-secondary" id="refreshTable">
-                    <i class="fas fa-sync-alt"></i> Actualizar
-                </button>
-                <a href="/index.php" class="btn btn-danger">Regresar</a>
-            </div>
+<!-- Content -->
+<div class="content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Gestión de Productos</h2>
+        <div>
+            <button class="btn btn-primary" onclick="window.location.href='insertar_producto.php'">
+                <i class="fas fa-plus"></i> Añadir Producto
+            </button>
+            <button class="btn btn-secondary" id="refreshTable">
+                <i class="fas fa-sync-alt"></i> Actualizar
+            </button>
+            <a href="/index.php" class="btn btn-danger">Regresar</a>
         </div>
-
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Modelo</th>
-                    <th>Marca</th>
-                    <th>Género</th>
-                    <th>Precio</th>
-                    <th>Descripción</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="productsTableBody">
-                <?php foreach ($products as $product): ?>
-                    <tr data-id="<?= $product['id_shoe'] ?>" class="product-row">
-                        <td><?= $product['id_shoe'] ?></td>
-                        <td class="expandable" style="cursor: pointer;">
-                            <?= htmlspecialchars($product['model_name']) ?>
-                        </td>
-                        <td><?= htmlspecialchars($product['brand']) ?></td>
-                        <td><?= htmlspecialchars($product['gender']) ?></td>
-                        <td>$<?= number_format($product['price'], 2) ?></td>
-                        <td><?= htmlspecialchars($product['description']) ?></td>
-                        <td>
-                            <a href="editar.php?id=<?= $product['id_shoe'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                            <button class="btn btn-sm btn-danger deleteProduct" data-id="<?= $product['id_shoe'] ?>">Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr class="product-details" style="display: none;">
-                        <td colspan="7">
-                            <div>
-                                <h5>Imágenes:</h5>
-                                <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" style="max-height: 100px;">
-                                <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" style="max-height: 100px;">
-                                <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" style="max-height: 100px;">
-                                <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" style="max-height: 100px;">
-                                <h5>Variaciones:</h5>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Talla</th>
-                                            <th>Color</th>
-                                            <th>Stock Local</th>
-                                            <th>Stock Tianguis</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
     </div>
+
+    <!-- Tabla de Productos -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Modelo</th>
+                <th>Marca</th>
+                <th>Género</th>
+                <th>Precio</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="productsTableBody">
+            <?php foreach ($products as $product): ?>
+                <tr data-id="<?= $product['id_shoe'] ?>" class="product-row">
+                    <td><?= $product['id_shoe'] ?></td>
+                    <td class="expandable" style="cursor: pointer;">
+                        <?= htmlspecialchars($product['model_name']) ?>
+                    </td>
+                    <td><?= htmlspecialchars($product['brand']) ?></td>
+                    <td><?= htmlspecialchars($product['gender']) ?></td>
+                    <td>$<?= number_format($product['price'], 2) ?></td>
+                    <td><?= htmlspecialchars($product['description']) ?></td>
+                    <td>
+                        <a href="editar.php?id=<?= $product['id_shoe'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                        <button class="btn btn-sm btn-danger deleteProduct" data-id="<?= $product['id_shoe'] ?>">Eliminar</button>
+                    </td>
+                </tr>
+                <tr class="product-details" style="display: none;">
+                    <td colspan="7">
+                        <div>
+                            <h5>Imágenes:</h5>
+                            <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" style="max-height: 100px;">
+                            <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" style="max-height: 100px;">
+                            <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" style="max-height: 100px;">
+                            <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" style="max-height: 100px;">
+                            <h5>Variaciones:</h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Talla</th>
+                                        <th>Color</th>
+                                        <th>Stock Local</th>
+                                        <th>Stock Tianguis</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
 
-<!-- Header -->
+<!-- Footer -->
 <?php include __DIR__ . '/../src/footer.php'; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
