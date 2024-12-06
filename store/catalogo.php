@@ -65,84 +65,92 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="/src/css/style.css">
     <link rel="stylesheet" href="/src/css/footer.css">
 
+    <style>
+        /* Estilo CSS para asegurar que las imágenes de los productos sean consistentes */
+        .product-image {
+            width: 250px; /* Ancho fijo */
+            height: 250px; /* Alto fijo */
+            object-fit: cover; /* Mantiene la proporción recortando el exceso */
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
     <?php include __DIR__ . '/../src/include/header.php'; ?>
 
     <!-- Main content -->
-<main style="min-height: 53.6vh;">
-    <main class="container my-5">
-        <!-- Filtros de categoría y buscador -->
-        <div class="row mb-4 align-items-center">
-            <!-- Filtros de categoría -->
-            <div class="col-md-8 text-start">
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link <?= $id_genero === 0 ? 'active' : '' ?>" href="catalogo.php">Todos los productos</a>
-                    </li>
-                    <?php
-                    // Generar filtros dinámicos de géneros
-                    $sql_categorias = "SELECT id_genre, genre FROM genres";
-                    $result_categorias = $pdo->query($sql_categorias);
+    <main style="min-height: 53.6vh;">
+        <main class="container my-5">
+            <!-- Filtros de categoría y buscador -->
+            <div class="row mb-4 align-items-center">
+                <!-- Filtros de categoría -->
+                <div class="col-md-8 text-start">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link <?= $id_genero === 0 ? 'active' : '' ?>" href="catalogo.php">Todos los productos</a>
+                        </li>
+                        <?php
+                        // Generar filtros dinámicos de géneros
+                        $sql_categorias = "SELECT id_genre, genre FROM genres";
+                        $result_categorias = $pdo->query($sql_categorias);
 
-                    while ($row = $result_categorias->fetch(PDO::FETCH_ASSOC)) {
-                        $active_class = $id_genero === intval($row['id_genre']) ? 'active' : '';
-                        echo '<li class="nav-item">';
-                        echo '<a class="nav-link ' . $active_class . '" href="catalogo.php?genero=' . $row['id_genre'] . '">' . htmlspecialchars($row['genre']) . '</a>';
-                        echo '</li>';
+                        while ($row = $result_categorias->fetch(PDO::FETCH_ASSOC)) {
+                            $active_class = $id_genero === intval($row['id_genre']) ? 'active' : '';
+                            echo '<li class="nav-item">';
+                            echo '<a class="nav-link ' . $active_class . '" href="catalogo.php?genero=' . $row['id_genre'] . '">' . htmlspecialchars($row['genre']) . '</a>';
+                            echo '</li>';
+                        }
+                        ?>
+                    </ul>
+                </div>
+
+                <!-- Buscador -->
+                <div class="col-md-4 text-end">
+                    <form class="d-flex" role="search" method="get" action="catalogo.php">
+                        <input class="form-control me-2" type="search" name="search" value="<?= htmlspecialchars($search_term) ?>" placeholder="Buscar productos" aria-label="Buscar">
+                        <button class="btn btn-outline-info" type="submit">Buscar</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Título del catálogo -->
+            <h2 class="text-center mb-5"><?= htmlspecialchars($titulo_catalogo) ?></h2>
+
+            <!-- Productos -->
+            <div class="row text-center">
+                <?php
+                if (count($result_productos) > 0) {
+                    foreach ($result_productos as $row) {
+                        $id_shoe = $row['id_shoe'];
+                        $model_name = htmlspecialchars($row['model_name']);
+                        $brand_name = htmlspecialchars($row['brand_name']);
+                        $img_main = $row['img_main'] ? $row['img_main'] : '/src/images/default-placeholder.png';  // Verifica la imagen
+
+                        // Si las imágenes son rutas relativas, asegúrate de que las imágenes estén en el lugar correcto
+                        // Para evitar problemas de carga, puedes usar rutas absolutas en producción:
+                        $img_main_url = (strpos($img_main, 'http') === false) ? 'https://administracion.calzadojj.net/' . $img_main : $img_main;
+
+                        echo '<div class="col-md-4 mb-4">';
+                        echo '    <div class="card border-0">';
+                        echo '        <div class="product-placeholder position-relative">';
+                        echo '            <img src="' . $img_main_url . '" class="img-fluid product-image" alt="' . $model_name . '">';
+                        echo '        </div>';
+                        echo '        <div class="card-body">';
+                        echo '            <p class="card-text"><strong>' . $brand_name . '</strong> - ' . $model_name . '</p>';
+                        echo '            <p class="fw-bold"><a href="detalleProducto.php?id=' . $id_shoe . '" class="text-decoration-none">Ver Producto</a></p>';
+                        echo '        </div>';
+                        echo '    </div>';
+                        echo '</div>';
                     }
-                    ?>
-                </ul>
-            </div>
-
-            <!-- Buscador -->
-            <div class="col-md-4 text-end">
-                <form class="d-flex" role="search" method="get" action="catalogo.php">
-                    <input class="form-control me-2" type="search" name="search" value="<?= htmlspecialchars($search_term) ?>" placeholder="Buscar productos" aria-label="Buscar">
-                    <button class="btn btn-outline-info" type="submit">Buscar</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Título del catálogo -->
-        <h2 class="text-center mb-5"><?= htmlspecialchars($titulo_catalogo) ?></h2>
-
-        <!-- Productos -->
-        <div class="row text-center">
-            <?php
-            if (count($result_productos) > 0) {
-                foreach ($result_productos as $row) {
-                    $id_shoe = $row['id_shoe'];
-                    $model_name = htmlspecialchars($row['model_name']);
-                    $brand_name = htmlspecialchars($row['brand_name']);
-                    $img_main = $row['img_main'] ? $row['img_main'] : '/src/images/default-placeholder.png';  // Verifica la imagen
-
-                    // Si las imágenes son rutas relativas, asegúrate de que las imágenes estén en el lugar correcto
-                    // Para evitar problemas de carga, puedes usar rutas absolutas en producción:
-                    $img_main_url = (strpos($img_main, 'http') === false) ? 'https://administracion.calzadojj.net/' . $img_main : $img_main;
-
-                    echo '<div class="col-md-4 mb-4">';
-                    echo '    <div class="card border-0">';
-                    echo '        <div class="product-placeholder position-relative">';
-                    echo '            <img src="' . $img_main_url . '" class="img-fluid product-image" alt="' . $model_name . '">';
-                    echo '        </div>';
-                    echo '        <div class="card-body">';
-                    echo '            <p class="card-text"><strong>' . $brand_name . '</strong> - ' . $model_name . '</p>';
-                    echo '            <p class="fw-bold"><a href="detalleProducto.php?id=' . $id_shoe . '" class="text-decoration-none">Ver Producto</a></p>';
-                    echo '        </div>';
-                    echo '    </div>';
-                    echo '</div>';
+                } else {
+                    echo '<p class="text-center">No se encontraron productos para esta búsqueda.</p>';
                 }
-            } else {
-                echo '<p class="text-center">No se encontraron productos para esta búsqueda.</p>';
-            }
-            ?>
-        </div>
-    </main>
+                ?>
+            </div>
+        </main>
 
-    <!-- Footer -->
-</main>
+        <!-- Footer -->
+    </main>
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
     <!-- Font Awesome Integration -->
