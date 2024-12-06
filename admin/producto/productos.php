@@ -210,6 +210,42 @@ $stmt->closeCursor(); // Liberar recursos
             })
             .catch(error => console.error('Error al actualizar la tabla de productos:', error));
     });
+
+    // Eliminar producto
+    document.querySelectorAll('.deleteProduct').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            
+            // Confirmación de eliminación
+            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+                // Enviar la solicitud de eliminación al servidor
+                fetch('delete_product.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `id=${productId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);  // Mostrar mensaje de éxito
+                        // Eliminar el producto de la tabla sin recargar la página
+                        const row = document.querySelector(`tr[data-id="${productId}"]`);
+                        if (row) {
+                            row.remove();
+                        }
+                    } else {
+                        alert(data.message);  // Mostrar mensaje de error
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al eliminar el producto:', error);
+                    alert('Hubo un error al intentar eliminar el producto.');
+                });
+            }
+        });
+    });
 </script>
 </body>
 </html>
