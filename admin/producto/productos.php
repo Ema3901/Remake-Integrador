@@ -73,7 +73,10 @@ $stmt->closeCursor(); // Liberar recursos
             </tr>
         </thead>
         <tbody id="productsTableBody">
-            <?php foreach ($products as $product): ?>
+            <?php 
+                // Crear una fila por cada producto, sin duplicarlos por variación
+                foreach ($products as $product): 
+            ?>
                 <tr data-id="<?= $product['id_shoe'] ?>" class="product-row">
                     <td><?= $product['id_shoe'] ?></td>
                     <td class="expandable" style="cursor: pointer;">
@@ -200,7 +203,7 @@ $stmt->closeCursor(); // Liberar recursos
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        button.closest('tr').remove(); // Eliminar la fila del producto
+                        button.closest('tr').remove(); // Eliminar el producto de la tabla
                     } else {
                         alert('Error al eliminar el producto.');
                     }
@@ -247,6 +250,28 @@ $stmt->closeCursor(); // Liberar recursos
             })
             .catch(error => console.error('Error al actualizar la tabla de productos:', error));
     });
+
+    // Configurar el comportamiento de eliminar productos
+    function setupDeleteProduct() {
+        document.querySelectorAll('.deleteProduct').forEach(button => {
+            button.addEventListener('click', () => {
+                const productId = button.getAttribute('data-id');
+                if (confirm('¿Estás seguro de eliminar este producto?')) {
+                    fetch(`delete_product.php?id=${productId}`, {
+                        method: 'POST'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            button.closest('tr').remove(); // Eliminar el producto
+                        } else {
+                            alert('Error al eliminar el producto.');
+                        }
+                    });
+                }
+            });
+        });
+    }
 </script>
 </body>
 </html>
