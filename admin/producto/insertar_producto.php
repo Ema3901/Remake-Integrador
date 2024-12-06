@@ -133,7 +133,6 @@ function uploadImage($image) {
         return ''; // Si no se pudo mover el archivo, retornamos vacío
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
