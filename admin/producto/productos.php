@@ -125,6 +125,25 @@ $stmt->closeCursor(); // Liberar recursos
 <!-- Footer -->
 <?php include __DIR__ . '/../src/footer.php'; ?>
 
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // Expandir detalles y cargar variaciones dinámicamente
@@ -211,13 +230,17 @@ $stmt->closeCursor(); // Liberar recursos
             .catch(error => console.error('Error al actualizar la tabla de productos:', error));
     });
 
-    // Eliminar producto
+    // Eliminar productos con confirmación en el modal
     document.querySelectorAll('.deleteProduct').forEach(button => {
         button.addEventListener('click', function() {
             const productId = this.getAttribute('data-id');
             
-            // Confirmación de eliminación
-            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+            // Mostrar el modal de confirmación
+            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            modal.show();
+
+            // Cuando el usuario haga clic en el botón "Eliminar" del modal
+            document.getElementById('confirmDeleteButton').onclick = function() {
                 // Enviar la solicitud de eliminación al servidor
                 fetch('delete_product.php', {
                     method: 'POST',
@@ -243,7 +266,14 @@ $stmt->closeCursor(); // Liberar recursos
                     console.error('Error al eliminar el producto:', error);
                     alert('Hubo un error al intentar eliminar el producto.');
                 });
-            }
+                // Cerrar el modal después de la acción
+                modal.hide();
+            };
+
+            // Cerrar el modal si el usuario hace clic en "Cancelar"
+            document.querySelector('.btn-secondary').addEventListener('click', function() {
+                modal.hide();
+            });
         });
     });
 </script>
