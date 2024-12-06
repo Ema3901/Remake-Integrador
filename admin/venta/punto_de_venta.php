@@ -61,14 +61,14 @@ function obtenerDetallesCarrito($id_variation) {
     }
 }
 
-// Función para actualizar el stock después de una compra
+// Función para actualizar el stock cuando un producto es eliminado del carrito
 function actualizarStock($id_variation, $stock_type) {
     global $pdo;
     try {
         if ($stock_type == 'local') {
-            $sql = "UPDATE shoes_variations SET stock_local = stock_local - 1 WHERE id_varition = :id_variation AND stock_local > 0";
+            $sql = "UPDATE shoes_variations SET stock_local = stock_local + 1 WHERE id_varition = :id_variation";
         } else {
-            $sql = "UPDATE shoes_variations SET stock_tianguis = stock_tianguis - 1 WHERE id_varition = :id_variation AND stock_tianguis > 0";
+            $sql = "UPDATE shoes_variations SET stock_tianguis = stock_tianguis + 1 WHERE id_varition = :id_variation";
         }
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':id_variation' => $id_variation]);
@@ -88,17 +88,16 @@ if (isset($_POST['agregar_al_carrito'])) {
             'id_variation' => $id_variation,
             'stock_type' => $stock_type
         ];
-
-        // Actualizar el stock
-        actualizarStock($id_variation, $stock_type);
-    } else {
-        echo "<pre>Faltan datos necesarios para agregar al carrito.</pre>"; // Muestra mensaje si faltan datos
     }
 }
 
-// Eliminar del carrito
+// Eliminar del carrito y actualizar el stock
 if (isset($_POST['eliminar_del_carrito'])) {
     $id_variation = $_POST['id_variation'];
+    $stock_type = $_POST['stock_type'];
+
+    // Actualizar el stock antes de eliminar del carrito
+    actualizarStock($id_variation, $stock_type);
 
     // Buscar el índice del producto en el carrito
     foreach ($_SESSION['carrito'] as $key => $item) {
@@ -109,6 +108,12 @@ if (isset($_POST['eliminar_del_carrito'])) {
     }
     // Reindexar el arreglo para evitar índices desordenados
     $_SESSION['carrito'] = array_values($_SESSION['carrito']);
+}
+
+// Pagar (limpiar el carrito sin afectar el stock)
+if (isset($_POST['pagar'])) {
+    // Limpiar el carrito después de la compra
+    unset($_SESSION['carrito']);
 }
 
 // Obtener lista de productos
@@ -127,17 +132,6 @@ if (isset($_POST['id_shoe'])) {
         $productoSeleccionado = $producto->fetch(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         echo "Error al obtener el producto: " . $e->getMessage();
-    }
-}
-
-// Calcular el total del carrito
-$totalCarrito = 0;
-if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
-    foreach ($_SESSION['carrito'] as $item) {
-        $detalles = obtenerDetallesCarrito($item['id_variation']);
-        if ($detalles) {
-            $totalCarrito += $detalles['price'];
-        }
     }
 }
 ?>
@@ -213,42 +207,39 @@ if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
             <h3>Carrito</h3>
             <ul class="list-group">
                 <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
-                    <?php foreach ($_SESSION['carrito'] as $item): ?>
-                        <?php 
+                    <?php $total = 0; ?>
+                    <?php foreach ($_SESSION['carrito'] as $key => $item): ?>
+                        <?php
                             $detalles = obtenerDetallesCarrito($item['id_variation']);
+                            $total += $detalles['price'];
                         ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong><?php echo $detalles['model_name']; ?></strong> - 
-                                <em><?php echo $detalles['sizeMX']; ?> | <?php echo $detalles['color']; ?></em>
-                            </div>
-                            <div class="text-end">
-                                <span>$<?php echo $detalles['price']; ?></span>
-                                <form method="POST" class="d-inline">
-                                    <input type="hidden" name="id_variation" value="<?php echo $item['id_variation']; ?>">
-                                    <button type="submit" name="eliminar_del_carrito" class="btn btn-danger btn-sm ms-2">Eliminar</button>
-                                </form>
-                            </div>
+                            <?php echo $detalles['model_name'] . ' | ' . $detalles['sizeMX'] . ' | ' . $detalles['color']; ?>
+                            <span>$<?php echo $detalles['price']; ?></span>
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="id_variation" value="<?php echo $item['id_variation']; ?>">
+                                <input type="hidden" name="stock_type" value="<?php echo $item['stock_type']; ?>">
+                                <button type="submit" name="eliminar_del_carrito" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
                         </li>
                     <?php endforeach; ?>
-                    
-                    <!-- Total -->
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <strong>Total:</strong>
-                        <span>$<?php echo number_format($totalCarrito, 2); ?></span>
-                    </li>
-
                 <?php else: ?>
-                    <li class="list-group-item">No hay productos en el carrito.</li>
+                    <li class="list-group-item">Tu carrito está vacío</li>
                 <?php endif; ?>
             </ul>
 
+            <!-- Mostrar total y botón de pago -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <h4>Total: $<?php echo $total; ?></h4>
+                <form method="POST">
+                    <button type="submit" name="pagar" class="btn btn-success">Pagar</button>
+                </form>
+            </div>
         </div>
     </main>
 
     <!-- Footer -->
     <?php include __DIR__ . '/../src/footer.php'; ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
 </html>
