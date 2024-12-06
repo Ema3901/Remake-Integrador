@@ -123,6 +123,7 @@ function uploadImage($image) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
