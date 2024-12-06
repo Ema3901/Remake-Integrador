@@ -129,6 +129,17 @@ if (isset($_POST['id_shoe'])) {
         echo "Error al obtener el producto: " . $e->getMessage();
     }
 }
+
+// Calcular el total del carrito
+$totalCarrito = 0;
+if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
+    foreach ($_SESSION['carrito'] as $item) {
+        $detalles = obtenerDetallesCarrito($item['id_variation']);
+        if ($detalles) {
+            $totalCarrito += $detalles['price'];
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -209,7 +220,7 @@ if (isset($_POST['id_shoe'])) {
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <strong><?php echo $detalles['model_name']; ?></strong> - 
-                                <em><?php echo $detalles['brands']; ?> |<?php echo $detalles['sizeMX']; ?> | <?php echo $detalles['color']; ?></em>
+                                <em><?php echo $detalles['sizeMX']; ?> | <?php echo $detalles['color']; ?></em>
                             </div>
                             <div class="text-end">
                                 <span>$<?php echo $detalles['price']; ?></span>
@@ -220,6 +231,13 @@ if (isset($_POST['id_shoe'])) {
                             </div>
                         </li>
                     <?php endforeach; ?>
+                    
+                    <!-- Total -->
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <strong>Total:</strong>
+                        <span>$<?php echo number_format($totalCarrito, 2); ?></span>
+                    </li>
+
                 <?php else: ?>
                     <li class="list-group-item">No hay productos en el carrito.</li>
                 <?php endif; ?>
