@@ -63,29 +63,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ':img_front' => $img_front,
         ':img_rear' => $img_rear,
     ]);
-    
-    $id_shoe = $pdo->lastInsertId(); // Obtener el ID del producto recién insertado
+
+    // Obtener el ID del producto insertado
+    $id_shoe = $pdo->lastInsertId();
 
     // Insertar las variaciones
-    if (isset($_POST['sizes']) && isset($_POST['colors']) && !empty($_POST['sizes']) && !empty($_POST['colors'])) {
-        foreach ($_POST['sizes'] as $size_id) {
-            foreach ($_POST['colors'] as $color_id) {
-                $stock_local = $_POST['stock_local_' . $size_id . '_' . $color_id];
-                $stock_tianguis = $_POST['stock_tianguis_' . $size_id . '_' . $color_id];
+    foreach ($_POST['variations'] as $variation) {
+        $id_size = $variation['size'];
+        $id_color = $variation['color'];
+        $stock_local = $variation['stock_local'];
+        $stock_tianguis = $variation['stock_tianguis'];
 
-                // Insertar en la tabla shoes_variations
-                $sql_variation = "INSERT INTO shoes_variations (id_shoe, id_size, id_color, stock_local, stock_tianguis) 
-                                  VALUES (:id_shoe, :id_size, :id_color, :stock_local, :stock_tianguis)";
-                $stmt_variation = $pdo->prepare($sql_variation);
-                $stmt_variation->execute([
-                    ':id_shoe' => $id_shoe,
-                    ':id_size' => $size_id,
-                    ':id_color' => $color_id,
-                    ':stock_local' => $stock_local,
-                    ':stock_tianguis' => $stock_tianguis
-                ]);
-            }
-        }
+        // Insertar variaciones en la base de datos
+        $sql_variation = "INSERT INTO shoes_variations (id_shoe, id_size, id_color, stock_local, stock_tianguis)
+                          VALUES (:id_shoe, :id_size, :id_color, :stock_local, :stock_tianguis)";
+        $stmt_variation = $pdo->prepare($sql_variation);
+        $stmt_variation->execute([
+            ':id_shoe' => $id_shoe,
+            ':id_size' => $id_size,
+            ':id_color' => $id_color,
+            ':stock_local' => $stock_local,
+            ':stock_tianguis' => $stock_tianguis,
+        ]);
     }
 
     // Redirigir a la página de gestión de productos
@@ -177,83 +176,101 @@ function uploadImage($image) {
                 </div>
 
                 <div class="col-md-6">
-                    <!-- Imágenes -->
+                    <!-- Imagen Principal -->
                     <div class="mb-3">
                         <label for="img_main" class="form-label">Imagen Principal</label>
                         <input type="file" class="form-control" id="img_main" name="img_main" accept="image/*" required>
                     </div>
 
+                    <!-- Imagen Perfil -->
                     <div class="mb-3">
                         <label for="img_profile" class="form-label">Imagen Perfil</label>
                         <input type="file" class="form-control" id="img_profile" name="img_profile" accept="image/*">
                     </div>
 
+                    <!-- Imagen Frontal -->
                     <div class="mb-3">
                         <label for="img_front" class="form-label">Imagen Frontal</label>
                         <input type="file" class="form-control" id="img_front" name="img_front" accept="image/*">
                     </div>
 
+                    <!-- Imagen Trasera -->
                     <div class="mb-3">
                         <label for="img_rear" class="form-label">Imagen Trasera</label>
                         <input type="file" class="form-control" id="img_rear" name="img_rear" accept="image/*">
                     </div>
-
-                    <!-- Variaciones -->
-                    <div class="mb-3">
-                        <label for="sizes" class="form-label">Tamaño</label>
-                        <select class="form-control" id="sizes" name="sizes[]" multiple required>
-                            <?php foreach ($sizes as $size): ?>
-                                <option value="<?= $size['id_size'] ?>"><?= $size['sizeMX'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="colors" class="form-label">Color</label>
-                        <select class="form-control" id="colors" name="colors[]" multiple required>
-                            <?php foreach ($colors as $color): ?>
-                                <option value="<?= $color['id_color'] ?>"><?= $color['color'] ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <!-- Stock -->
-                    <div id="stock_fields"></div>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success">Guardar Producto</button>
+            <!-- Variaciones -->
+            <div id="variations-container">
+                <div class="variation mb-3">
+                    <label for="size_0" class="form-label">Talla</label>
+                    <select class="form-control" name="variations[0][size]" id="size_0" required>
+                        <option value="">Seleccionar Talla</option>
+                        <?php foreach ($sizes as $size): ?>
+                            <option value="<?= $size['id_size'] ?>"><?= $size['sizeMX'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <label for="color_0" class="form-label">Color</label>
+                    <select class="form-control" name="variations[0][color]" id="color_0" required>
+                        <option value="">Seleccionar Color</option>
+                        <?php foreach ($colors as $color): ?>
+                            <option value="<?= $color['id_color'] ?>"><?= $color['color'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <label for="stock_local_0" class="form-label">Stock Local</label>
+                    <input type="number" class="form-control" name="variations[0][stock_local]" id="stock_local_0" required>
+
+                    <label for="stock_tianguis_0" class="form-label">Stock Tianguis</label>
+                    <input type="number" class="form-control" name="variations[0][stock_tianguis]" id="stock_tianguis_0" required>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-secondary" id="add-variation-btn">Agregar Variación</button>
+
+            <button type="submit" class="btn btn-primary mt-4">Guardar Producto</button>
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
-        // Script para generar campos de stock según las combinaciones de talla y color seleccionadas
-        document.getElementById('sizes').addEventListener('change', updateStockFields);
-        document.getElementById('colors').addEventListener('change', updateStockFields);
+        let variationIndex = 1;
 
-        function updateStockFields() {
-            const sizes = Array.from(document.getElementById('sizes').selectedOptions).map(option => option.value);
-            const colors = Array.from(document.getElementById('colors').selectedOptions).map(option => option.value);
-            const stockContainer = document.getElementById('stock_fields');
+        // Función para agregar una nueva variación
+        document.getElementById('add-variation-btn').addEventListener('click', () => {
+            const container = document.getElementById('variations-container');
+            const newVariation = document.createElement('div');
+            newVariation.classList.add('variation', 'mb-3');
+            
+            newVariation.innerHTML = `
+                <label for="size_${variationIndex}" class="form-label">Talla</label>
+                <select class="form-control" name="variations[${variationIndex}][size]" id="size_${variationIndex}" required>
+                    <option value="">Seleccionar Talla</option>
+                    <?php foreach ($sizes as $size): ?>
+                        <option value="<?= $size['id_size'] ?>"><?= $size['sizeMX'] ?></option>
+                    <?php endforeach; ?>
+                </select>
 
-            stockContainer.innerHTML = ''; // Limpiar los campos de stock previos
+                <label for="color_${variationIndex}" class="form-label">Color</label>
+                <select class="form-control" name="variations[${variationIndex}][color]" id="color_${variationIndex}" required>
+                    <option value="">Seleccionar Color</option>
+                    <?php foreach ($colors as $color): ?>
+                        <option value="<?= $color['id_color'] ?>"><?= $color['color'] ?></option>
+                    <?php endforeach; ?>
+                </select>
 
-            sizes.forEach(size_id => {
-                colors.forEach(color_id => {
-                    const stockId = `stock_${size_id}_${color_id}`;
-                    stockContainer.innerHTML += `
-                        <div class="mb-3">
-                            <label for="${stockId}" class="form-label">Stock Local - Talla ${size_id} Color ${color_id}</label>
-                            <input type="number" class="form-control" name="stock_local_${size_id}_${color_id}" required>
-                            <label for="${stockId}" class="form-label">Stock Tianguis - Talla ${size_id} Color ${color_id}</label>
-                            <input type="number" class="form-control" name="stock_tianguis_${size_id}_${color_id}" required>
-                        </div>
-                    `;
-                });
-            });
-        }
+                <label for="stock_local_${variationIndex}" class="form-label">Stock Local</label>
+                <input type="number" class="form-control" name="variations[${variationIndex}][stock_local]" id="stock_local_${variationIndex}" required>
+
+                <label for="stock_tianguis_${variationIndex}" class="form-label">Stock Tianguis</label>
+                <input type="number" class="form-control" name="variations[${variationIndex}][stock_tianguis]" id="stock_tianguis_${variationIndex}" required>
+            `;
+            
+            container.appendChild(newVariation);
+            variationIndex++;
+        });
     </script>
 </body>
 </html>
