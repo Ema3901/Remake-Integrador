@@ -97,7 +97,7 @@ $stmt->closeCursor(); // Liberar recursos
                             <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" style="max-height: 100px;">
                             <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" style="max-height: 100px;">
                             <h5>Variaciones:</h5>
-                            <table class="table table-bordered" id="variationsTable-<?= $product['id_shoe'] ?>"> <!-- ID único para cada tabla -->
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Talla</th>
@@ -130,19 +130,17 @@ $stmt->closeCursor(); // Liberar recursos
             const row = cell.closest('tr');
             const detailsRow = row.nextElementSibling;
 
-            // Verificar si la fila de detalles está oculta o visible
             if (detailsRow.style.display === 'none') {
-                detailsRow.style.display = 'table-row'; // Mostrar detalles del producto
-                const productId = row.getAttribute('data-id'); // Obtener el ID del producto
-                const variationsTable = document.getElementById(`variationsTable-${productId}`);
+                detailsRow.style.display = 'table-row';
+                const productId = row.getAttribute('data-id');
+                const variationsTable = detailsRow.querySelector('tbody');
 
-                // Solo cargar las variaciones si no se han cargado aún
                 if (variationsTable.innerHTML.trim() === '') {
-                    fetch(`fetch_variations.php?id=${productId}`)  // Corregir la URL para incluir el ID
+                    fetch(`fetch_variations.php?id=${productId}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data.success && data.variations.length > 0) {
-                                variationsTable.innerHTML = ''; // Limpiar tabla de variaciones antes de agregar nuevos datos
+                                variationsTable.innerHTML = '';
                                 data.variations.forEach(variation => {
                                     const tr = document.createElement('tr');
                                     tr.innerHTML = `
@@ -156,7 +154,7 @@ $stmt->closeCursor(); // Liberar recursos
                                     `;
                                     variationsTable.appendChild(tr);
                                 });
-                                setupDeleteVariation(); // Configurar el evento de eliminación de variación
+                                setupDeleteVariation();
                             } else {
                                 variationsTable.innerHTML = `<tr><td colspan="5" class="text-center">No hay variaciones disponibles</td></tr>`;
                             }
@@ -164,7 +162,7 @@ $stmt->closeCursor(); // Liberar recursos
                         .catch(error => console.error('Error al cargar las variaciones:', error));
                 }
             } else {
-                detailsRow.style.display = 'none'; // Ocultar los detalles del producto
+                detailsRow.style.display = 'none';
             }
         });
     });
@@ -180,7 +178,7 @@ $stmt->closeCursor(); // Liberar recursos
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        button.closest('tr').remove(); // Eliminar la fila de variación de la tabla
+                        button.closest('tr').remove();
                     } else {
                         alert('Error al eliminar la variación.');
                     }
@@ -200,7 +198,7 @@ $stmt->closeCursor(); // Liberar recursos
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        button.closest('tr').remove(); // Eliminar la fila del producto
+                        button.closest('tr').remove();
                     } else {
                         alert('Error al eliminar el producto.');
                     }
@@ -222,8 +220,8 @@ $stmt->closeCursor(); // Liberar recursos
                         const tr = document.createElement('tr');
                         tr.setAttribute('data-id', product.id_shoe);
                         tr.classList.add('product-row');
-                        tr.innerHTML = 
-                            `<td>${product.id_shoe}</td>
+                        tr.innerHTML = `
+                            <td>${product.id_shoe}</td>
                             <td class="expandable" style="cursor: pointer;">
                                 ${product.model_name}
                             </td>
@@ -234,7 +232,8 @@ $stmt->closeCursor(); // Liberar recursos
                             <td>
                                 <a href="editar.php?id=${product.id_shoe}" class="btn btn-sm btn-warning">Editar</a>
                                 <button class="btn btn-sm btn-danger deleteProduct" data-id="${product.id_shoe}">Eliminar</button>
-                            </td>`;
+                            </td>
+                        `;
                         tableBody.appendChild(tr);
                     });
 
@@ -259,7 +258,7 @@ $stmt->closeCursor(); // Liberar recursos
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            button.closest('tr').remove(); // Eliminar la fila del producto
+                            button.closest('tr').remove();
                         } else {
                             alert('Error al eliminar el producto.');
                         }
