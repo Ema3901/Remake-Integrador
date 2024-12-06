@@ -36,8 +36,8 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Main content -->
     <main style="min-height: 53.5vh;">
-        <div> Prueba para video </div>
-        <button style="width: 300px; height: 50px"> Hola </button>
+        <div> Este es un boton para probar el envio de datos a servidor </div>
+        <button style="width: 600px; height: 50px"> Hola </button>
     </main>
 
     <!-- Footer -->
