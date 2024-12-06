@@ -74,8 +74,12 @@ $stmt->closeCursor(); // Liberar recursos
         </thead>
         <tbody id="productsTableBody">
             <?php 
-                // Crear una fila por cada producto, sin duplicarlos por variación
+                // Agrupar productos por el id del zapato, mostrando las variaciones solo cuando se expanden
+                $lastProductId = null;
                 foreach ($products as $product): 
+                    // Solo mostrar una fila por producto
+                    if ($lastProductId !== $product['id_shoe']) :
+                        $lastProductId = $product['id_shoe'];
             ?>
                 <tr data-id="<?= $product['id_shoe'] ?>" class="product-row">
                     <td><?= $product['id_shoe'] ?></td>
@@ -111,12 +115,13 @@ $stmt->closeCursor(); // Liberar recursos
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- Aquí se cargarán las variaciones con JS -->
                                 </tbody>
                             </table>
                         </div>
                     </td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endif; endforeach; ?>
         </tbody>
     </table>
 </div>
