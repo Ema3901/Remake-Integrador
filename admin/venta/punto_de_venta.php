@@ -63,17 +63,30 @@ function obtenerDetallesCarrito($id_variation) {
 
 // Agregar al carrito
 if (isset($_POST['agregar_al_carrito'])) {
-    $id_variation = $_POST['id_variation'];
-    $stock_type = $_POST['stock_type'];
+    // Depuración para ver qué datos se están enviando
+    error_log('Datos recibidos para agregar al carrito: ' . print_r($_POST, true)); 
 
-    // Agregar producto al carrito en sesión
-    $_SESSION['carrito'][] = [
-        'id_variation' => $id_variation,
-        'stock_type' => $stock_type
-    ];
+    if (isset($_POST['id_variation']) && isset($_POST['stock_type'])) {
+        $id_variation = $_POST['id_variation'];
+        $stock_type = $_POST['stock_type'];
 
-    // Actualizar el stock
-    actualizarStock($id_variation, $stock_type);
+        // Depuración: mostrar los valores antes de agregarlos al carrito
+        error_log("ID Variación: $id_variation, Stock Type: $stock_type");
+
+        // Agregar producto al carrito en sesión
+        $_SESSION['carrito'][] = [
+            'id_variation' => $id_variation,
+            'stock_type' => $stock_type
+        ];
+
+        // Depuración: mostrar el carrito después de agregar el producto
+        error_log("Carrito actualizado: " . print_r($_SESSION['carrito'], true));
+
+        // Actualizar el stock
+        actualizarStock($id_variation, $stock_type);
+    } else {
+        error_log('Faltan datos necesarios para agregar al carrito.');
+    }
 }
 
 // Eliminar del carrito
@@ -189,13 +202,11 @@ if (isset($_POST['id_shoe'])) {
                         ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
-                                <strong>Producto:</strong> <?php echo $detalles['model_name']; ?> <br>
-                                <strong>Talla:</strong> <?php echo $detalles['sizeMX']; ?> <br>
-                                <strong>Color:</strong> <?php echo $detalles['color']; ?>
+                                <strong><?php echo $detalles['model_name']; ?></strong> - 
+                                <em><?php echo $detalles['sizeMX']; ?> | <?php echo $detalles['color']; ?></em>
                             </div>
                             <div class="text-end">
-                                <strong>Precio:</strong> $<?php echo $detalles['price']; ?><br>
-                                <!-- Eliminar botón -->
+                                <span>$<?php echo $detalles['price']; ?></span>
                                 <form method="POST" class="d-inline">
                                     <input type="hidden" name="id_variation" value="<?php echo $item['id_variation']; ?>">
                                     <button type="submit" name="eliminar_del_carrito" class="btn btn-danger btn-sm ms-2">Eliminar</button>
