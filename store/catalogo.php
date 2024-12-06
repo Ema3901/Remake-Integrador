@@ -116,14 +116,16 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
                     $id_shoe = $row['id_shoe'];
                     $model_name = htmlspecialchars($row['model_name']);
                     $brand_name = htmlspecialchars($row['brand_name']);
-                    $img_main = $row['img_main'] ?: '/src/images/default-placeholder.png';
+                    $img_main = $row['img_main'] ? $row['img_main'] : '/src/images/default-placeholder.png';  // Verifica la imagen
+
+                    // Si las imágenes son rutas relativas, asegúrate de que las imágenes estén en el lugar correcto
+                    // Para evitar problemas de carga, puedes usar rutas absolutas en producción:
+                    $img_main_url = (strpos($img_main, 'http') === false) ? 'https://calzadojj.net' . $img_main : $img_main;
 
                     echo '<div class="col-md-4 mb-4">';
                     echo '    <div class="card border-0">';
                     echo '        <div class="product-placeholder position-relative">';
-                    echo '            <img src="' . $img_main . '" class="img-fluid product-image" alt="' . $model_name . '">';
-
-                    echo '            </button>';
+                    echo '            <img src="' . $img_main_url . '" class="img-fluid product-image" alt="' . $model_name . '">';
                     echo '        </div>';
                     echo '        <div class="card-body">';
                     echo '            <p class="card-text"><strong>' . $brand_name . '</strong> - ' . $model_name . '</p>';
