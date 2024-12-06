@@ -77,23 +77,19 @@ function uploadImage($image) {
         
         // Verificar si el archivo ya existe
         if (file_exists($target_file)) {
-            echo "El archivo ya existe: " . $target_file;
-            return '';
+            return ''; // Si el archivo ya existe, retornamos vacío
         }
 
         // Mover la imagen al directorio de uploads
         if (move_uploaded_file($image['tmp_name'], $target_file)) {
-            echo "El archivo se subió correctamente a: " . $target_file;
-            return '/uploads/' . basename($image['name']);
+            return '/uploads/' . basename($image['name']); // Retornamos la ruta relativa
         } else {
-            echo "Error al mover el archivo: " . $image['tmp_name'];
-            return '';
+            return ''; // Si no se pudo mover el archivo, retornamos vacío
         }
-    } else {
-        echo "Error en la subida del archivo: " . $image['error'];
-        return '';
     }
+    return ''; // Si hubo error en la subida, retornamos vacío
 }
+
 
 ?>
 
