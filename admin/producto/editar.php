@@ -239,43 +239,50 @@ function uploadImage($image) {
                         </div>
 
                         <!-- Imágenes -->
-                        <div class="mb-3">
-    <label class="form-label">Imágenes</label>
-    <div class="d-flex justify-content-start gap-3">
-        <!-- Imagen Principal -->
-        <div>
-            <input type="file" class="form-control" id="img_main" name="img_main" accept="image/*">
-            <?php if ($product['img_main']): ?>
-                <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid mt-2" width="100">
-            <?php endif; ?>
+<div class="mb-3">
+    <label for="img_main" class="form-label">Imagen Principal</label>
+    <input type="file" class="form-control" id="img_main" name="img_main" accept="image/*">
+    <?php if ($product['img_main']): ?>
+        <div class="d-flex mt-2">
+            <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid" width="150" style="margin-right: 10px;">
+            <!-- Puedes agregar más imágenes si es necesario -->
         </div>
-
-        <!-- Imagen Perfil -->
-        <div>
-            <input type="file" class="form-control" id="img_profile" name="img_profile" accept="image/*">
-            <?php if ($product['img_profile']): ?>
-                <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" class="img-fluid mt-2" width="100">
-            <?php endif; ?>
-        </div>
-
-        <!-- Imagen Frontal -->
-        <div>
-            <input type="file" class="form-control" id="img_front" name="img_front" accept="image/*">
-            <?php if ($product['img_front']): ?>
-                <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" class="img-fluid mt-2" width="100">
-            <?php endif; ?>
-        </div>
-
-        <!-- Imagen Trasera -->
-        <div>
-            <input type="file" class="form-control" id="img_rear" name="img_rear" accept="image/*">
-            <?php if ($product['img_rear']): ?>
-                <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" class="img-fluid mt-2" width="100">
-            <?php endif; ?>
-        </div>
-    </div>
+    <?php endif; ?>
 </div>
 
+<div class="mb-3">
+    <label for="img_profile" class="form-label">Imagen Perfil</label>
+    <input type="file" class="form-control" id="img_profile" name="img_profile" accept="image/*">
+    <?php if ($product['img_profile']): ?>
+        <div class="d-flex mt-2">
+            <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" class="img-fluid" width="150" style="margin-right: 10px;">
+        </div>
+    <?php endif; ?>
+</div>
+
+<div class="mb-3">
+    <label for="img_front" class="form-label">Imagen Frontal</label>
+    <input type="file" class="form-control" id="img_front" name="img_front" accept="image/*">
+    <?php if ($product['img_front']): ?>
+        <div class="d-flex mt-2">
+            <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" class="img-fluid" width="150" style="margin-right: 10px;">
+        </div>
+    <?php endif; ?>
+</div>
+
+                        <div class="mb-3">
+                            <label for="img_rear" class="form-label">Imagen Trasera</label>
+                            <input type="file" class="form-control" id="img_rear" name="img_rear" accept="image/*">
+                            <?php if ($product['img_rear']): ?>
+                        <div class="d-flex mt-2">
+                            <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" class="img-fluid" width="150">
+                        </div>
+                            <?php endif; ?>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary">Actualizar Producto</button>
+                    </div>
 
                     <!-- Variaciones -->
                     <div class="col-md-6">
