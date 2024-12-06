@@ -120,7 +120,7 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
 
                     // Si las imágenes son rutas relativas, asegúrate de que las imágenes estén en el lugar correcto
                     // Para evitar problemas de carga, puedes usar rutas absolutas en producción:
-                    $img_main_url = (strpos($img_main, 'http') === false) ? 'https://calzadojj.net' . $img_main : $img_main;
+                    $img_main_url = (strpos($img_main, 'http') === false) ? 'https://administracion.calzadojj.net/uploads' . $img_main : $img_main;
 
                     echo '<div class="col-md-4 mb-4">';
                     echo '    <div class="card border-0">';
