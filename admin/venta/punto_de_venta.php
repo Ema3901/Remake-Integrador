@@ -93,9 +93,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ?>
     <h1>Punto de Venta</h1>
     <form method="POST" action="punto_de_venta.php">
-        <div style="margin-bottom: 20px;">
-            <label for="shoe_id" style="font-weight: bold;">Selecciona el tenis:</label>
-            <select name="shoe_id" required>
+        <div class="form-group">
+            <label for="shoe_id" class="form-label">Selecciona el tenis:</label>
+            <select name="shoe_id" class="form-control" required>
                 <?php
                 $query_tenis = "SELECT id_shoe, model_name FROM shoes";
                 $stmt = $pdo->prepare($query_tenis);
@@ -108,24 +108,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </select>
         </div>
 
-        <div style="margin-bottom: 20px;">
-            <label for="quantity" style="font-weight: bold;">Cantidad:</label>
-            <input type="number" name="quantity" min="1" required style="padding: 8px;">
+        <div class="form-group">
+            <label for="quantity" class="form-label">Cantidad:</label>
+            <input type="number" name="quantity" class="form-control" min="1" required>
         </div>
 
-        <div style="margin-bottom: 20px;">
-            <label for="venta_tipo" style="font-weight: bold;">Tipo de venta:</label>
-            <select name="venta_tipo" required>
+        <div class="form-group">
+            <label for="venta_tipo" class="form-label">Tipo de venta:</label>
+            <select name="venta_tipo" class="form-control" required>
                 <option value="local">Local</option>
                 <option value="tianguis">Tianguis</option>
             </select>
         </div>
 
-        <button type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">Registrar Venta</button>
+        <button type="submit" class="btn btn-success">Registrar Venta</button>
     </form>
 
     <br>
-    <a href="punto_de_venta.php" style="font-size: 16px; color: #007bff;">Añadir otro producto</a>
+    <a href="punto_de_venta.php" class="btn btn-primary">Añadir otro producto</a>
     <?php
 }
 ?>
+
