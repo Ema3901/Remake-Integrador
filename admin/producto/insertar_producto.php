@@ -72,18 +72,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Función para subir las imágenes
 function uploadImage($image) {
     if ($image['error'] == 0) {
-        $target_dir = __DIR__ . '/../uploads';
+        $target_dir = __DIR__ . '/../uploads/';
         $target_file = $target_dir . basename($image['name']);
         
-        // Mover la imagen al directorio de uploads
-        if (move_uploaded_file($image['tmp_name'], $target_file)) {
-            return '/uploads/' . basename($image['name']);
-        } else {
+        // Verificar si el archivo ya existe
+        if (file_exists($target_file)) {
+            echo "El archivo ya existe: " . $target_file;
             return '';
         }
+
+        // Mover la imagen al directorio de uploads
+        if (move_uploaded_file($image['tmp_name'], $target_file)) {
+            echo "El archivo se subió correctamente a: " . $target_file;
+            return '/uploads/' . basename($image['name']);
+        } else {
+            echo "Error al mover el archivo: " . $image['tmp_name'];
+            return '';
+        }
+    } else {
+        echo "Error en la subida del archivo: " . $image['error'];
+        return '';
     }
-    return '';
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -94,6 +105,7 @@ function uploadImage($image) {
     <title>Insertar Producto | Calzado JJ</title>
     <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="www.calzadojj.net/src/css/style.css"
 </head>
 <body>
     <!-- Header -->
