@@ -238,51 +238,47 @@ function uploadImage($image) {
                             <textarea class="form-control" id="description" name="description" rows="3"><?= $product['descriptionn'] ?></textarea>
                         </div>
 
-                        <!-- Imágenes -->
+<!-- Imágenes -->
 <div class="mb-3">
     <label for="img_main" class="form-label">Imagen Principal</label>
-    <input type="file" class="form-control" id="img_main" name="img_main" accept="image/*">
-    <?php if ($product['img_main']): ?>
-        <div class="d-flex mt-2">
-            <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid" width="150" style="margin-right: 10px;">
-            <!-- Puedes agregar más imágenes si es necesario -->
-        </div>
-    <?php endif; ?>
+    <div class="d-flex">
+        <input type="file" class="form-control me-2" id="img_main" name="img_main" accept="image/*" style="max-width: 200px;">
+        <?php if ($product['img_main']): ?>
+            <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid" width="100" style="margin-left: 10px;">
+        <?php endif; ?>
+    </div>
 </div>
 
 <div class="mb-3">
     <label for="img_profile" class="form-label">Imagen Perfil</label>
-    <input type="file" class="form-control" id="img_profile" name="img_profile" accept="image/*">
-    <?php if ($product['img_profile']): ?>
-        <div class="d-flex mt-2">
-            <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" class="img-fluid" width="150" style="margin-right: 10px;">
-        </div>
-    <?php endif; ?>
+    <div class="d-flex">
+        <input type="file" class="form-control me-2" id="img_profile" name="img_profile" accept="image/*" style="max-width: 200px;">
+        <?php if ($product['img_profile']): ?>
+            <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" class="img-fluid" width="100" style="margin-left: 10px;">
+        <?php endif; ?>
+    </div>
 </div>
 
 <div class="mb-3">
     <label for="img_front" class="form-label">Imagen Frontal</label>
-    <input type="file" class="form-control" id="img_front" name="img_front" accept="image/*">
-    <?php if ($product['img_front']): ?>
-        <div class="d-flex mt-2">
-            <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" class="img-fluid" width="150" style="margin-right: 10px;">
-        </div>
-    <?php endif; ?>
+    <div class="d-flex">
+        <input type="file" class="form-control me-2" id="img_front" name="img_front" accept="image/*" style="max-width: 200px;">
+        <?php if ($product['img_front']): ?>
+            <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" class="img-fluid" width="100" style="margin-left: 10px;">
+        <?php endif; ?>
+    </div>
 </div>
 
-                        <div class="mb-3">
-                            <label for="img_rear" class="form-label">Imagen Trasera</label>
-                            <input type="file" class="form-control" id="img_rear" name="img_rear" accept="image/*">
-                            <?php if ($product['img_rear']): ?>
-                        <div class="d-flex mt-2">
-                            <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" class="img-fluid" width="150">
-                        </div>
-                            <?php endif; ?>
-                        </div>
+<div class="mb-3">
+    <label for="img_rear" class="form-label">Imagen Trasera</label>
+    <div class="d-flex">
+        <input type="file" class="form-control me-2" id="img_rear" name="img_rear" accept="image/*" style="max-width: 200px;">
+        <?php if ($product['img_rear']): ?>
+            <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" class="img-fluid" width="100" style="margin-left: 10px;">
+        <?php endif; ?>
+    </div>
+</div>
 
-
-                        <button type="submit" class="btn btn-primary">Actualizar Producto</button>
-                    </div>
 
                     <!-- Variaciones -->
                     <div class="col-md-6">
