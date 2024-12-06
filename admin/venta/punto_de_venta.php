@@ -1,151 +1,102 @@
 <?php
 // Incluir el archivo de conexión
 include __DIR__ . '/../../src/database/db.php';
-
 session_start();
 
-// Si no hay una sesión activa, redirigir a /sesion/sesion.php
+// Si no hay una sesión activa, redirigir a la página de inicio de sesión
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /sesion/sesion.php');  // Cambia esto por la URL de tu página de sesión
+    header('Location: /sesion/sesion.php');
     exit();
 }
 
-// Obtiene el ID del usuario activo (vendedor)
+// Obtener el ID del usuario activo (vendedor)
 $user_id = $_SESSION['user_id'];
 
-// Verifica si se ha enviado el formulario de venta
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Recibe los datos del formulario
-    $shoe_id = $_POST['shoe_id'];
-    $quantity = $_POST['quantity'];
-    $venta_tipo = $_POST['venta_tipo'];  // "local" o "tianguis"
-    $size_id = $_POST['size_id'];
-    $color_id = $_POST['color_id'];
-    
-    // 1. Obtener el nombre del vendedor
-    $query_vendedor = "CALL sp_get_seller_name(:user_id)";
-    $stmt = $pdo->prepare($query_vendedor);
+// Procesar la venta cuando se presiona el botón de proceder al pago
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalize_sale'])) {
+    // Guardar la venta en la base de datos
+    $total_sale = $_POST['total_sale'];
+    $query_sale = "INSERT INTO sales (user_id, total_price, sale_date) VALUES (:user_id, :total_price, NOW())";
+    $stmt = $pdo->prepare($query_sale);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $vendedor = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    // 2. Obtener los detalles del producto (tenis)
-    $query_tenis = "SELECT shoes.model_name, shoes.price, shoes.img_main
-                    FROM shoes 
-                    WHERE shoes.id_shoe = :shoe_id";
-    $stmt = $pdo->prepare($query_tenis);
-    $stmt->bindParam(':shoe_id', $shoe_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $tenis = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // 3. Registrar la venta llamando al procedimiento almacenado
-    $query_venta = "CALL sp_register_sale(:shoe_id, :quantity, :venta_tipo, :user_id, :size_id, :color_id)";
-    $stmt = $pdo->prepare($query_venta);
-    $stmt->bindParam(':shoe_id', $shoe_id, PDO::PARAM_INT);
-    $stmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-    $stmt->bindParam(':venta_tipo', $venta_tipo, PDO::PARAM_STR);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':size_id', $size_id, PDO::PARAM_INT);
-    $stmt->bindParam(':color_id', $color_id, PDO::PARAM_INT);
+    $stmt->bindParam(':total_price', $total_sale, PDO::PARAM_STR);
     $stmt->execute();
 
-    // 4. Obtener las variaciones del producto (tamaño y color)
-    $query_variaciones = "CALL sp_get_variationsventa(:shoe_id)";
-    $stmt = $pdo->prepare($query_variaciones);
-    $stmt->bindParam(':shoe_id', $shoe_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $variaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Obtener el ID de la venta registrada
+    $sale_id = $pdo->lastInsertId();
 
-    // Mensaje de confirmación
-    echo "<h2>Venta registrada exitosamente</h2>";
-    echo "<p><strong>Vendedor:</strong> " . $vendedor['namee'] . "</p>";
-    echo "<p><strong>Producto:</strong> " . $tenis['model_name'] . "</p>";
-    echo "<p><strong>Tamaño:</strong> " . $variaciones[0]['sizeMX'] . " - <strong>Color:</strong> " . $variaciones[0]['color'] . "</p>";
-    echo "<p><strong>Cantidad vendida:</strong> " . $quantity . "</p>";
-    echo "<p><strong>Tipo de venta:</strong> " . $venta_tipo . "</p>";
-    echo "<p><strong>Precio total:</strong> $" . ($tenis['price'] * $quantity) . "</p>";
-    echo "<br><a href='punto_de_venta.php'>Añadir otro producto</a><br>";
+    // Registrar cada producto de la venta
+    foreach ($_POST['products'] as $product) {
+        $query_detail = "INSERT INTO sale_details (sale_id, product_id, quantity, price, total_price) VALUES (:sale_id, :product_id, :quantity, :price, :total_price)";
+        $stmt = $pdo->prepare($query_detail);
+        $stmt->bindParam(':sale_id', $sale_id, PDO::PARAM_INT);
+        $stmt->bindParam(':product_id', $product['id'], PDO::PARAM_INT);
+        $stmt->bindParam(':quantity', $product['quantity'], PDO::PARAM_INT);
+        $stmt->bindParam(':price', $product['price'], PDO::PARAM_STR);
+        $stmt->bindParam(':total_price', $product['total_price'], PDO::PARAM_STR);
+        $stmt->execute();
+    }
 
-} else {
-    // Si no se envió el formulario, muestra el formulario
-    ?>
+    // Redirigir a la página de confirmación o éxito
+    header('Location: /ventas/confirmacion.php');
+    exit();
+}
+
+// Consultar los productos para la búsqueda
+$query_products = "SELECT id, name, price FROM products";
+$stmt = $pdo->prepare($query_products);
+$stmt->execute();
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administracion | Calzado JJ</title>
-
-    <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
-    
+    <title>Punto de Venta</title>
     <!-- Bootstrap 5.3 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
-    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
 <body>
 
-    <!-- Header -->
-    <?php include __DIR__ . '/src/header.php'; ?>
+<!-- Encabezado -->
+<?php include __DIR__ . '/src/header.php'; ?>
 
-    <!-- Main content -->
-    <main class="container my-5">
-        <h1 class="mb-4">Punto de Venta</h1>
-        
-        <!-- Formulario de Venta -->
-        <form method="POST" action="punto_de_venta.php">
-            
-            <!-- Seleccionar el producto -->
-            <div class="mb-3">
-                <label for="shoe_id" class="form-label">Selecciona el producto:</label>
-                <input type="text" id="shoe_name" class="form-control" readonly>
-                <input type="hidden" name="shoe_id" id="shoe_id">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#searchProductModal">Buscar Producto</button>
-            </div>
+<main class="container my-5">
+    <h1>Punto de Venta</h1>
 
-            <!-- Seleccionar la talla -->
-            <div class="mb-3">
-                <label for="size_id" class="form-label">Selecciona la talla:</label>
-                <select name="size_id" id="size_id" class="form-select" required>
-                    <option value="">Selecciona una talla</option>
-                </select>
-            </div>
+    <!-- Formulario de venta -->
+    <form method="POST" action="punto_de_venta.php">
+        <h3>Productos Seleccionados</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Talla</th>
+                    <th>Color</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="product-list">
+                <!-- Los productos se agregarán dinámicamente aquí -->
+            </tbody>
+        </table>
 
-            <!-- Seleccionar el color -->
-            <div class="mb-3">
-                <label for="color_id" class="form-label">Selecciona el color:</label>
-                <select name="color_id" id="color_id" class="form-select" required>
-                    <option value="">Selecciona un color</option>
-                </select>
-            </div>
+        <div class="mb-3">
+            <h3>Total de la Venta: <span id="total-sale">0</span></h3>
+        </div>
 
-            <!-- Cantidad -->
-            <div class="mb-3">
-                <label for="quantity" class="form-label">Cantidad:</label>
-                <input type="number" name="quantity" id="quantity" class="form-control" min="1" required>
-            </div>
+        <button type="submit" name="finalize_sale" class="btn btn-success">Proceder al Pago</button>
 
-            <!-- Tipo de venta -->
-            <div class="mb-3">
-                <label for="venta_tipo" class="form-label">Tipo de venta:</label>
-                <select name="venta_tipo" id="venta_tipo" class="form-select" required>
-                    <option value="local">Local</option>
-                    <option value="tianguis">Tianguis</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-success">Registrar Venta</button>
-        </form>
-
-        <br>
-        <a href="punto_de_venta.php" class="btn btn-link">Añadir otro producto</a>
-
-    </main>
+        <!-- Datos de los productos -->
+        <input type="hidden" name="total_sale" id="total-sale-input">
+        <input type="hidden" name="products" id="products-input">
+    </form>
 
     <!-- Modal de búsqueda de productos -->
     <div class="modal fade" id="searchProductModal" tabindex="-1" aria-labelledby="searchProductModalLabel" aria-hidden="true">
@@ -156,72 +107,114 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="searchQuery" class="form-control" placeholder="Buscar por nombre de producto...">
-                    <ul id="productList" class="list-group mt-3"></ul>
+                    <input type="text" id="searchQuery" class="form-control" placeholder="Buscar producto por nombre...">
+                    <ul id="productSearchResults" class="list-group mt-3"></ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <?php include __DIR__ . '/src/footer.php'; ?>
+    <!-- Botón para abrir el modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#searchProductModal">
+        Buscar Producto
+    </button>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
-    <script>
-        // Actualización de los selectores de tamaño y color mediante AJAX
-        document.getElementById('shoe_id').addEventListener('change', function() {
-            var shoeId = this.value;
-            if (shoeId) {
-                // Llamar a la API para obtener las variaciones (talla y color)
-                fetch('get_variationsventa.php?shoe_id=' + shoeId)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Actualizar el select de tamaño
-                        var sizeSelect = document.getElementById('size_id');
-                        sizeSelect.innerHTML = '<option value="">Selecciona una talla</option>';
-                        data.forEach(size => {
-                            sizeSelect.innerHTML += `<option value="${size.id_size}">${size.sizeMX}</option>`;
-                        });
+</main>
 
-                        // Actualizar el select de color
-                        var colorSelect = document.getElementById('color_id');
-                        colorSelect.innerHTML = '<option value="">Selecciona un color</option>';
-                        data.forEach(color => {
-                            colorSelect.innerHTML += `<option value="${color.id_color}">${color.color}</option>`;
+<!-- Footer -->
+<?php include __DIR__ . '/src/footer.php'; ?>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+<script>
+    // Variables globales
+    let productsList = [];
+    let totalSale = 0;
+
+    // Manejo de búsqueda de productos
+    document.getElementById('searchQuery').addEventListener('input', function() {
+        const query = this.value;
+        if (query.length > 2) {  // Solo buscar si la consulta tiene más de 2 caracteres
+            fetch('search_products.php?q=' + query)
+                .then(response => response.json())
+                .then(data => {
+                    const results = document.getElementById('productSearchResults');
+                    results.innerHTML = '';  // Limpiar los resultados anteriores
+                    data.forEach(product => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('list-group-item');
+                        listItem.textContent = product.name;
+                        listItem.addEventListener('click', function() {
+                            addProductToList(product);
+                            $('#searchProductModal').modal('hide');
                         });
+                        results.appendChild(listItem);
                     });
-            }
-        });
+                });
+        }
+    });
 
-        // Función para el modal de búsqueda de productos
-        document.getElementById('searchQuery').addEventListener('input', function() {
-            var query = this.value;
+    // Agregar producto a la lista
+    function addProductToList(product) {
+        const quantity = prompt("¿Cuántas unidades deseas agregar?", 1);
+        if (quantity && quantity > 0) {
+            const price = product.price;
+            const totalPrice = price * quantity;
 
-            if (query.length > 2) {  // Comienza la búsqueda después de 2 caracteres
-                fetch('search_products.php?q=' + query)
-                    .then(response => response.json())
-                    .then(data => {
-                        var productList = document.getElementById('productList');
-                        productList.innerHTML = '';  // Limpiar los resultados previos
-                        
-                        data.forEach(product => {
-                            var listItem = document.createElement('li');
-                            listItem.classList.add('list-group-item');
-                            listItem.textContent = product.model_name;
-                            listItem.addEventListener('click', function() {
-                                document.getElementById('shoe_id').value = product.id_shoe;
-                                document.getElementById('shoe_name').value = product.model_name;
-                                $('#searchProductModal').modal('hide');  // Cerrar el modal
-                            });
-                            productList.appendChild(listItem);
-                        });
-                    });
-            }
-        });
-    </script>
+            const productData = {
+                id: product.id,
+                name: product.name,
+                quantity: quantity,
+                price: price,
+                total_price: totalPrice
+            };
+
+            // Agregar al arreglo
+            productsList.push(productData);
+
+            // Actualizar la tabla
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${product.name}</td>
+                <td><input type="text" class="form-control" value="Tamaño" readonly></td>
+                <td><input type="text" class="form-control" value="Color" readonly></td>
+                <td>${price}</td>
+                <td>${quantity}</td>
+                <td>${totalPrice}</td>
+                <td><button type="button" class="btn btn-danger btn-sm" onclick="removeProduct(${product.id})">Eliminar</button></td>
+            `;
+            document.getElementById('product-list').appendChild(row);
+
+            // Actualizar el total de la venta
+            totalSale += totalPrice;
+            document.getElementById('total-sale').textContent = totalSale;
+            document.getElementById('total-sale-input').value = totalSale;
+
+            // Actualizar los productos para enviar en el formulario
+            document.getElementById('products-input').value = JSON.stringify(productsList);
+        }
+    }
+
+    // Eliminar producto de la lista
+    function removeProduct(productId) {
+        const index = productsList.findIndex(product => product.id === productId);
+        if (index > -1) {
+            const product = productsList[index];
+            totalSale -= product.total_price;
+            productsList.splice(index, 1);
+
+            // Actualizar la tabla
+            const rows = document.getElementById('product-list').getElementsByTagName('tr');
+            rows[index].remove();
+
+            // Actualizar el total
+            document.getElementById('total-sale').textContent = totalSale;
+            document.getElementById('total-sale-input').value = totalSale;
+
+            // Actualizar los productos para enviar en el formulario
+            document.getElementById('products-input').value = JSON.stringify(productsList);
+        }
+    }
+</script>
 </body>
 </html>
-
-<?php
-}
-?>
