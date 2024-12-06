@@ -199,98 +199,88 @@ function uploadImage($image) {
         <?php if ($product): ?>
             <form action="editar.php?id=<?= $product['id_shoe'] ?>" method="POST" enctype="multipart/form-data">
                 <div class="row">
-                    <!-- Sección de Producto Principal -->
                     <div class="col-md-6">
-                        <h4>Producto Principal</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <!-- Modelo -->
-                                <div class="mb-3">
-                                    <label for="model_name" class="form-label">Modelo</label>
-                                    <input type="text" class="form-control" id="model_name" name="model_name" value="<?= $product['model_name'] ?>" required>
-                                </div>
+                        <!-- Modelo, Marca, Género -->
+                        <div class="mb-3">
+                            <label for="model_name" class="form-label">Modelo</label>
+                            <input type="text" class="form-control" id="model_name" name="model_name" value="<?= $product['model_name'] ?>" required>
+                        </div>
 
-                                <!-- Marca -->
-                                <div class="mb-3">
-                                    <label for="brand_id" class="form-label">Marca</label>
-                                    <select class="form-select" id="brand_id" name="brand_id">
-                                        <?php foreach ($brands as $brand): ?>
-                                            <option value="<?= $brand['id_brand'] ?>" <?= $product['id_brand'] == $brand['id_brand'] ? 'selected' : '' ?>><?= $brand['brands'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
+                        <div class="mb-3">
+                            <label for="brand_id" class="form-label">Marca</label>
+                            <select class="form-select" id="brand_id" name="brand_id">
+                                <?php foreach ($brands as $brand): ?>
+                                    <option value="<?= $brand['id_brand'] ?>" <?= $product['id_brand'] == $brand['id_brand'] ? 'selected' : '' ?>><?= $brand['brands'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
-                                <!-- Género -->
-                                <div class="mb-3">
-                                    <label for="genre_id" class="form-label">Género</label>
-                                    <select class="form-select" id="genre_id" name="genre_id">
-                                        <?php foreach ($genres as $genre): ?>
-                                            <option value="<?= $genre['id_genre'] ?>" <?= $product['id_genre'] == $genre['id_genre'] ? 'selected' : '' ?>><?= $genre['genre'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <!-- Precio -->
-                                <div class="mb-3">
-                                    <label for="price" class="form-label">Precio</label>
-                                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="<?= $product['price'] ?>" required>
-                                </div>
-
-                                <!-- Descripción -->
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Descripción</label>
-                                    <textarea class="form-control" id="description" name="description" rows="3"><?= $product['descriptionn'] ?></textarea>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label for="genre_id" class="form-label">Género</label>
+                            <select class="form-select" id="genre_id" name="genre_id">
+                                <?php foreach ($genres as $genre): ?>
+                                    <option value="<?= $genre['id_genre'] ?>" <?= $product['id_genre'] == $genre['id_genre'] ? 'selected' : '' ?>><?= $genre['genre'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- Sección de Variaciones -->
                     <div class="col-md-6">
-                        <h4>Variaciones</h4>
-                        <div id="variationsContainer">
-                            <?php foreach ($variations as $index => $variation): ?>
-                                <div class="mb-3 variation">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label for="size_<?= $index ?>" class="form-label">Tamaño</label>
-                                            <select class="form-select" id="size_<?= $index ?>" name="variations[<?= $index ?>][size]">
-                                                <?php foreach ($sizes as $size): ?>
-                                                    <option value="<?= $size['id_size'] ?>" <?= $size['id_size'] == $variation['id_size'] ? 'selected' : '' ?>><?= $size['sizeMX'] ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
+                        <!-- Precio, Descripción -->
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Precio</label>
+                            <input type="number" step="0.01" class="form-control" id="price" name="price" value="<?= $product['price'] ?>" required>
+                        </div>
 
-                                        <div class="col-md-3">
-                                            <label for="color_<?= $index ?>" class="form-label">Color</label>
-                                            <select class="form-select" id="color_<?= $index ?>" name="variations[<?= $index ?>][color]">
-                                                <?php foreach ($colors as $color): ?>
-                                                    <option value="<?= $color['id_color'] ?>" <?= $color['id_color'] == $variation['id_color'] ? 'selected' : '' ?>><?= $color['color'] ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"><?= $product['descriptionn'] ?></textarea>
+                        </div>
+                    </div>
+                </div>
 
-                                        <div class="col-md-3">
-                                            <label for="stock_local_<?= $index ?>" class="form-label">Stock Local</label>
-                                            <input type="number" class="form-control" id="stock_local_<?= $index ?>" name="variations[<?= $index ?>][stock_local]" value="<?= $variation['stock_local'] ?>" required>
-                                        </div>
+                <!-- Sección de Variaciones -->
+                <div class="mt-4">
+                    <h4>Variaciones</h4>
+                    <div id="variationsContainer">
+                        <?php foreach ($variations as $index => $variation): ?>
+                            <div class="mb-3 variation">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label for="size_<?= $index ?>" class="form-label">Tamaño</label>
+                                        <select class="form-select" id="size_<?= $index ?>" name="variations[<?= $index ?>][size]">
+                                            <?php foreach ($sizes as $size): ?>
+                                                <option value="<?= $size['id_size'] ?>" <?= $size['id_size'] == $variation['id_size'] ? 'selected' : '' ?>><?= $size['sizeMX'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
 
-                                        <div class="col-md-3">
-                                            <label for="stock_tianguis_<?= $index ?>" class="form-label">Stock Tianguis</label>
-                                            <input type="number" class="form-control" id="stock_tianguis_<?= $index ?>" name="variations[<?= $index ?>][stock_tianguis]" value="<?= $variation['stock_tianguis'] ?>" required>
-                                        </div>
+                                    <div class="col-md-3">
+                                        <label for="color_<?= $index ?>" class="form-label">Color</label>
+                                        <select class="form-select" id="color_<?= $index ?>" name="variations[<?= $index ?>][color]">
+                                            <?php foreach ($colors as $color): ?>
+                                                <option value="<?= $color['id_color'] ?>" <?= $color['id_color'] == $variation['id_color'] ? 'selected' : '' ?>><?= $color['color'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="stock_local_<?= $index ?>" class="form-label">Stock Local</label>
+                                        <input type="number" class="form-control" id="stock_local_<?= $index ?>" name="variations[<?= $index ?>][stock_local]" value="<?= $variation['stock_local'] ?>" required>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="stock_tianguis_<?= $index ?>" class="form-label">Stock Tianguis</label>
+                                        <input type="number" class="form-control" id="stock_tianguis_<?= $index ?>" name="variations[<?= $index ?>][stock_tianguis]" value="<?= $variation['stock_tianguis'] ?>" required>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
-                        </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-
                 </div>
 
                 <!-- Sección de Imágenes -->
-                <div class="mb-3">
+                <div class="mt-4 mb-3">
                     <h4>Imágenes</h4>
                     <div class="d-flex">
                         <div class="col-md-3">
