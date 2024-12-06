@@ -1,5 +1,5 @@
 <?php
-// Incluir archivo de conexión a la base de datos
+// Incluir el archivo de conexión
 include __DIR__ . '/../../src/database/db.php';
 
 session_start();
@@ -10,234 +10,168 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
+// Función para buscar productos
+function buscarProducto($term) {
+    global $pdo;
+    $sql = "SELECT id_shoe, model_name FROM shoes WHERE model_name LIKE :term OR id_shoe = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':term' => "%$term%", ':id' => $term]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-// Si el formulario ha sido enviado
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Recibimos los datos del formulario
-    $productos = json_decode($_POST['productos'], true); // Array con los productos agregados
-    $venta_tipo = $_POST['venta_tipo']; // Tipo de venta (local o tianguis)
-    $total_amount = $_POST['total_amount']; // Total de la venta
-    
-    // 1. Registrar la venta
-    $stmt = $pdo->prepare("INSERT INTO sales (user_id, total_amount, sale_type) VALUES (:user_id, :total_amount, :sale_type)");
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->bindParam(':total_amount', $total_amount);
-    $stmt->bindParam(':sale_type', $venta_tipo);
-    $stmt->execute();
-    $sale_id = $pdo->lastInsertId();  // Obtener el ID de la venta registrada
-    
-    $total_amount_calculado = 0;
+// Función para obtener las variaciones de un producto
+function obtenerVariaciones($id_shoe) {
+    global $pdo;
+    $sql = "SELECT sv.id_varition, s.id_size, sz.sizeMX, c.color, sv.stock_local, sv.stock_tianguis
+            FROM shoes_variations sv
+            JOIN sizes sz ON sv.id_size = sz.id_size
+            JOIN colors c ON sv.id_color = c.id_color
+            WHERE sv.id_shoe = :id_shoe";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':id_shoe' => $id_shoe]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-    // 2. Registrar los detalles de la venta y actualizar el stock
-    foreach ($productos as $producto) {
-        // Calcular el total por producto
-        $total_price = $producto['price'] * $producto['quantity'];
-        $total_amount_calculado += $total_price;
-        
-        // Insertar los detalles de la venta
-        $stmt = $pdo->prepare("INSERT INTO sale_details (sale_id, product_id, size_id, color_id, quantity, price, total_price) 
-                               VALUES (:sale_id, :product_id, :size_id, :color_id, :quantity, :price, :total_price)");
-        $stmt->bindParam(':sale_id', $sale_id);
-        $stmt->bindParam(':product_id', $producto['id']);
-        $stmt->bindParam(':size_id', $producto['size_id']);
-        $stmt->bindParam(':color_id', $producto['color_id']);
-        $stmt->bindParam(':quantity', $producto['quantity']);
-        $stmt->bindParam(':price', $producto['price']);
-        $stmt->bindParam(':total_price', $total_price);
-        $stmt->execute();
-
-        // Actualizar el stock según el tipo de venta
-        $stock_column = ($venta_tipo == 'local') ? 'stock_local' : 'stock_tianguis';
-        
-        $stmt = $pdo->prepare("UPDATE shoes_variations SET $stock_column = $stock_column - :quantity 
-                               WHERE id_shoe = :product_id AND id_size = :size_id AND id_color = :color_id");
-        $stmt->bindParam(':quantity', $producto['quantity']);
-        $stmt->bindParam(':product_id', $producto['id']);
-        $stmt->bindParam(':size_id', $producto['size_id']);
-        $stmt->bindParam(':color_id', $producto['color_id']);
-        $stmt->execute();
+// Función para actualizar el stock después de una compra
+function actualizarStock($id_variation, $stock_type) {
+    global $pdo;
+    if ($stock_type == 'local') {
+        $sql = "UPDATE shoes_variations SET stock_local = stock_local - 1 WHERE id_varition = :id_variation AND stock_local > 0";
+    } else {
+        $sql = "UPDATE shoes_variations SET stock_tianguis = stock_tianguis - 1 WHERE id_varition = :id_variation AND stock_tianguis > 0";
     }
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':id_variation' => $id_variation]);
+}
 
-    // Actualizar el total de la venta
-    $stmt = $pdo->prepare("UPDATE sales SET total_amount = :total_amount WHERE id_sale = :sale_id");
-    $stmt->bindParam(':total_amount', $total_amount_calculado);
-    $stmt->bindParam(':sale_id', $sale_id);
-    $stmt->execute();
+// Agregar al carrito
+if (isset($_POST['agregar_al_carrito'])) {
+    $id_variation = $_POST['id_variation'];
+    $stock_type = $_POST['stock_type'];
 
-    // Confirmación de la venta
-    echo "Venta registrada exitosamente. Total: $" . $total_amount_calculado;
-} else {
-    // Si no se ha enviado el formulario, mostrar el formulario de ventas.
-    // Puedes agregar tu formulario aquí, como ya lo tienes en el código anterior
+    // Agregar producto al carrito en sesión
+    $_SESSION['carrito'][] = [
+        'id_variation' => $id_variation,
+        'stock_type' => $stock_type
+    ];
+
+    // Actualizar el stock
+    actualizarStock($id_variation, $stock_type);
+}
+
+// Buscar productos cuando se envía el formulario
+$productos = [];
+if (isset($_POST['buscar_producto'])) {
+    $term = $_POST['term'];
+    $productos = buscarProducto($term);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Punto de Venta</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Punto de Venta | Calzado JJ</title>
+
+    <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
+    
+    <!-- Bootstrap 5.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
+    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
 <body>
-    <h1>Punto de Venta</h1>
-    
-    <form id="form_venta" method="POST">
-        <div>
-            <label for="venta_tipo">Tipo de Venta:</label>
-            <select id="venta_tipo" name="venta_tipo" required>
-                <option value="local">Stock Local</option>
-                <option value="tianguis">Stock Tianguis</option>
-            </select>
+
+    <!-- Header -->
+    <?php include __DIR__ . '/src/header.php'; ?>
+
+    <!-- Main content -->
+    <main style="min-height: 53.6vh;">
+        <div class="container mt-4">
+            <h2>Punto de Venta</h2>
+
+            <!-- Formulario de búsqueda de productos -->
+            <form method="POST" class="mb-4">
+                <label for="term">Buscar Producto por Nombre o ID:</label>
+                <input type="text" name="term" id="term" class="form-control" required>
+                <button type="submit" name="buscar_producto" class="btn btn-primary mt-2">Buscar</button>
+            </form>
+
+            <?php if (!empty($productos)): ?>
+                <h3>Resultados de la búsqueda</h3>
+                <ul class="list-group">
+                    <?php foreach ($productos as $producto): ?>
+                        <li class="list-group-item">
+                            <a href="punto_de_venta.php?id_shoe=<?php echo $producto['id_shoe']; ?>">
+                                <?php echo $producto['model_name']; ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+
+            <?php
+            // Mostrar variaciones si un producto ha sido seleccionado
+            if (isset($_GET['id_shoe'])) {
+                $id_shoe = $_GET['id_shoe'];
+                $variaciones = obtenerVariaciones($id_shoe);
+                $producto = $pdo->prepare("SELECT model_name, price FROM shoes WHERE id_shoe = :id_shoe");
+                $producto->execute([':id_shoe' => $id_shoe]);
+                $producto = $producto->fetch(PDO::FETCH_ASSOC);
+            ?>
+
+            <h3>Producto: <?php echo $producto['model_name']; ?> - $<?php echo $producto['price']; ?></h3>
+
+            <!-- Mostrar variaciones -->
+            <form method="POST">
+                <input type="hidden" name="id_shoe" value="<?php echo $id_shoe; ?>">
+
+                <?php foreach ($variaciones as $variacion): ?>
+                    <div class="mb-3">
+                        <h5>Tamaño: <?php echo $variacion['sizeMX']; ?> | Color: <?php echo $variacion['color']; ?></h5>
+                        <p>Stock Local: <?php echo $variacion['stock_local']; ?> | Stock Tianguis: <?php echo $variacion['stock_tianguis']; ?></p>
+
+                        <!-- Selección de stock -->
+                        <label for="stock_type_<?php echo $variacion['id_varition']; ?>">Elegir Stock:</label>
+                        <select name="stock_type" id="stock_type_<?php echo $variacion['id_varition']; ?>" class="form-select" required>
+                            <option value="local">Local</option>
+                            <option value="tianguis">Tianguis</option>
+                        </select>
+
+                        <button type="submit" name="agregar_al_carrito" class="btn btn-success mt-2">Agregar al carrito</button>
+                        <input type="hidden" name="id_variation" value="<?php echo $variacion['id_varition']; ?>">
+                    </div>
+                <?php endforeach; ?>
+            </form>
+
+            <?php } ?>
+
+            <!-- Mostrar carrito -->
+            <h3>Carrito</h3>
+            <ul class="list-group">
+                <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
+                    <?php foreach ($_SESSION['carrito'] as $item): ?>
+                        <li class="list-group-item">
+                            Producto ID Variación: <?php echo $item['id_variation']; ?> | Stock: <?php echo $item['stock_type']; ?>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li class="list-group-item">No hay productos en el carrito.</li>
+                <?php endif; ?>
+            </ul>
+
         </div>
+    </main>
 
-        <!-- Modal para seleccionar productos -->
-        <button type="button" id="btn_modal" onclick="abrirModal()">Seleccionar Producto</button>
-        
-        <!-- Lista de productos seleccionados -->
-        <table id="productos_lista">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Talla</th>
-                    <th>Color</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Productos agregados aparecerán aquí -->
-            </tbody>
-        </table>
-        
-        <!-- Total de la venta -->
-        <div>
-            <label for="total_venta">Total de la Venta:</label>
-            <span id="total_venta">$0.00</span>
-        </div>
+    <!-- Footer -->
+    <?php include __DIR__ . '/src/footer.php'; ?>
 
-        <button type="submit">Proceder al Pago</button>
-    </form>
-
-    <!-- Modal de productos -->
-    <div id="modal" style="display:none;">
-        <div id="modal_contenido">
-            <h2>Seleccionar Producto</h2>
-            <input type="text" id="buscador_producto" placeholder="Buscar por nombre" onkeyup="buscarProducto()">
-            <table id="tabla_productos">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Seleccionar</th>
-                    </tr>
-                </thead>
-                <tbody id="productos_encontrados">
-                    <!-- Los productos serán cargados aquí -->
-                </tbody>
-            </table>
-            <button type="button" onclick="cerrarModal()">Cerrar</button>
-        </div>
-    </div>
-
-    <script>
-        // Variables
-        let productosSeleccionados = [];
-
-        // Función para abrir el modal
-        function abrirModal() {
-            $('#modal').show();
-            cargarProductos(); // Cargar productos cuando el modal se abre
-        }
-
-        // Función para cerrar el modal
-        function cerrarModal() {
-            $('#modal').hide();
-        }
-
-        // Función para buscar productos
-        function buscarProducto() {
-            var query = $('#buscador_producto').val().toLowerCase();
-            var productos = <?php
-                // Obtener los productos desde la base de datos
-                $stmt = $pdo->query("SELECT id_shoe, name FROM shoes");
-                $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode($productos);
-            ?>;
-            var resultados = productos.filter(p => p.name.toLowerCase().includes(query));
-            mostrarProductos(resultados);
-        }
-
-        // Función para mostrar los productos en el modal
-        function mostrarProductos(productos) {
-            var tbody = $('#productos_encontrados');
-            tbody.empty();
-            productos.forEach(producto => {
-                tbody.append(`
-                    <tr>
-                        <td>${producto.name}</td>
-                        <td><button onclick="seleccionarProducto(${producto.id_shoe})">Seleccionar</button></td>
-                    </tr>
-                `);
-            });
-        }
-
-        // Función para seleccionar un producto
-        function seleccionarProducto(idProducto) {
-            $.get('get_product_info.php', { id_shoe: idProducto }, function(producto) {
-                // Agregar el producto a la lista de productos
-                productosSeleccionados.push(producto);
-                actualizarLista();
-                cerrarModal();
-            });
-        }
-
-        // Función para actualizar la lista de productos
-        function actualizarLista() {
-            var tbody = $('#productos_lista tbody');
-            tbody.empty();
-            var totalVenta = 0;
-            productosSeleccionados.forEach(producto => {
-                var totalProducto = producto.price * producto.quantity;
-                tbody.append(`
-                    <tr>
-                        <td>${producto.name}</td>
-                        <td>${producto.size}</td>
-                        <td>${producto.color}</td>
-                        <td>$${producto.price}</td>
-                        <td>${producto.quantity}</td>
-                        <td>$${totalProducto}</td>
-                    </tr>
-                `);
-                totalVenta += totalProducto;
-            });
-            $('#total_venta').text('$' + totalVenta.toFixed(2));
-        }
-
-        // Enviar la venta
-        $('#form_venta').submit(function(event) {
-            event.preventDefault();
-
-        // Preparar los datos para enviar
-        var productos = productosSeleccionados.map(p => ({
-            id: p.id,
-            size_id: p.size_id,
-            color_id: p.color_id,
-            quantity: p.quantity,
-            price: p.price
-        }));
-
-        $.post('punto_de_venta.php', {
-            productos: JSON.stringify(productos),
-            venta_tipo: $('#venta_tipo').val(),
-            total_amount: $('#total_venta').text().replace('$', '')
-        }, function(response) {
-            alert(response);
-            // Aquí puedes agregar lógica para mostrar el ticket o limpiar la lista
-        });
-    });
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
 </html>
