@@ -85,26 +85,27 @@ try {
                     </tr>
                 </thead>
                 <tbody id="ticketsTableBody">
-                    <?php if (!empty($tickets)): ?>
-                        <?php foreach ($tickets as $ticket): ?>
-                            <tr data-id="<?= $ticket['id_ticket'] ?>">
-                                <td><?= $ticket['id_ticket'] ?></td>
-                                <td><?= $ticket['sale_date'] ?></td>
-                                <td>$<?= number_format($ticket['total'], 2) ?></td>
-                                <td><?= htmlspecialchars($ticket['client_name']) ?></td>
-                                <td><?= htmlspecialchars($ticket['product_name']) ?></td>
-                                <td><?= htmlspecialchars($ticket['size']) ?></td>
-                                <td><?= htmlspecialchars($ticket['color']) ?></td>
-                                <td><?= $ticket['quantity'] ?></td>
-                                <td>$<?= number_format($ticket['price'], 2) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="9" class="text-center">No hay tickets para mostrar.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
+    <?php if (!empty($tickets)): ?>
+        <?php foreach ($tickets as $ticket): ?>
+            <tr data-id="<?= $ticket['id_ticket'] ?>">
+                <td><?= $ticket['id_ticket'] ?></td>
+                <td><?= $ticket['sale_date'] ?></td>
+                <td>$<?= number_format($ticket['total'], 2) ?></td>
+                <td><?= htmlspecialchars($ticket['client_name']) ?></td>
+                <td><?= htmlspecialchars($ticket['product_name']) ?></td>  <!-- Nombre del producto -->
+                <td><?= htmlspecialchars($ticket['sizeMX']) ?></td>  <!-- Tamaño -->
+                <td><?= htmlspecialchars($ticket['color']) ?></td>
+                <td><?= $ticket['quantity'] ?></td>
+                <td>$<?= number_format($ticket['price'], 2) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="9" class="text-center">No hay tickets para mostrar.</td>
+        </tr>
+    <?php endif; ?>
+</tbody>
+
             </table>
         </div>
     </main>
