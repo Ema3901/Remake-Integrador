@@ -36,7 +36,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Main content -->
     <main style="min-height: 53.5vh;">
-        <div> Hola rellena todo </div>
+        <div> Prueba para video </div>
     </main>
 
     <!-- Footer -->
