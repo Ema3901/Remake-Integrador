@@ -28,6 +28,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
+    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
 <body>
 

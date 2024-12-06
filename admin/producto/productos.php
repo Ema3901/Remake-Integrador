@@ -35,6 +35,7 @@ $stmt->closeCursor(); // Liberar recursos
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
+    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
 <body>
     
