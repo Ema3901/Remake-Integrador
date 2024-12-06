@@ -189,7 +189,7 @@ $stmt->closeCursor(); // Liberar recursos
         });
     }
 
-    // Eliminar producto
+    // Configurar botón de eliminar producto
     document.querySelectorAll('.deleteProduct').forEach(button => {
         button.addEventListener('click', () => {
             const productId = button.getAttribute('data-id');
@@ -247,28 +247,6 @@ $stmt->closeCursor(); // Liberar recursos
             })
             .catch(error => console.error('Error al actualizar la tabla de productos:', error));
     });
-
-    // Configurar el comportamiento de eliminar productos
-    function setupDeleteProduct() {
-        document.querySelectorAll('.deleteProduct').forEach(button => {
-            button.addEventListener('click', () => {
-                const productId = button.getAttribute('data-id');
-                if (confirm('¿Estás seguro de eliminar este producto?')) {
-                    fetch(`delete_product.php?id=${productId}`, {
-                        method: 'POST'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            button.closest('tr').remove(); // Eliminar la fila del producto
-                        } else {
-                            alert('Error al eliminar el producto.');
-                        }
-                    });
-                }
-            });
-        });
-    }
 </script>
 </body>
 </html>
