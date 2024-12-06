@@ -1,215 +1,243 @@
 <?php
-// Incluir el archivo de conexión a la base de datos
+// Incluir archivo de conexión a la base de datos
 include __DIR__ . '/../../src/database/db.php';
 
 session_start();
 
-// Verifica si el usuario está logueado, sino redirige a la página de login
+// Si no hay una sesión activa, redirigir a /sesion/sesion.php
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /sesion/sesion.php');  // Cambia esto por la URL de tu página de login
+    header('Location: /sesion/sesion.php');  // Cambia esto por la URL de tu página de sesión
     exit();
 }
 
-// Obtiene el ID del usuario activo (vendedor)
 $user_id = $_SESSION['user_id'];
 
-// Si se ha enviado el formulario de venta
+// Si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Recibe los productos seleccionados (en formato JSON)
-    $products = json_decode($_POST['products'], true);
-
+    // Recibimos los datos del formulario
+    $productos = json_decode($_POST['productos'], true); // Array con los productos agregados
+    $venta_tipo = $_POST['venta_tipo']; // Tipo de venta (local o tianguis)
+    $total_amount = $_POST['total_amount']; // Total de la venta
+    
     // 1. Registrar la venta
-    $total_sale = 0;
-    foreach ($products as $product) {
-        $total_sale += $product['total_price'];
-    }
-
-    // Inserta la venta en la tabla `sales`
-    $stmt = $pdo->prepare("INSERT INTO sales (user_id, total_amount) VALUES (:user_id, :total_amount)");
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':total_amount', $total_sale, PDO::PARAM_STR);
+    $stmt = $pdo->prepare("INSERT INTO sales (user_id, total_amount, sale_type) VALUES (:user_id, :total_amount, :sale_type)");
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->bindParam(':total_amount', $total_amount);
+    $stmt->bindParam(':sale_type', $venta_tipo);
     $stmt->execute();
+    $sale_id = $pdo->lastInsertId();  // Obtener el ID de la venta registrada
+    
+    $total_amount_calculado = 0;
 
-    // Obtener el ID de la venta recién insertada
-    $sale_id = $pdo->lastInsertId();
+    // 2. Registrar los detalles de la venta y actualizar el stock
+    foreach ($productos as $producto) {
+        // Calcular el total por producto
+        $total_price = $producto['price'] * $producto['quantity'];
+        $total_amount_calculado += $total_price;
+        
+        // Insertar los detalles de la venta
+        $stmt = $pdo->prepare("INSERT INTO sale_details (sale_id, product_id, size_id, color_id, quantity, price, total_price) 
+                               VALUES (:sale_id, :product_id, :size_id, :color_id, :quantity, :price, :total_price)");
+        $stmt->bindParam(':sale_id', $sale_id);
+        $stmt->bindParam(':product_id', $producto['id']);
+        $stmt->bindParam(':size_id', $producto['size_id']);
+        $stmt->bindParam(':color_id', $producto['color_id']);
+        $stmt->bindParam(':quantity', $producto['quantity']);
+        $stmt->bindParam(':price', $producto['price']);
+        $stmt->bindParam(':total_price', $total_price);
+        $stmt->execute();
 
-    // 2. Registrar los detalles de la venta en `sale_details`
-    foreach ($products as $product) {
-        $stmt = $pdo->prepare("INSERT INTO sale_details (sale_id, product_id, size_id, color_id, quantity, price, total_price)
-            VALUES (:sale_id, :product_id, :size_id, :color_id, :quantity, :price, :total_price)");
-
-        $stmt->bindParam(':sale_id', $sale_id, PDO::PARAM_INT);
-        $stmt->bindParam(':product_id', $product['id'], PDO::PARAM_INT);
-        $stmt->bindParam(':size_id', $product['size_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':color_id', $product['color_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':quantity', $product['quantity'], PDO::PARAM_INT);
-        $stmt->bindParam(':price', $product['price'], PDO::PARAM_STR);
-        $stmt->bindParam(':total_price', $product['total_price'], PDO::PARAM_STR);
+        // Actualizar el stock según el tipo de venta
+        $stock_column = ($venta_tipo == 'local') ? 'stock_local' : 'stock_tianguis';
+        
+        $stmt = $pdo->prepare("UPDATE shoes_variations SET $stock_column = $stock_column - :quantity 
+                               WHERE id_shoe = :product_id AND id_size = :size_id AND id_color = :color_id");
+        $stmt->bindParam(':quantity', $producto['quantity']);
+        $stmt->bindParam(':product_id', $producto['id']);
+        $stmt->bindParam(':size_id', $producto['size_id']);
+        $stmt->bindParam(':color_id', $producto['color_id']);
         $stmt->execute();
     }
 
-    // Mensaje de confirmación
-    echo "<h2>Venta registrada exitosamente</h2>";
-    echo "<p><strong>Vendedor:</strong> " . $_SESSION['user_name'] . "</p>";
-    echo "<p><strong>Total de la venta:</strong> $" . $total_sale . "</p>";
-    echo "<br><a href='punto_de_venta.php'>Añadir otro producto</a><br>";
+    // Actualizar el total de la venta
+    $stmt = $pdo->prepare("UPDATE sales SET total_amount = :total_amount WHERE id_sale = :sale_id");
+    $stmt->bindParam(':total_amount', $total_amount_calculado);
+    $stmt->bindParam(':sale_id', $sale_id);
+    $stmt->execute();
 
+    // Confirmación de la venta
+    echo "Venta registrada exitosamente. Total: $" . $total_amount_calculado;
 } else {
-    // Si no se ha enviado el formulario, muestra el formulario
-    ?>
+    // Si no se ha enviado el formulario, mostrar el formulario de ventas.
+    // Puedes agregar tu formulario aquí, como ya lo tienes en el código anterior
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Punto de Venta</title>
-
-    <!-- Estilos y Scripts (Bootstrap y jQuery) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
-    <!-- Header -->
-    <?php include __DIR__ . '/src/header.php'; ?>
-
-    <!-- Main content -->
-    <main class="container my-5">
-        <h1 class="mb-4">Punto de Venta</h1>
-
-        <!-- Modal de búsqueda de productos -->
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#searchModal">Buscar Producto</button>
-        
-        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="searchModalLabel">Buscar Producto</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" id="search-query" class="form-control" placeholder="Buscar producto...">
-                        <ul id="search-results" class="list-group mt-3"></ul>
-                    </div>
-                </div>
-            </div>
+    <h1>Punto de Venta</h1>
+    
+    <form id="form_venta" method="POST">
+        <div>
+            <label for="venta_tipo">Tipo de Venta:</label>
+            <select id="venta_tipo" name="venta_tipo" required>
+                <option value="local">Stock Local</option>
+                <option value="tianguis">Stock Tianguis</option>
+            </select>
         </div>
 
-        <!-- Formulario de venta -->
-        <form method="POST" action="punto_de_venta.php">
-            <input type="hidden" name="products" id="products-input">
+        <!-- Modal para seleccionar productos -->
+        <button type="button" id="btn_modal" onclick="abrirModal()">Seleccionar Producto</button>
+        
+        <!-- Lista de productos seleccionados -->
+        <table id="productos_lista">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Talla</th>
+                    <th>Color</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Productos agregados aparecerán aquí -->
+            </tbody>
+        </table>
+        
+        <!-- Total de la venta -->
+        <div>
+            <label for="total_venta">Total de la Venta:</label>
+            <span id="total_venta">$0.00</span>
+        </div>
 
-            <!-- Tabla de productos agregados -->
-            <table class="table" id="product-list">
+        <button type="submit">Proceder al Pago</button>
+    </form>
+
+    <!-- Modal de productos -->
+    <div id="modal" style="display:none;">
+        <div id="modal_contenido">
+            <h2>Seleccionar Producto</h2>
+            <input type="text" id="buscador_producto" placeholder="Buscar por nombre" onkeyup="buscarProducto()">
+            <table id="tabla_productos">
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Talla</th>
-                        <th>Color</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Total</th>
-                        <th>Acciones</th>
+                        <th>Seleccionar</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Productos agregados aquí dinámicamente -->
+                <tbody id="productos_encontrados">
+                    <!-- Los productos serán cargados aquí -->
                 </tbody>
             </table>
-
-            <hr>
-            <h3>Total: $<span id="total-sale">0.00</span></h3>
-
-            <button type="submit" class="btn btn-success">Proceder al Pago</button>
-        </form>
-    </main>
-
-    <!-- Footer -->
-    <?php include __DIR__ . '/src/footer.php'; ?>
+            <button type="button" onclick="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
 
     <script>
-        let productsList = [];
-        let totalSale = 0;
+        // Variables
+        let productosSeleccionados = [];
 
-        // Función para agregar un producto a la lista
-        function addProduct(product) {
-            productsList.push(product);
-            totalSale += product.total_price;
-            updateProductList();
-            updateTotalSale();
+        // Función para abrir el modal
+        function abrirModal() {
+            $('#modal').show();
+            cargarProductos(); // Cargar productos cuando el modal se abre
         }
 
-        // Función para actualizar la lista de productos en la tabla
-        function updateProductList() {
-            const tbody = document.getElementById('product-list').getElementsByTagName('tbody')[0];
-            tbody.innerHTML = '';
-            productsList.forEach(product => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${product.name}</td>
-                    <td>${product.size}</td>
-                    <td>${product.color}</td>
-                    <td>$${product.price}</td>
-                    <td>${product.quantity}</td>
-                    <td>$${product.total_price}</td>
-                    <td><button class="btn btn-danger" onclick="removeProduct(${product.id})">Eliminar</button></td>
-                `;
-                tbody.appendChild(row);
+        // Función para cerrar el modal
+        function cerrarModal() {
+            $('#modal').hide();
+        }
+
+        // Función para buscar productos
+        function buscarProducto() {
+            var query = $('#buscador_producto').val().toLowerCase();
+            var productos = <?php
+                // Obtener los productos desde la base de datos
+                $stmt = $pdo->query("SELECT id_shoe, name FROM shoes");
+                $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($productos);
+            ?>;
+            var resultados = productos.filter(p => p.name.toLowerCase().includes(query));
+            mostrarProductos(resultados);
+        }
+
+        // Función para mostrar los productos en el modal
+        function mostrarProductos(productos) {
+            var tbody = $('#productos_encontrados');
+            tbody.empty();
+            productos.forEach(producto => {
+                tbody.append(`
+                    <tr>
+                        <td>${producto.name}</td>
+                        <td><button onclick="seleccionarProducto(${producto.id_shoe})">Seleccionar</button></td>
+                    </tr>
+                `);
             });
         }
 
-        // Función para actualizar el total de la venta
-        function updateTotalSale() {
-            document.getElementById('total-sale').textContent = totalSale.toFixed(2);
-            document.getElementById('products-input').value = JSON.stringify(productsList);
+        // Función para seleccionar un producto
+        function seleccionarProducto(idProducto) {
+            $.get('get_product_info.php', { id_shoe: idProducto }, function(producto) {
+                // Agregar el producto a la lista de productos
+                productosSeleccionados.push(producto);
+                actualizarLista();
+                cerrarModal();
+            });
         }
 
-        // Función para eliminar un producto de la lista
-        function removeProduct(productId) {
-            const index = productsList.findIndex(product => product.id === productId);
-            if (index !== -1) {
-                totalSale -= productsList[index].total_price;
-                productsList.splice(index, 1);
-                updateProductList();
-                updateTotalSale();
-            }
+        // Función para actualizar la lista de productos
+        function actualizarLista() {
+            var tbody = $('#productos_lista tbody');
+            tbody.empty();
+            var totalVenta = 0;
+            productosSeleccionados.forEach(producto => {
+                var totalProducto = producto.price * producto.quantity;
+                tbody.append(`
+                    <tr>
+                        <td>${producto.name}</td>
+                        <td>${producto.size}</td>
+                        <td>${producto.color}</td>
+                        <td>$${producto.price}</td>
+                        <td>${producto.quantity}</td>
+                        <td>$${totalProducto}</td>
+                    </tr>
+                `);
+                totalVenta += totalProducto;
+            });
+            $('#total_venta').text('$' + totalVenta.toFixed(2));
         }
 
-        // Buscar productos por nombre
-        document.getElementById('search-query').addEventListener('input', function () {
-            const query = this.value;
-            if (query) {
-                fetch('search_products.php?q=' + query)
-                    .then(response => response.json())
-                    .then(data => {
-                        const resultsContainer = document.getElementById('search-results');
-                        resultsContainer.innerHTML = '';
-                        data.forEach(product => {
-                            const li = document.createElement('li');
-                            li.classList.add('list-group-item');
-                            li.textContent = product.model_name;
-                            li.onclick = function () {
-                                addProduct({
-                                    id: product.id_shoe,
-                                    name: product.model_name,
-                                    size: 'Tamaño A',  // Obtener la talla del producto
-                                    color: 'Color A',  // Obtener el color del producto
-                                    price: product.price,
-                                    quantity: 1,
-                                    total_price: product.price
-                                });
-                                $('#searchModal').modal('hide');
-                            };
-                            resultsContainer.appendChild(li);
-                        });
-                    });
-            }
+        // Enviar la venta
+        $('#form_venta').submit(function(event) {
+            event.preventDefault();
+
+        // Preparar los datos para enviar
+        var productos = productosSeleccionados.map(p => ({
+            id: p.id,
+            size_id: p.size_id,
+            color_id: p.color_id,
+            quantity: p.quantity,
+            price: p.price
+        }));
+
+        $.post('punto_de_venta.php', {
+            productos: JSON.stringify(productos),
+            venta_tipo: $('#venta_tipo').val(),
+            total_amount: $('#total_venta').text().replace('$', '')
+        }, function(response) {
+            alert(response);
+            // Aquí puedes agregar lógica para mostrar el ticket o limpiar la lista
         });
-    </script>
-
+    });
+</script>
 </body>
 </html>
-
-<?php
-}
-?>
