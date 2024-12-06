@@ -1,6 +1,6 @@
 <?php
 // Incluir el archivo de conexión
-include __DIR__ . '/../../src/database/db.php';
+include __DIR__ . '/../src/database/db.php';
 
 session_start();
 
