@@ -82,10 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Subida de imágenes
     try {
-        $img_main = uploadImage($_FILES['img_main']);
-        $img_profile = uploadImage($_FILES['img_profile']);
-        $img_front = uploadImage($_FILES['img_front']);
-        $img_rear = uploadImage($_FILES['img_rear']);
+        // Solo subimos nuevas imágenes si el campo no está vacío
+        $img_main = !empty($_FILES['img_main']['name']) ? uploadImage($_FILES['img_main']) : $product['img_main'];
+        $img_profile = !empty($_FILES['img_profile']['name']) ? uploadImage($_FILES['img_profile']) : $product['img_profile'];
+        $img_front = !empty($_FILES['img_front']['name']) ? uploadImage($_FILES['img_front']) : $product['img_front'];
+        $img_rear = !empty($_FILES['img_rear']['name']) ? uploadImage($_FILES['img_rear']) : $product['img_rear'];
     } catch (Exception $e) {
         echo "Error en la subida de imágenes: " . $e->getMessage();
         exit();
@@ -208,12 +209,9 @@ function uploadImage($image) {
                         <!-- Marca -->
                         <div class="mb-3">
                             <label for="brand_id" class="form-label">Marca</label>
-                            <select class="form-control" id="brand_id" name="brand_id" required>
-                                <option value="">Seleccionar Marca</option>
+                            <select class="form-select" id="brand_id" name="brand_id">
                                 <?php foreach ($brands as $brand): ?>
-                                    <option value="<?= $brand['id_brand'] ?>" <?= $brand['id_brand'] == $product['id_brand'] ? 'selected' : '' ?>>
-                                        <?= $brand['brands'] ?>
-                                    </option>
+                                    <option value="<?= $brand['id_brand'] ?>" <?= $product['id_brand'] == $brand['id_brand'] ? 'selected' : '' ?>><?= $brand['brands'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -221,12 +219,9 @@ function uploadImage($image) {
                         <!-- Género -->
                         <div class="mb-3">
                             <label for="genre_id" class="form-label">Género</label>
-                            <select class="form-control" id="genre_id" name="genre_id" required>
-                                <option value="">Seleccionar Género</option>
+                            <select class="form-select" id="genre_id" name="genre_id">
                                 <?php foreach ($genres as $genre): ?>
-                                    <option value="<?= $genre['id_genre'] ?>" <?= $genre['id_genre'] == $product['id_genre'] ? 'selected' : '' ?>>
-                                        <?= $genre['genre'] ?>
-                                    </option>
+                                    <option value="<?= $genre['id_genre'] ?>" <?= $product['id_genre'] == $genre['id_genre'] ? 'selected' : '' ?>><?= $genre['genre'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -234,22 +229,23 @@ function uploadImage($image) {
                         <!-- Precio -->
                         <div class="mb-3">
                             <label for="price" class="form-label">Precio</label>
-                            <input type="number" class="form-control" id="price" name="price" value="<?= $product['price'] ?>" required>
+                            <input type="number" step="0.01" class="form-control" id="price" name="price" value="<?= $product['price'] ?>" required>
                         </div>
 
                         <!-- Descripción -->
                         <div class="mb-3">
                             <label for="description" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="description" name="description" rows="4"><?= $product['descriptionn'] ?></textarea>
+                            <textarea class="form-control" id="description" name="description" rows="3"><?= $product['descriptionn'] ?></textarea>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
+                        <!-- Imágenes -->
                         <!-- Imagen Principal -->
                         <div class="mb-3">
                             <label for="img_main" class="form-label">Imagen Principal</label>
                             <input type="file" class="form-control" id="img_main" name="img_main" accept="image/*">
-                            <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid mt-2" width="200">
+                            <?php if ($product['img_main']): ?>
+                                <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid mt-2" width="200">
+                            <?php endif; ?>
                         </div>
 
                         <!-- Imagen Perfil -->
@@ -278,63 +274,42 @@ function uploadImage($image) {
                                 <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" class="img-fluid mt-2" width="200">
                             <?php endif; ?>
                         </div>
+
+                        <button type="submit" class="btn btn-primary">Actualizar Producto</button>
                     </div>
-                </div>
 
-                <div class="mt-5">
-                    <h3>Variaciones</h3>
-
-                    <div id="variations-container">
-                        <?php foreach ($variations as $index => $variation): ?>
-                            <div class="row variation-group mb-3">
-                                <div class="col-md-3">
-                                    <label for="size_<?= $index ?>" class="form-label">Talla</label>
-                                    <select class="form-control" name="variations[<?= $index ?>][size]" required>
-                                        <option value="">Seleccionar Talla</option>
+                    <!-- Variaciones -->
+                    <div class="col-md-6">
+                        <h4>Variaciones</h4>
+                        <div id="variationsContainer">
+                            <?php foreach ($variations as $index => $variation): ?>
+                                <div class="mb-3 variation">
+                                    <label for="size_<?= $index ?>" class="form-label">Tamaño</label>
+                                    <select class="form-select" id="size_<?= $index ?>" name="variations[<?= $index ?>][size]">
                                         <?php foreach ($sizes as $size): ?>
                                             <option value="<?= $size['id_size'] ?>" <?= $size['id_size'] == $variation['id_size'] ? 'selected' : '' ?>>
                                                 <?= $size['sizeMX'] ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
-                                </div>
-
-                                <div class="col-md-3">
                                     <label for="color_<?= $index ?>" class="form-label">Color</label>
-                                    <select class="form-control" name="variations[<?= $index ?>][color]" required>
-                                        <option value="">Seleccionar Color</option>
+                                    <select class="form-select" id="color_<?= $index ?>" name="variations[<?= $index ?>][color]">
                                         <?php foreach ($colors as $color): ?>
                                             <option value="<?= $color['id_color'] ?>" <?= $color['id_color'] == $variation['id_color'] ? 'selected' : '' ?>>
                                                 <?= $color['color'] ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
-                                </div>
-
-                                <div class="col-md-2">
                                     <label for="stock_local_<?= $index ?>" class="form-label">Stock Local</label>
-                                    <input type="number" class="form-control" name="variations[<?= $index ?>][stock_local]" value="<?= $variation['stock_local'] ?>" required>
-                                </div>
-
-                                <div class="col-md-2">
+                                    <input type="number" class="form-control" id="stock_local_<?= $index ?>" name="variations[<?= $index ?>][stock_local]" value="<?= $variation['stock_local'] ?>" required>
                                     <label for="stock_tianguis_<?= $index ?>" class="form-label">Stock Tianguis</label>
-                                    <input type="number" class="form-control" name="variations[<?= $index ?>][stock_tianguis]" value="<?= $variation['stock_tianguis'] ?>" required>
+                                    <input type="number" class="form-control" id="stock_tianguis_<?= $index ?>" name="variations[<?= $index ?>][stock_tianguis]" value="<?= $variation['stock_tianguis'] ?>" required>
                                 </div>
-
-                                <div class="col-md-2">
-                                    <button type="button" class="btn btn-danger remove-variation" onclick="removeVariation(this)">Eliminar</button>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-
-                    <button type="button" class="btn btn-primary" id="add-variation">Agregar Variación</button>
                 </div>
-
-                <button type="submit" class="btn btn-success mt-4">Guardar Producto</button>
             </form>
-        <?php else: ?>
-            <p>El producto que estás intentando editar no existe.</p>
         <?php endif; ?>
     </div>
 
