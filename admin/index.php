@@ -14,18 +14,21 @@ if (!isset($_SESSION['user_id'])) {
 $sql = "CALL GetSalesTickets()"; // Aquí deberías usar el procedimiento almacenado adecuado
 $stmt = $pdo->prepare($sql);
 
-// Depuración: Verificar si la consulta se ejecuta correctamente
-if (!$stmt->execute()) {
-    // Mostrar error si no se puede ejecutar la consulta
-    die("Error al ejecutar la consulta: " . implode(", ", $stmt->errorInfo()));
-}
+try {
+    // Intentamos ejecutar la consulta
+    $stmt->execute();
+    $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Verificamos si se obtuvieron resultados
+    if (!$tickets) {
+        throw new Exception("No se encontraron tickets en la base de datos.");
+    }
 
-// Obtener los resultados de los tickets
-$tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Depuración: Verificar si se obtienen resultados
-if (empty($tickets)) {
-    die("No se encontraron tickets en la base de datos.");
+} catch (Exception $e) {
+    // Capturamos cualquier error y lo mostramos
+    error_log("Error al obtener los tickets: " . $e->getMessage());
+    $tickets = [];  // Si ocurre un error, establecemos una variable vacía para evitar que el código se rompa
+    $error_message = "Hubo un problema al obtener los tickets. Intenta más tarde.";
 }
 ?>
 
@@ -58,6 +61,13 @@ if (empty($tickets)) {
                 <i class="fas fa-sync-alt"></i> Actualizar
             </button>
 
+            <!-- Mensaje de error si ocurre -->
+            <?php if (isset($error_message)): ?>
+                <div class="alert alert-danger">
+                    <?= $error_message ?>
+                </div>
+            <?php endif; ?>
+
             <table class="table table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
@@ -73,19 +83,25 @@ if (empty($tickets)) {
                     </tr>
                 </thead>
                 <tbody id="ticketsTableBody">
-                    <?php foreach ($tickets as $ticket): ?>
-                        <tr data-id="<?= $ticket['id_ticket'] ?>">
-                            <td><?= $ticket['id_ticket'] ?></td>
-                            <td><?= $ticket['sale_date'] ?></td>
-                            <td>$<?= number_format($ticket['total'], 2) ?></td>
-                            <td><?= htmlspecialchars($ticket['client_name']) ?></td>
-                            <td><?= htmlspecialchars($ticket['product_name']) ?></td>
-                            <td><?= htmlspecialchars($ticket['size']) ?></td>
-                            <td><?= htmlspecialchars($ticket['color']) ?></td>
-                            <td><?= $ticket['quantity'] ?></td>
-                            <td>$<?= number_format($ticket['price'], 2) ?></td>
+                    <?php if (!empty($tickets)): ?>
+                        <?php foreach ($tickets as $ticket): ?>
+                            <tr data-id="<?= $ticket['id_ticket'] ?>">
+                                <td><?= $ticket['id_ticket'] ?></td>
+                                <td><?= $ticket['sale_date'] ?></td>
+                                <td>$<?= number_format($ticket['total'], 2) ?></td>
+                                <td><?= htmlspecialchars($ticket['client_name']) ?></td>
+                                <td><?= htmlspecialchars($ticket['product_name']) ?></td>
+                                <td><?= htmlspecialchars($ticket['size']) ?></td>
+                                <td><?= htmlspecialchars($ticket['color']) ?></td>
+                                <td><?= $ticket['quantity'] ?></td>
+                                <td>$<?= number_format($ticket['price'], 2) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="9" class="text-center">No hay tickets para mostrar.</td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
