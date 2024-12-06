@@ -5,6 +5,9 @@ include __DIR__ . '/../../src/database/db.php';
 // Verificar que se haya pasado un ID de producto
 $product_id = $_GET['id'] ?? null;
 
+// Agregar un log de depuración
+error_log("Producto ID: " . $product_id);  // Verifica que el ID esté llegando
+
 if (!$product_id) {
     echo json_encode(['success' => false, 'message' => 'No se especificó el producto']);
     exit();
@@ -24,8 +27,15 @@ $sql = "
     INNER JOIN colors c ON sv.id_color = c.id_color
     WHERE sv.id_shoe = :product_id
 ";
+
 $stmt = $pdo->prepare($sql);
 $stmt->execute([':product_id' => $product_id]);
+
+// Depuración: Verificar si la consulta se ejecutó
+if ($stmt->errorCode() !== '00000') {
+    error_log("Error en la consulta: " . implode(", ", $stmt->errorInfo()));
+}
+
 $variations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Devolver las variaciones en formato JSON
