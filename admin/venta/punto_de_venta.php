@@ -33,7 +33,8 @@ function obtenerProductos() {
 function obtenerVariaciones($id_shoe) {
     global $pdo;
     try {
-        $sql = "SELECT sv.id_varition, s.id_size, sz.sizeMX, c.color, sv.stock_local, sv.stock_tianguis
+        // Corregir el alias para la tabla sizes
+        $sql = "SELECT sv.id_varition, sz.id_size, sz.sizeMX, c.color, sv.stock_local, sv.stock_tianguis
                 FROM shoes_variations sv
                 JOIN sizes sz ON sv.id_size = sz.id_size
                 JOIN colors c ON sv.id_color = c.id_color
@@ -46,6 +47,7 @@ function obtenerVariaciones($id_shoe) {
         return [];
     }
 }
+
 
 // Función para actualizar el stock después de una compra
 function actualizarStock($id_variation, $stock_type) {
