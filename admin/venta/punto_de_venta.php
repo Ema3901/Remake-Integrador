@@ -77,6 +77,44 @@ function actualizarStock($id_variation, $stock_type) {
     }
 }
 
+// Función para registrar la venta en la tabla orders y order_items
+function registrarVenta($user_id, $total_price, $carrito) {
+    global $pdo;
+    try {
+        // Iniciar transacción
+        $pdo->beginTransaction();
+
+        // Insertar en la tabla orders
+        $sql = "INSERT INTO orders (user_id, total_price) VALUES (:user_id, :total_price)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':user_id' => $user_id, ':total_price' => $total_price]);
+        $order_id = $pdo->lastInsertId(); // Obtener el ID de la orden insertada
+
+        // Insertar en la tabla order_items
+        foreach ($carrito as $item) {
+            $detalles = obtenerDetallesCarrito($item['id_variation']);
+            $sql_item = "INSERT INTO order_items (id_order, id_variation, price, quantity, sizeMX, color) 
+                         VALUES (:id_order, :id_variation, :price, :quantity, :sizeMX, :color)";
+            $stmt_item = $pdo->prepare($sql_item);
+            $stmt_item->execute([
+                ':id_order' => $order_id,
+                ':id_variation' => $item['id_variation'],
+                ':price' => $detalles['price'],
+                ':quantity' => 1, // Suponiendo que es 1 por producto
+                ':sizeMX' => $detalles['sizeMX'],
+                ':color' => $detalles['color']
+            ]);
+        }
+
+        // Confirmar transacción
+        $pdo->commit();
+    } catch (Exception $e) {
+        // Si ocurre un error, revertir la transacción
+        $pdo->rollBack();
+        echo "Error al registrar la venta: " . $e->getMessage();
+    }
+}
+
 // Agregar al carrito
 if (isset($_POST['agregar_al_carrito'])) {
     if (isset($_POST['id_variation']) && isset($_POST['stock_type'])) {
@@ -110,8 +148,17 @@ if (isset($_POST['eliminar_del_carrito'])) {
     $_SESSION['carrito'] = array_values($_SESSION['carrito']);
 }
 
-// Pagar (limpiar el carrito sin afectar el stock)
+// Pagar (limpiar el carrito sin afectar el stock y registrar la venta)
 if (isset($_POST['pagar'])) {
+    $total = 0;
+    foreach ($_SESSION['carrito'] as $item) {
+        $detalles = obtenerDetallesCarrito($item['id_variation']);
+        $total += $detalles['price'];
+    }
+
+    // Registrar la venta en las tablas orders y order_items
+    registrarVenta($_SESSION['user_id'], $total, $_SESSION['carrito']);
+
     // Limpiar el carrito después de la compra
     unset($_SESSION['carrito']);
 }
