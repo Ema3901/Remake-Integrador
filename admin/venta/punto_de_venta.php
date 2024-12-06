@@ -91,42 +91,76 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     // Si no se envió el formulario, muestra el formulario
     ?>
-    <h1>Punto de Venta</h1>
-    <form method="POST" action="punto_de_venta.php">
-        <div class="form-group">
-            <label for="shoe_id" class="form-label">Selecciona el tenis:</label>
-            <select name="shoe_id" class="form-control" required>
-                <?php
-                $query_tenis = "SELECT id_shoe, model_name FROM shoes";
-                $stmt = $pdo->prepare($query_tenis);
-                $stmt->execute();
-                $tenisList = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($tenisList as $row) {
-                    echo "<option value='{$row['id_shoe']}'>{$row['model_name']}</option>";
-                }
-                ?>
-            </select>
-        </div>
 
-        <div class="form-group">
-            <label for="quantity" class="form-label">Cantidad:</label>
-            <input type="number" name="quantity" class="form-control" min="1" required>
-        </div>
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Punto de Venta | Calzado JJ</title>
 
-        <div class="form-group">
-            <label for="venta_tipo" class="form-label">Tipo de venta:</label>
-            <select name="venta_tipo" class="form-control" required>
-                <option value="local">Local</option>
-                <option value="tianguis">Tianguis</option>
-            </select>
-        </div>
+        <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
+        
+        <!-- Bootstrap 5.3 CDN -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <button type="submit" class="btn btn-success">Registrar Venta</button>
-    </form>
+        <!-- Font Awesome CDN -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <br>
-    <a href="punto_de_venta.php" class="btn btn-primary">Añadir otro producto</a>
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
+    </head>
+    <body>
+
+        <!-- Header -->
+        <?php include __DIR__ . '/src/header.php'; ?>
+
+        <!-- Main content -->
+        <main class="container my-5">
+            <h1 class="mb-4">Punto de Venta</h1>
+            <form method="POST" action="punto_de_venta.php">
+                <div class="mb-3">
+                    <label for="shoe_id" class="form-label">Selecciona el tenis:</label>
+                    <select name="shoe_id" id="shoe_id" class="form-select" required>
+                        <?php
+                        $query_tenis = "SELECT id_shoe, model_name FROM shoes";
+                        $stmt = $pdo->prepare($query_tenis);
+                        $stmt->execute();
+                        $tenisList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        foreach ($tenisList as $row) {
+                            echo "<option value='{$row['id_shoe']}'>{$row['model_name']}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Cantidad:</label>
+                    <input type="number" name="quantity" id="quantity" class="form-control" min="1" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="venta_tipo" class="form-label">Tipo de venta:</label>
+                    <select name="venta_tipo" id="venta_tipo" class="form-select" required>
+                        <option value="local">Local</option>
+                        <option value="tianguis">Tianguis</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success">Registrar Venta</button>
+            </form>
+
+            <br>
+            <a href="punto_de_venta.php" class="btn btn-link">Añadir otro producto</a>
+        </main>
+
+        <!-- Footer -->
+        <?php include __DIR__ . '/src/footer.php'; ?>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    </body>
+    </html>
+    
     <?php
 }
 ?>
-
