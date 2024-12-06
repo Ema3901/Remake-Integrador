@@ -77,14 +77,14 @@ $stmt_recomendados->closeCursor();
                 </div>
             </div>
 
-            <!-- Main image -->
+            <!-- Imagen principal -->
             <div class="col-md-7">
                 <div class="product-image-container text-center">
                     <img src="/<?= htmlspecialchars($producto['img_principal']) ?>" class="img-fluid" alt="<?= htmlspecialchars($producto['modelo']) ?>">
                 </div>
             </div>
 
-            <!-- Product details -->
+            <!-- Detalles del producto -->
             <div class="col-md-4">
                 <h3><?= htmlspecialchars($producto['modelo']) ?></h3>
                 <p id="product-description"><?= htmlspecialchars($producto['descripcion']) ?></p>
