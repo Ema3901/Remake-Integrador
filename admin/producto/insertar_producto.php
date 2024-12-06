@@ -48,20 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $img_front = uploadImage($_FILES['img_front']);
     $img_rear = uploadImage($_FILES['img_rear']);
     
-    // Depuración: Verificar si las imágenes fueron subidas correctamente
-    if ($img_main == '') {
-        echo "Error al subir la imagen principal.<br>";
-    }
-    if ($img_profile == '') {
-        echo "Error al subir la imagen de perfil.<br>";
-    }
-    if ($img_front == '') {
-        echo "Error al subir la imagen frontal.<br>";
-    }
-    if ($img_rear == '') {
-        echo "Error al subir la imagen trasera.<br>";
-    }
-
     // Insertar el producto en la base de datos
     $sql = "INSERT INTO shoes (id_brand, id_genre, model_name, price, descriptionn, img_main, img_profile, img_front, img_rear)
             VALUES (:brand_id, :genre_id, :model_name, :price, :description, :img_main, :img_profile, :img_front, :img_rear)";
@@ -113,7 +99,7 @@ function uploadImage($image) {
         echo "Error en la subida de la imagen: " . $image['error'] . "<br>";
         return ''; // Si hay un error en la subida, retornamos vacío
     }
-    
+
     $target_dir = __DIR__ . '/../uploads';
     
     // Verificar si el directorio de destino existe, si no, crearlo
@@ -125,9 +111,14 @@ function uploadImage($image) {
         }
     }
     
-    $target_file = $target_dir . '/' . basename($image['name']);
+    // Obtener la extensión del archivo
+    $file_extension = pathinfo($image['name'], PATHINFO_EXTENSION);
     
-    // Verificar si el archivo ya existe
+    // Generar un nombre único para el archivo utilizando el timestamp
+    $new_file_name = uniqid('img_', true) . '.' . $file_extension;
+    $target_file = $target_dir . '/' . $new_file_name;
+
+    // Depuración: Verificar si el archivo ya existe
     if (file_exists($target_file)) {
         echo "El archivo ya existe: $target_file<br>";
         return ''; // Si el archivo ya existe, retornamos vacío
@@ -136,14 +127,14 @@ function uploadImage($image) {
     // Intentar mover el archivo al directorio de uploads
     if (move_uploaded_file($image['tmp_name'], $target_file)) {
         echo "Imagen subida con éxito: $target_file<br>"; // Depuración: Confirmar que la imagen se movió correctamente
-        return '/uploads/' . basename($image['name']); // Retornamos la ruta relativa
+        return '/uploads/' . $new_file_name; // Retornamos la ruta relativa con el nuevo nombre
     } else {
         echo "Error al mover la imagen: $target_file<br>";
         return ''; // Si no se pudo mover el archivo, retornamos vacío
     }
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
