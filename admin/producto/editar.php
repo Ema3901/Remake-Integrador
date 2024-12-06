@@ -239,47 +239,45 @@ function uploadImage($image) {
                         </div>
 
                         <!-- Imágenes -->
-<div class="mb-3">
-    <label for="img_main" class="form-label">Imagen Principal</label>
-    <input type="file" class="form-control" id="img_main" name="img_main" accept="image/*">
-    <?php if ($product['img_main']): ?>
-        <div class="d-flex mt-2">
-            <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid" width="150" style="margin-right: 10px;">
-            <!-- Puedes agregar más imágenes si es necesario -->
-        </div>
-    <?php endif; ?>
-</div>
+                        <div class="mb-3">
+                            <label for="img_main" class="form-label">Imagen Principal</label>
+                            <input type="file" class="form-control" id="img_main" name="img_main" accept="image/*">
+                            <?php if ($product['img_main']): ?>
+                                <div class="d-flex mt-2">
+                                    <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid" width="150" style="margin-right: 10px;">
+                                </div>
+                            <?php endif; ?>
+                        </div>
 
-<div class="mb-3">
-    <label for="img_profile" class="form-label">Imagen Perfil</label>
-    <input type="file" class="form-control" id="img_profile" name="img_profile" accept="image/*">
-    <?php if ($product['img_profile']): ?>
-        <div class="d-flex mt-2">
-            <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" class="img-fluid" width="150" style="margin-right: 10px;">
-        </div>
-    <?php endif; ?>
-</div>
+                        <div class="mb-3">
+                            <label for="img_profile" class="form-label">Imagen Perfil</label>
+                            <input type="file" class="form-control" id="img_profile" name="img_profile" accept="image/*">
+                            <?php if ($product['img_profile']): ?>
+                                <div class="d-flex mt-2">
+                                    <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" class="img-fluid" width="150" style="margin-right: 10px;">
+                                </div>
+                            <?php endif; ?>
+                        </div>
 
-<div class="mb-3">
-    <label for="img_front" class="form-label">Imagen Frontal</label>
-    <input type="file" class="form-control" id="img_front" name="img_front" accept="image/*">
-    <?php if ($product['img_front']): ?>
-        <div class="d-flex mt-2">
-            <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" class="img-fluid" width="150" style="margin-right: 10px;">
-        </div>
-    <?php endif; ?>
-</div>
+                        <div class="mb-3">
+                            <label for="img_front" class="form-label">Imagen Frontal</label>
+                            <input type="file" class="form-control" id="img_front" name="img_front" accept="image/*">
+                            <?php if ($product['img_front']): ?>
+                                <div class="d-flex mt-2">
+                                    <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" class="img-fluid" width="150" style="margin-right: 10px;">
+                                </div>
+                            <?php endif; ?>
+                        </div>
 
                         <div class="mb-3">
                             <label for="img_rear" class="form-label">Imagen Trasera</label>
                             <input type="file" class="form-control" id="img_rear" name="img_rear" accept="image/*">
                             <?php if ($product['img_rear']): ?>
-                        <div class="d-flex mt-2">
-                            <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" class="img-fluid" width="150">
-                        </div>
+                                <div class="d-flex mt-2">
+                                    <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" class="img-fluid" width="150">
+                                </div>
                             <?php endif; ?>
                         </div>
-
 
                         <button type="submit" class="btn btn-primary">Actualizar Producto</button>
                     </div>
@@ -293,21 +291,20 @@ function uploadImage($image) {
                                     <label for="size_<?= $index ?>" class="form-label">Tamaño</label>
                                     <select class="form-select" id="size_<?= $index ?>" name="variations[<?= $index ?>][size]">
                                         <?php foreach ($sizes as $size): ?>
-                                            <option value="<?= $size['id_size'] ?>" <?= $size['id_size'] == $variation['id_size'] ? 'selected' : '' ?>>
-                                                <?= $size['sizeMX'] ?>
-                                            </option>
+                                            <option value="<?= $size['id_size'] ?>" <?= $size['id_size'] == $variation['id_size'] ? 'selected' : '' ?>><?= $size['sizeMX'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
+
                                     <label for="color_<?= $index ?>" class="form-label">Color</label>
                                     <select class="form-select" id="color_<?= $index ?>" name="variations[<?= $index ?>][color]">
                                         <?php foreach ($colors as $color): ?>
-                                            <option value="<?= $color['id_color'] ?>" <?= $color['id_color'] == $variation['id_color'] ? 'selected' : '' ?>>
-                                                <?= $color['color'] ?>
-                                            </option>
+                                            <option value="<?= $color['id_color'] ?>" <?= $color['id_color'] == $variation['id_color'] ? 'selected' : '' ?>><?= $color['color'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
+
                                     <label for="stock_local_<?= $index ?>" class="form-label">Stock Local</label>
                                     <input type="number" class="form-control" id="stock_local_<?= $index ?>" name="variations[<?= $index ?>][stock_local]" value="<?= $variation['stock_local'] ?>" required>
+
                                     <label for="stock_tianguis_<?= $index ?>" class="form-label">Stock Tianguis</label>
                                     <input type="number" class="form-control" id="stock_tianguis_<?= $index ?>" name="variations[<?= $index ?>][stock_tianguis]" value="<?= $variation['stock_tianguis'] ?>" required>
                                 </div>
@@ -324,25 +321,20 @@ function uploadImage($image) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    let variationIndex = <?= count($variations) ?>;
+        let variationIndex = <?= count($variations) ?>;
 
-    document.getElementById('add-variation').addEventListener('click', function() {
-        const variationContainer = document.getElementById('variations-container');
-        const variationGroup = document.querySelector('.variation-group').cloneNode(true);  <!-- Aquí se corrigió el error -->
+        document.getElementById('add-variation').addEventListener('click', function() {
+            const variationContainer = document.getElementById('variationsContainer');
+            const variationGroup = document.querySelector('.variation').cloneNode(true);
 
-        // Actualizar el nombre de los campos para que cada variación tenga un índice único
-        variationGroup.querySelectorAll('select, input').forEach(input => {
-            input.name = input.name.replace(/\[\d\]/, `[${variationIndex}]`);
+            // Actualizar el nombre de los campos para que cada variación tenga un índice único
+            variationGroup.querySelectorAll('select, input').forEach(input => {
+                input.name = input.name.replace(/\[\d\]/, `[${variationIndex}]`);
+            });
+
+            variationContainer.appendChild(variationGroup);
+            variationIndex++;
         });
-
-        // Agregar la nueva variación al contenedor
-        variationContainer.appendChild(variationGroup);
-        variationIndex++;
-    });
-
-    function removeVariation(button) {
-        button.closest('.variation-group').remove();
-    }
     </script>
 
 </body>
