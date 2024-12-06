@@ -187,19 +187,27 @@ if (isset($_POST['id_shoe'])) {
                         // Obtener detalles del producto en el carrito
                         $detalles = obtenerDetallesCarrito($item['id_variation']);
                         ?>
-                        <li class="list-group-item">
-                            Producto: <?php echo $detalles['model_name']; ?> | Precio: $<?php echo $detalles['price']; ?> | Talla: <?php echo $detalles['sizeMX']; ?> | Color: <?php echo $detalles['color']; ?>
-                            <!-- Eliminar botón -->
-                            <form method="POST" class="d-inline">
-                                <input type="hidden" name="id_variation" value="<?php echo $item['id_variation']; ?>">
-                                <button type="submit" name="eliminar_del_carrito" class="btn btn-danger btn-sm ms-2">Eliminar</button>
-                            </form>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Producto:</strong> <?php echo $detalles['model_name']; ?> <br>
+                                <strong>Talla:</strong> <?php echo $detalles['sizeMX']; ?> <br>
+                                <strong>Color:</strong> <?php echo $detalles['color']; ?>
+                            </div>
+                            <div class="text-end">
+                                <strong>Precio:</strong> $<?php echo $detalles['price']; ?><br>
+                                <!-- Eliminar botón -->
+                                <form method="POST" class="d-inline">
+                                    <input type="hidden" name="id_variation" value="<?php echo $item['id_variation']; ?>">
+                                    <button type="submit" name="eliminar_del_carrito" class="btn btn-danger btn-sm ms-2">Eliminar</button>
+                                </form>
+                            </div>
                         </li>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <li class="list-group-item">No hay productos en el carrito.</li>
                 <?php endif; ?>
             </ul>
+
         </div>
     </main>
 
