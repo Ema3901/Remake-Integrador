@@ -80,41 +80,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Mensaje de confirmación
-    echo "Venta registrada exitosamente. Vendedor: " . $vendedor['namee'] . "<br>";
-    echo "Producto: " . $tenis['model_name'] . "<br>";
-    echo "Tamaño: " . $variacion['sizeMX'] . " - Color: " . $variacion['color'] . "<br>";
-    echo "Cantidad vendida: " . $quantity . "<br>";
-    echo "Tipo de venta: " . $venta_tipo . "<br>";
-    echo "Precio total: $" . ($tenis['price'] * $quantity) . "<br>";
+    echo "<h2>Venta registrada exitosamente</h2>";
+    echo "<p><strong>Vendedor:</strong> " . $vendedor['namee'] . "</p>";
+    echo "<p><strong>Producto:</strong> " . $tenis['model_name'] . "</p>";
+    echo "<p><strong>Tamaño:</strong> " . $variacion['sizeMX'] . " - <strong>Color:</strong> " . $variacion['color'] . "</p>";
+    echo "<p><strong>Cantidad vendida:</strong> " . $quantity . "</p>";
+    echo "<p><strong>Tipo de venta:</strong> " . $venta_tipo . "</p>";
+    echo "<p><strong>Precio total:</strong> $" . ($tenis['price'] * $quantity) . "</p>";
+    echo "<br><a href='punto_de_venta.php'>Añadir otro producto</a><br>";
 } else {
     // Si no se envió el formulario, muestra el formulario
     ?>
     <h1>Punto de Venta</h1>
     <form method="POST" action="punto_de_venta.php">
-        <label for="shoe_id">Selecciona el tenis:</label>
-        <select name="shoe_id" required>
-            <?php
-            $query_tenis = "SELECT id_shoe, model_name FROM shoes";
-            $stmt = $pdo->prepare($query_tenis);
-            $stmt->execute();
-            $tenisList = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($tenisList as $row) {
-                echo "<option value='{$row['id_shoe']}'>{$row['model_name']}</option>";
-            }
-            ?>
-        </select><br><br>
+        <div style="margin-bottom: 20px;">
+            <label for="shoe_id" style="font-weight: bold;">Selecciona el tenis:</label>
+            <select name="shoe_id" required>
+                <?php
+                $query_tenis = "SELECT id_shoe, model_name FROM shoes";
+                $stmt = $pdo->prepare($query_tenis);
+                $stmt->execute();
+                $tenisList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($tenisList as $row) {
+                    echo "<option value='{$row['id_shoe']}'>{$row['model_name']}</option>";
+                }
+                ?>
+            </select>
+        </div>
 
-        <label for="quantity">Cantidad:</label>
-        <input type="number" name="quantity" min="1" required><br><br>
+        <div style="margin-bottom: 20px;">
+            <label for="quantity" style="font-weight: bold;">Cantidad:</label>
+            <input type="number" name="quantity" min="1" required style="padding: 8px;">
+        </div>
 
-        <label for="venta_tipo">Tipo de venta:</label>
-        <select name="venta_tipo" required>
-            <option value="local">Local</option>
-            <option value="tianguis">Tianguis</option>
-        </select><br><br>
+        <div style="margin-bottom: 20px;">
+            <label for="venta_tipo" style="font-weight: bold;">Tipo de venta:</label>
+            <select name="venta_tipo" required>
+                <option value="local">Local</option>
+                <option value="tianguis">Tianguis</option>
+            </select>
+        </div>
 
-        <button type="submit">Registrar Venta</button>
+        <button type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">Registrar Venta</button>
     </form>
+
+    <br>
+    <a href="punto_de_venta.php" style="font-size: 16px; color: #007bff;">Añadir otro producto</a>
     <?php
 }
 ?>
