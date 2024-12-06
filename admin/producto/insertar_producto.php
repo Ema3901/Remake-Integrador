@@ -1,4 +1,8 @@
 <?php
+// Activar la visualización de errores
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 // Incluir el archivo de conexión
 include __DIR__ . '/../../src/database/db.php';
 
@@ -16,22 +20,27 @@ $sizes = [];
 $colors = [];
 
 // Obtener los datos necesarios para el formulario
-$brand_query = "SELECT id_brand, brands FROM brands";
-$genre_query = "SELECT id_genre, genre FROM genres";
-$size_query = "SELECT id_size, sizeMX FROM sizes";
-$color_query = "SELECT id_color, color FROM colors";
+try {
+    $brand_query = "SELECT id_brand, brands FROM brands";
+    $genre_query = "SELECT id_genre, genre FROM genres";
+    $size_query = "SELECT id_size, sizeMX FROM sizes";
+    $color_query = "SELECT id_color, color FROM colors";
 
-$stmt = $pdo->query($brand_query);
-$brands = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->query($brand_query);
+    $brands = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->query($genre_query);
-$genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->query($genre_query);
+    $genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->query($size_query);
-$sizes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->query($size_query);
+    $sizes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->query($color_query);
-$colors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $pdo->query($color_query);
+    $colors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error al obtener datos de la base de datos: " . $e->getMessage();
+    exit();
+}
 
 // Si el formulario es enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -41,74 +50,79 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $genre_id = $_POST['genre_id'] ?? '';
     $price = $_POST['price'] ?? '';
     $description = $_POST['description'] ?? '';
-    
+
     // Subida de imágenes
-    $img_main = uploadImage($_FILES['img_main']);
-    $img_profile = uploadImage($_FILES['img_profile']);
-    $img_front = uploadImage($_FILES['img_front']);
-    $img_rear = uploadImage($_FILES['img_rear']);
-    
-    // Insertar el producto en la base de datos
-    $sql = "INSERT INTO shoes (id_brand, id_genre, model_name, price, descriptionn, img_main, img_profile, img_front, img_rear)
-            VALUES (:brand_id, :genre_id, :model_name, :price, :description, :img_main, :img_profile, :img_front, :img_rear)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':brand_id' => $brand_id,
-        ':genre_id' => $genre_id,
-        ':model_name' => $model_name,
-        ':price' => $price,
-        ':description' => $description,
-        ':img_main' => $img_main,
-        ':img_profile' => $img_profile,
-        ':img_front' => $img_front,
-        ':img_rear' => $img_rear,
-    ]);
-
-    // Obtener el ID del producto insertado
-    $id_shoe = $pdo->lastInsertId();
-
-    // Insertar las variaciones
-    foreach ($_POST['variations'] as $variation) {
-        $id_size = $variation['size'];
-        $id_color = $variation['color'];
-        $stock_local = $variation['stock_local'];
-        $stock_tianguis = $variation['stock_tianguis'];
-
-        // Insertar variaciones en la base de datos
-        $sql_variation = "INSERT INTO shoes_variations (id_shoe, id_size, id_color, stock_local, stock_tianguis)
-                          VALUES (:id_shoe, :id_size, :id_color, :stock_local, :stock_tianguis)";
-        $stmt_variation = $pdo->prepare($sql_variation);
-        $stmt_variation->execute([
-            ':id_shoe' => $id_shoe,
-            ':id_size' => $id_size,
-            ':id_color' => $id_color,
-            ':stock_local' => $stock_local,
-            ':stock_tianguis' => $stock_tianguis,
-        ]);
+    try {
+        $img_main = uploadImage($_FILES['img_main']);
+        $img_profile = uploadImage($_FILES['img_profile']);
+        $img_front = uploadImage($_FILES['img_front']);
+        $img_rear = uploadImage($_FILES['img_rear']);
+    } catch (Exception $e) {
+        echo "Error en la subida de imágenes: " . $e->getMessage();
+        exit();
     }
 
-    // Redirigir a la página de gestión de productos
-    header('Location: productos.php');
-    exit();
+    // Insertar el producto en la base de datos
+    try {
+        $sql = "INSERT INTO shoes (id_brand, id_genre, model_name, price, descriptionn, img_main, img_profile, img_front, img_rear)
+                VALUES (:brand_id, :genre_id, :model_name, :price, :description, :img_main, :img_profile, :img_front, :img_rear)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':brand_id' => $brand_id,
+            ':genre_id' => $genre_id,
+            ':model_name' => $model_name,
+            ':price' => $price,
+            ':description' => $description,
+            ':img_main' => $img_main,
+            ':img_profile' => $img_profile,
+            ':img_front' => $img_front,
+            ':img_rear' => $img_rear,
+        ]);
+
+        // Obtener el ID del producto insertado
+        $id_shoe = $pdo->lastInsertId();
+
+        // Insertar las variaciones
+        foreach ($_POST['variations'] as $variation) {
+            $id_size = $variation['size'];
+            $id_color = $variation['color'];
+            $stock_local = $variation['stock_local'];
+            $stock_tianguis = $variation['stock_tianguis'];
+
+            // Insertar variaciones en la base de datos
+            $sql_variation = "INSERT INTO shoes_variations (id_shoe, id_size, id_color, stock_local, stock_tianguis)
+                              VALUES (:id_shoe, :id_size, :id_color, :stock_local, :stock_tianguis)";
+            $stmt_variation = $pdo->prepare($sql_variation);
+            $stmt_variation->execute([
+                ':id_shoe' => $id_shoe,
+                ':id_size' => $id_size,
+                ':id_color' => $id_color,
+                ':stock_local' => $stock_local,
+                ':stock_tianguis' => $stock_tianguis,
+            ]);
+        }
+
+        // Redirigir a la página de gestión de productos
+        header('Location: productos.php');
+        exit();
+    } catch (PDOException $e) {
+        echo 'Error de base de datos: ' . $e->getMessage();
+        exit();
+    }
 }
 
 // Función para subir las imágenes
 function uploadImage($image) {
-    // Depuración: Verificar si hay errores en la subida
+    // Verificar si hay errores en la subida
     if ($image['error'] != 0) {
-        echo "Error en la subida de la imagen: " . $image['error'] . "<br>";
-        return ''; // Si hay un error en la subida, retornamos vacío
+        throw new Exception("Error en la subida de la imagen: " . $image['error']);
     }
 
     $target_dir = __DIR__ . '/../uploads';
     
     // Verificar si el directorio de destino existe, si no, crearlo
-    if (!is_dir($target_dir)) {
-        echo "El directorio de subida no existe. Intentando crear: $target_dir<br>";
-        if (!mkdir($target_dir, 0777, true)) {
-            echo "Error al crear el directorio de subida.<br>";
-            return ''; // Si no se puede crear el directorio, retornamos vacío
-        }
+    if (!is_dir($target_dir) && !mkdir($target_dir, 0777, true)) {
+        throw new Exception("Error al crear el directorio de subida.");
     }
     
     // Obtener la extensión del archivo
@@ -118,22 +132,20 @@ function uploadImage($image) {
     $new_file_name = uniqid('img_', true) . '.' . $file_extension;
     $target_file = $target_dir . '/' . $new_file_name;
 
-    // Depuración: Verificar si el archivo ya existe
+    // Verificar si el archivo ya existe
     if (file_exists($target_file)) {
-        echo "El archivo ya existe: $target_file<br>";
-        return ''; // Si el archivo ya existe, retornamos vacío
+        throw new Exception("El archivo ya existe: $target_file");
     }
 
     // Intentar mover el archivo al directorio de uploads
-    if (move_uploaded_file($image['tmp_name'], $target_file)) {
-        echo "Imagen subida con éxito: $target_file<br>"; // Depuración: Confirmar que la imagen se movió correctamente
-        return '/uploads/' . $new_file_name; // Retornamos la ruta relativa con el nuevo nombre
-    } else {
-        echo "Error al mover la imagen: $target_file<br>";
-        return ''; // Si no se pudo mover el archivo, retornamos vacío
+    if (!move_uploaded_file($image['tmp_name'], $target_file)) {
+        throw new Exception("Error al mover la imagen: $target_file");
     }
+
+    return '/uploads/' . $new_file_name; // Retornar la ruta relativa con el nuevo nombre
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
