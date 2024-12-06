@@ -67,24 +67,24 @@ $stmt_recomendados->closeCursor();
             <!-- Thumbnails -->
             <div class="col-md-1 d-flex flex-column align-items-center">
                 <div class="product-thumbnail-container mb-3">
-                    <img src="/<?= htmlspecialchars($producto['img_perfil']) ?>" class="img-fluid" alt="Vista lateral">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_perfil']) ?>" class="img-fluid" alt="Vista lateral">
                 </div>
                 <div class="product-thumbnail-container mb-3">
-                    <img src="/<?= htmlspecialchars($producto['img_frontal']) ?>" class="img-fluid" alt="Vista frontal">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_frontal']) ?>" class="img-fluid" alt="Vista frontal">
                 </div>
                 <div class="product-thumbnail-container mb-3">
-                    <img src="/<?= htmlspecialchars($producto['img_trasera']) ?>" class="img-fluid" alt="Vista trasera">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_trasera']) ?>" class="img-fluid" alt="Vista trasera">
                 </div>
             </div>
 
-            <!-- Imagen principal -->
+            <!-- Main image -->
             <div class="col-md-7">
                 <div class="product-image-container text-center">
-                    <img src="/<?= htmlspecialchars($producto['img_principal']) ?>" class="img-fluid" alt="<?= htmlspecialchars($producto['modelo']) ?>">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_principal']) ?>" class="img-fluid" alt="<?= htmlspecialchars($producto['modelo']) ?>">
                 </div>
             </div>
 
-            <!-- Detalles del producto -->
+            <!-- Product details -->
             <div class="col-md-4">
                 <h3><?= htmlspecialchars($producto['modelo']) ?></h3>
                 <p id="product-description"><?= htmlspecialchars($producto['descripcion']) ?></p>
@@ -125,7 +125,7 @@ $stmt_recomendados->closeCursor();
                 <?php foreach ($productos_recomendados as $producto_recomendado): ?>
                     <div class="col-md-3 mb-4">
                         <div class="card">
-                            <img src="/<?= htmlspecialchars($producto_recomendado['img_principal']) ?>" class="card-img-top" alt="<?= htmlspecialchars($producto_recomendado['modelo']) ?>">
+                            <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto_recomendado['img_principal']) ?>" class="card-img-top" alt="<?= htmlspecialchars($producto_recomendado['modelo']) ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($producto_recomendado['modelo']) ?></h5>
                                 <p class="card-text">$<?= number_format($producto_recomendado['precio'], 2) ?></p>
