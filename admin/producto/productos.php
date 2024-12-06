@@ -143,7 +143,7 @@ $stmt->closeCursor(); // Liberar recursos
                                 data.variations.forEach(variation => {
                                     const tr = document.createElement('tr');
                                     tr.innerHTML = `
-                                        <td>${variation.size}</td>
+                                        <td>${variation.sizeMX}</td>
                                         <td>${variation.color}</td>
                                         <td>${variation.stock_local}</td>
                                         <td>${variation.stock_tianguis}</td>
