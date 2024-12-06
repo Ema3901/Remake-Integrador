@@ -121,7 +121,7 @@ function uploadImage($image) {
     <title>Insertar Producto | Calzado JJ</title>
     <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="www.calzadojj.net/src/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
 </head>
 <body>
     <!-- Header -->
