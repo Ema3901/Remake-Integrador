@@ -38,21 +38,22 @@ $user_id = $_SESSION['user_id'];
         <!-- Modal para buscar productos -->
         <button class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#productSearchModal">Buscar Producto</button>
 
-        <!-- Modal -->
-        <div class="modal fade" id="productSearchModal" tabindex="-1" aria-labelledby="productSearchModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="productSearchModalLabel">Buscar Producto</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" class="form-control" id="productSearchInput" placeholder="Buscar producto por nombre..." onkeyup="searchProducts()">
-                        <ul class="list-group mt-3" id="productList"></ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Modal de búsqueda de productos -->
+<div class="modal fade" id="searchProductModal" tabindex="-1" aria-labelledby="searchProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="searchProductModalLabel">Buscar Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="searchQuery" class="form-control" placeholder="Buscar por nombre de producto...">
+        <ul id="productList" class="list-group mt-3"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 
         <!-- Formulario de venta -->
         <form id="saleForm" method="POST" action="punto_de_venta.php">
