@@ -43,7 +43,7 @@ include __DIR__ . '/../src/include/header.php';
         <section class="row mb-5">
             <div class="col-md-6">
                 
-                    <img src="/src/images/conocenos/nosotros1.png" alt="Calzado" class="img-fluid">
+                    <img src="/src/images/conocenos/" alt="Calzado" class="img-fluid">
                 
             </div>
             <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -64,7 +64,7 @@ include __DIR__ . '/../src/include/header.php';
         <section class="row">
             <div class="col-md-6 order-md-2">
                 
-                    <img src="/src/images/conocenos/nosotros2.png" alt="Calzado" class="img-fluid">
+                    <img src="/src/images/conocenos/" alt="Calzado" class="img-fluid">
                 
             </div>
             <div class="col-md-6 d-flex flex-column justify-content-center order-md-1">
