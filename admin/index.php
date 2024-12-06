@@ -37,7 +37,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Main content -->
     <main style="min-height: 53.6vh;">
-        <div> Este es un boton para probar el envio de datos a servidor </div>
+        <div> pendejo </div>
         <button style="width: 600px; height: 50px"> Hola </button>
     </main>
 
