@@ -13,9 +13,22 @@ if (!isset($_SESSION['user_id'])) {
 // Llamar al procedimiento almacenado para obtener los tickets
 $sql = "CALL GetSalesTickets()"; // Aquí deberías usar el procedimiento almacenado adecuado
 $stmt = $pdo->prepare($sql);
-$stmt->execute();
+
+// Depuración: Verificar si la consulta se ejecuta correctamente
+if (!$stmt->execute()) {
+    // Mostrar error si no se puede ejecutar la consulta
+    die("Error al ejecutar la consulta: " . implode(", ", $stmt->errorInfo()));
+}
+
+// Obtener los resultados de los tickets
 $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Depuración: Verificar si se obtienen resultados
+if (empty($tickets)) {
+    die("No se encontraron tickets en la base de datos.");
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
