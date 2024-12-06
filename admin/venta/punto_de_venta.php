@@ -61,17 +61,30 @@ function obtenerDetallesCarrito($id_variation) {
     }
 }
 
+// Función para actualizar el stock después de una compra
+function actualizarStock($id_variation, $stock_type) {
+    global $pdo;
+    try {
+        if ($stock_type == 'local') {
+            $sql = "UPDATE shoes_variations SET stock_local = stock_local - 1 WHERE id_varition = :id_variation AND stock_local > 0";
+        } else {
+            $sql = "UPDATE shoes_variations SET stock_tianguis = stock_tianguis - 1 WHERE id_varition = :id_variation AND stock_tianguis > 0";
+        }
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':id_variation' => $id_variation]);
+    } catch (Exception $e) {
+        echo "Error al actualizar el stock: " . $e->getMessage();
+    }
+}
+
 // Agregar al carrito
 if (isset($_POST['agregar_al_carrito'])) {
-    // Depuración para ver qué datos se están enviando
-    error_log('Datos recibidos para agregar al carrito: ' . print_r($_POST, true)); 
+    // Depuración: Ver los datos recibidos
+    echo "<pre>" . print_r($_POST, true) . "</pre>"; // Muestra los datos recibidos
 
     if (isset($_POST['id_variation']) && isset($_POST['stock_type'])) {
         $id_variation = $_POST['id_variation'];
         $stock_type = $_POST['stock_type'];
-
-        // Depuración: mostrar los valores antes de agregarlos al carrito
-        error_log("ID Variación: $id_variation, Stock Type: $stock_type");
 
         // Agregar producto al carrito en sesión
         $_SESSION['carrito'][] = [
@@ -79,13 +92,13 @@ if (isset($_POST['agregar_al_carrito'])) {
             'stock_type' => $stock_type
         ];
 
-        // Depuración: mostrar el carrito después de agregar el producto
-        error_log("Carrito actualizado: " . print_r($_SESSION['carrito'], true));
+        // Depuración: Ver el estado del carrito después de agregar
+        echo "<pre>" . print_r($_SESSION['carrito'], true) . "</pre>";
 
         // Actualizar el stock
         actualizarStock($id_variation, $stock_type);
     } else {
-        error_log('Faltan datos necesarios para agregar al carrito.');
+        echo "<pre>Faltan datos necesarios para agregar al carrito.</pre>"; // Muestra mensaje si faltan datos
     }
 }
 
@@ -197,8 +210,7 @@ if (isset($_POST['id_shoe'])) {
                 <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
                     <?php foreach ($_SESSION['carrito'] as $item): ?>
                         <?php 
-                        // Obtener detalles del producto en el carrito
-                        $detalles = obtenerDetallesCarrito($item['id_variation']);
+                            $detalles = obtenerDetallesCarrito($item['id_variation']);
                         ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
