@@ -36,7 +36,7 @@ if (!isset($_SESSION['user_id'])) {
     <?php include __DIR__ . '/src/header.php'; ?>
 
     <!-- Main content -->
-    <main style="min-height: 53.5vh;">
+    <main style="min-height: 53.6vh;">
         <div> Este es un boton para probar el envio de datos a servidor </div>
         <button style="width: 600px; height: 50px"> Hola </button>
     </main>

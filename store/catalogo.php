@@ -71,7 +71,7 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
     <?php include __DIR__ . '/../src/include/header.php'; ?>
 
     <!-- Main content -->
-<main style="min-height: 53.5vh;">
+<main style="min-height: 53.6vh;">
     <main class="container my-5">
         <!-- Filtros de categoría y buscador -->
         <div class="row mb-4 align-items-center">

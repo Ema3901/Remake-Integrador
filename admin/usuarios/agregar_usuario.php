@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Header -->
     <?php include __DIR__ . '/../src/header.php'; ?>
 
-    <main style="min-height: 53.5vh;">
+    <main style="min-height: 53.6vh;">
     <div class="container my-5">
         <h2>Agregar Nuevo Usuario</h2>
 

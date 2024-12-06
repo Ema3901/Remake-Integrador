@@ -37,7 +37,7 @@ include __DIR__ . '/../src/include/header.php';
 ?>
 
     <!-- Main content -->
-<main style="min-height: 53.5vh;">
+<main style="min-height: 53.6vh;">
     <main class="container my-5">
         <!-- Primera Sección: ¿Quiénes Somos? -->
         <section class="row mb-5">

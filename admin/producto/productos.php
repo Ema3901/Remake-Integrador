@@ -43,7 +43,7 @@ $stmt->closeCursor(); // Liberar recursos
 <?php include __DIR__ . '/../src/header.php'; ?>
 
 <!-- Main content -->
-<main style="min-height: 53.5vh;">
+<main style="min-height: 53.6vh;">
 
 <!-- Content -->
 <div class="content">
