@@ -137,12 +137,12 @@ $stmt->closeCursor(); // Liberar recursos
                 const variationsTable = document.getElementById(`variationsTable-${productId}`);
 
                 // Solo cargar las variaciones si no se han cargado aún
-                if (variationsTable.innerHTML.trim() === '') {
+                if (variationsTable.querySelector('tbody').innerHTML.trim() === '') {
                     fetch(`fetch_variations.php?id=${productId}`)  // Corregir la URL para incluir el ID
                         .then(response => response.json())
                         .then(data => {
                             if (data.success && data.variations.length > 0) {
-                                variationsTable.innerHTML = ''; // Limpiar tabla de variaciones antes de agregar nuevos datos
+                                variationsTable.querySelector('tbody').innerHTML = ''; // Limpiar tabla de variaciones antes de agregar nuevos datos
                                 data.variations.forEach(variation => {
                                     const tr = document.createElement('tr');
                                     tr.innerHTML = `
@@ -154,11 +154,11 @@ $stmt->closeCursor(); // Liberar recursos
                                             <button class="btn btn-sm btn-danger deleteVariation" data-id="${variation.id_varition}">Eliminar</button>
                                         </td>
                                     `;
-                                    variationsTable.appendChild(tr);
+                                    variationsTable.querySelector('tbody').appendChild(tr);
                                 });
                                 setupDeleteVariation(); // Configurar el evento de eliminación de variación
                             } else {
-                                variationsTable.innerHTML = `<tr><td colspan="5" class="text-center">No hay variaciones disponibles</td></tr>`;
+                                variationsTable.querySelector('tbody').innerHTML = `<tr><td colspan="5" class="text-center">No hay variaciones disponibles</td></tr>`;
                             }
                         })
                         .catch(error => console.error('Error al cargar las variaciones:', error));
@@ -222,8 +222,8 @@ $stmt->closeCursor(); // Liberar recursos
                         const tr = document.createElement('tr');
                         tr.setAttribute('data-id', product.id_shoe);
                         tr.classList.add('product-row');
-                        tr.innerHTML = 
-                            `<td>${product.id_shoe}</td>
+                        tr.innerHTML = `
+                            <td>${product.id_shoe}</td>
                             <td class="expandable" style="cursor: pointer;">
                                 ${product.model_name}
                             </td>
@@ -234,7 +234,8 @@ $stmt->closeCursor(); // Liberar recursos
                             <td>
                                 <a href="editar.php?id=${product.id_shoe}" class="btn btn-sm btn-warning">Editar</a>
                                 <button class="btn btn-sm btn-danger deleteProduct" data-id="${product.id_shoe}">Eliminar</button>
-                            </td>`;
+                            </td>
+                        `;
                         tableBody.appendChild(tr);
                     });
 
