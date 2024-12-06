@@ -42,19 +42,22 @@ function obtenerVariaciones($id_shoe) {
     }
 }
 
-// Función para actualizar el stock después de una compra
-function actualizarStock($id_variation, $stock_type) {
+// Función para obtener los detalles del carrito (nombre del producto, precio, color, talla)
+function obtenerDetallesCarrito($id_variation) {
     global $pdo;
     try {
-        if ($stock_type == 'local') {
-            $sql = "UPDATE shoes_variations SET stock_local = stock_local - 1 WHERE id_varition = :id_variation AND stock_local > 0";
-        } else {
-            $sql = "UPDATE shoes_variations SET stock_tianguis = stock_tianguis - 1 WHERE id_varition = :id_variation AND stock_tianguis > 0";
-        }
+        $sql = "SELECT s.model_name, s.price, sz.sizeMX, c.color
+                FROM shoes_variations sv
+                JOIN shoes s ON sv.id_shoe = s.id_shoe
+                JOIN sizes sz ON sv.id_size = sz.id_size
+                JOIN colors c ON sv.id_color = c.id_color
+                WHERE sv.id_varition = :id_variation";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':id_variation' => $id_variation]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
-        echo "Error al actualizar el stock: " . $e->getMessage();
+        echo "Error al obtener detalles del carrito: " . $e->getMessage();
+        return [];
     }
 }
 
@@ -180,12 +183,16 @@ if (isset($_POST['id_shoe'])) {
             <ul class="list-group">
                 <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
                     <?php foreach ($_SESSION['carrito'] as $item): ?>
+                        <?php 
+                        // Obtener detalles del producto en el carrito
+                        $detalles = obtenerDetallesCarrito($item['id_variation']);
+                        ?>
                         <li class="list-group-item">
-                            Producto ID Variación: <?php echo $item['id_variation']; ?> | Stock: <?php echo $item['stock_type']; ?>
-                            <!-- Botón para eliminar del carrito -->
+                            Producto: <?php echo $detalles['model_name']; ?> | Precio: $<?php echo $detalles['price']; ?> | Talla: <?php echo $detalles['sizeMX']; ?> | Color: <?php echo $detalles['color']; ?>
+                            <!-- Eliminar botón -->
                             <form method="POST" class="d-inline">
                                 <input type="hidden" name="id_variation" value="<?php echo $item['id_variation']; ?>">
-                                <button type="submit" name="eliminar_del_carrito" class="btn btn-danger btn-sm float-end">Eliminar</button>
+                                <button type="submit" name="eliminar_del_carrito" class="btn btn-danger btn-sm ms-2">Eliminar</button>
                             </form>
                         </li>
                     <?php endforeach; ?>
@@ -193,7 +200,6 @@ if (isset($_POST['id_shoe'])) {
                     <li class="list-group-item">No hay productos en el carrito.</li>
                 <?php endif; ?>
             </ul>
-
         </div>
     </main>
 
