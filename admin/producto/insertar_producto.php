@@ -48,6 +48,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $img_front = uploadImage($_FILES['img_front']);
     $img_rear = uploadImage($_FILES['img_rear']);
     
+    // Depuración: Verificar si las imágenes fueron subidas correctamente
+    if ($img_main == '') {
+        echo "Error al subir la imagen principal.<br>";
+    }
+    if ($img_profile == '') {
+        echo "Error al subir la imagen de perfil.<br>";
+    }
+    if ($img_front == '') {
+        echo "Error al subir la imagen frontal.<br>";
+    }
+    if ($img_rear == '') {
+        echo "Error al subir la imagen trasera.<br>";
+    }
+
     // Insertar el producto en la base de datos
     $sql = "INSERT INTO shoes (id_brand, id_genre, model_name, price, descriptionn, img_main, img_profile, img_front, img_rear)
             VALUES (:brand_id, :genre_id, :model_name, :price, :description, :img_main, :img_profile, :img_front, :img_rear)";
@@ -94,25 +108,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Función para subir las imágenes
 function uploadImage($image) {
-    if ($image['error'] == 0) {
-        $target_dir = __DIR__ . '/../uploads';
-        $target_file = $target_dir . basename($image['name']);
-        
-        // Verificar si el archivo ya existe
-        if (file_exists($target_file)) {
-            return ''; // Si el archivo ya existe, retornamos vacío
-        }
-
-        // Mover la imagen al directorio de uploads
-        if (move_uploaded_file($image['tmp_name'], $target_file)) {
-            return '/uploads/' . basename($image['name']); // Retornamos la ruta relativa
-        } else {
-            return ''; // Si no se pudo mover el archivo, retornamos vacío
+    // Depuración: Verificar si hay errores en la subida
+    if ($image['error'] != 0) {
+        echo "Error en la subida de la imagen: " . $image['error'] . "<br>";
+        return ''; // Si hay un error en la subida, retornamos vacío
+    }
+    
+    $target_dir = __DIR__ . '/../uploads';
+    
+    // Verificar si el directorio de destino existe, si no, crearlo
+    if (!is_dir($target_dir)) {
+        echo "El directorio de subida no existe. Intentando crear: $target_dir<br>";
+        if (!mkdir($target_dir, 0777, true)) {
+            echo "Error al crear el directorio de subida.<br>";
+            return ''; // Si no se puede crear el directorio, retornamos vacío
         }
     }
-    return ''; // Si hubo error en la subida, retornamos vacío
+    
+    $target_file = $target_dir . '/' . basename($image['name']);
+    
+    // Verificar si el archivo ya existe
+    if (file_exists($target_file)) {
+        echo "El archivo ya existe: $target_file<br>";
+        return ''; // Si el archivo ya existe, retornamos vacío
+    }
+
+    // Intentar mover el archivo al directorio de uploads
+    if (move_uploaded_file($image['tmp_name'], $target_file)) {
+        echo "Imagen subida con éxito: $target_file<br>"; // Depuración: Confirmar que la imagen se movió correctamente
+        return '/uploads/' . basename($image['name']); // Retornamos la ruta relativa
+    } else {
+        echo "Error al mover la imagen: $target_file<br>";
+        return ''; // Si no se pudo mover el archivo, retornamos vacío
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
