@@ -166,40 +166,59 @@ if (isset($_POST['id_shoe'])) {
             <h2>Punto de Venta</h2>
 
             <!-- Selección de producto -->
-            <form method="POST" class="mb-4">
-                <label for="id_shoe">Seleccionar Producto:</label>
-                <select name="id_shoe" id="id_shoe" class="form-select" required>
-                    <option value="" disabled selected>Selecciona un producto</option>
-                    <?php foreach ($productos as $producto): ?>
-                        <option value="<?php echo $producto['id_shoe']; ?>"><?php echo $producto['model_name']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <button type="submit" class="btn btn-primary mt-2">Ver Variaciones</button>
+            <form method="POST" class="mb-4 row">
+                <div class="col-md-6">
+                    <label for="id_shoe">Seleccionar Producto:</label>
+                    <select name="id_shoe" id="id_shoe" class="form-select" required>
+                        <option value="" disabled selected>Selecciona un producto</option>
+                        <?php foreach ($productos as $producto): ?>
+                            <option value="<?php echo $producto['id_shoe']; ?>"><?php echo $producto['model_name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-6 d-flex align-items-center">
+                    <button type="submit" class="btn btn-primary mt-2">Ver Variaciones</button>
+                </div>
             </form>
 
             <?php if ($productoSeleccionado): ?>
-                <h3>Producto: <?php echo $productoSeleccionado['model_name']; ?> - $<?php echo $productoSeleccionado['price']; ?></h3>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h3>Producto: <?php echo $productoSeleccionado['model_name']; ?> - $<?php echo $productoSeleccionado['price']; ?></h3>
+                    </div>
+                </div>
 
-                <!-- Mostrar variaciones -->
+                <!-- Mostrar variaciones (max 4 por fila) -->
                 <form method="POST">
                     <input type="hidden" name="id_shoe" value="<?php echo $_POST['id_shoe']; ?>">
 
-                    <?php foreach ($variaciones as $variacion): ?>
-                        <div class="mb-3">
-                            <h5>Tamaño: <?php echo $variacion['sizeMX']; ?> | Color: <?php echo $variacion['color']; ?></h5>
-                            <p>Stock Local: <?php echo $variacion['stock_local']; ?> | Stock Tianguis: <?php echo $variacion['stock_tianguis']; ?></p>
+                    <div class="row">
+                        <?php $contador = 0; ?>
+                        <?php foreach ($variaciones as $variacion): ?>
+                            <div class="col-md-3 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tamaño: <?php echo $variacion['sizeMX']; ?> | Color: <?php echo $variacion['color']; ?></h5>
+                                        <p>Stock Local: <?php echo $variacion['stock_local']; ?> | Stock Tianguis: <?php echo $variacion['stock_tianguis']; ?></p>
 
-                            <!-- Selección de stock -->
-                            <label for="stock_type_<?php echo $variacion['id_varition']; ?>">Elegir Stock:</label>
-                            <select name="stock_type" id="stock_type_<?php echo $variacion['id_varition']; ?>" class="form-select" required>
-                                <option value="local">Local</option>
-                                <option value="tianguis">Tianguis</option>
-                            </select>
+                                        <!-- Selección de stock -->
+                                        <label for="stock_type_<?php echo $variacion['id_varition']; ?>">Elegir Stock:</label>
+                                        <select name="stock_type" id="stock_type_<?php echo $variacion['id_varition']; ?>" class="form-select" required>
+                                            <option value="local">Local</option>
+                                            <option value="tianguis">Tianguis</option>
+                                        </select>
 
-                            <button type="submit" name="agregar_al_carrito" class="btn btn-success mt-2">Agregar al carrito</button>
-                            <input type="hidden" name="id_variation" value="<?php echo $variacion['id_varition']; ?>">
-                        </div>
-                    <?php endforeach; ?>
+                                        <button type="submit" name="agregar_al_carrito" class="btn btn-success mt-2">Agregar al carrito</button>
+                                        <input type="hidden" name="id_variation" value="<?php echo $variacion['id_varition']; ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <?php $contador++; ?>
+                            <?php if ($contador % 4 == 0): ?>
+                                <div class="w-100"></div> <!-- Nueva fila después de 4 elementos -->
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
                 </form>
             <?php endif; ?>
 
