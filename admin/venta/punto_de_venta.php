@@ -19,9 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $shoe_id = $_POST['shoe_id'];
     $quantity = $_POST['quantity'];
     $venta_tipo = $_POST['venta_tipo'];  // "local" o "tianguis"
+    $size_id = $_POST['size_id'];
+    $color_id = $_POST['color_id'];
     
     // 1. Obtener el nombre del vendedor
-    $query_vendedor = "SELECT namee FROM users WHERE id_user = :user_id";
+    $query_vendedor = "CALL sp_get_seller_name(:user_id)";
     $stmt = $pdo->prepare($query_vendedor);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
@@ -35,59 +37,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bindParam(':shoe_id', $shoe_id, PDO::PARAM_INT);
     $stmt->execute();
     $tenis = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    // Obtener tamaño y color del tenis
-    $query_variaciones = "SELECT sizes.sizeMX, colors.color
-                          FROM shoes_variations
-                          JOIN sizes ON shoes_variations.id_size = sizes.id_size
-                          JOIN colors ON shoes_variations.id_color = colors.id_color
-                          WHERE shoes_variations.id_shoe = :shoe_id";
+
+    // 3. Registrar la venta llamando al procedimiento almacenado
+    $query_venta = "CALL sp_register_sale(:shoe_id, :quantity, :venta_tipo, :user_id, :size_id, :color_id)";
+    $stmt = $pdo->prepare($query_venta);
+    $stmt->bindParam(':shoe_id', $shoe_id, PDO::PARAM_INT);
+    $stmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+    $stmt->bindParam(':venta_tipo', $venta_tipo, PDO::PARAM_STR);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(':size_id', $size_id, PDO::PARAM_INT);
+    $stmt->bindParam(':color_id', $color_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // 4. Obtener las variaciones del producto (tamaño y color)
+    $query_variaciones = "CALL sp_get_variationsventa(:shoe_id)";
     $stmt = $pdo->prepare($query_variaciones);
     $stmt->bindParam(':shoe_id', $shoe_id, PDO::PARAM_INT);
     $stmt->execute();
-    $variacion = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // 3. Registrar la venta
-    $query_venta = "INSERT INTO sales (quantity, datee, fk_user, fk_shoe) 
-                    VALUES (:quantity, NOW(), :user_id, :shoe_id)";
-    $stmt = $pdo->prepare($query_venta);
-    $stmt->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->bindParam(':shoe_id', $shoe_id, PDO::PARAM_INT);
-    $stmt->execute();
-    
-    // 4. Actualizar el stock dependiendo del tipo de venta
-    if ($venta_tipo == 'local') {
-        $query_stock_local = "UPDATE shoes_variations 
-                              SET stock_local = stock_local - :quantity 
-                              WHERE id_shoe = :shoe_id AND id_size = :size_id AND id_color = :color_id";
-        $stmt = $pdo->prepare($query_stock_local);
-        $stmt->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $stmt->bindParam(':shoe_id', $shoe_id, PDO::PARAM_INT);
-        $stmt->bindParam(':size_id', $variacion['id_size'], PDO::PARAM_INT);
-        $stmt->bindParam(':color_id', $variacion['id_color'], PDO::PARAM_INT);
-        $stmt->execute();
-    } elseif ($venta_tipo == 'tianguis') {
-        $query_stock_tianguis = "UPDATE shoes_variations 
-                                 SET stock_tianguis = stock_tianguis - :quantity 
-                                 WHERE id_shoe = :shoe_id AND id_size = :size_id AND id_color = :color_id";
-        $stmt = $pdo->prepare($query_stock_tianguis);
-        $stmt->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $stmt->bindParam(':shoe_id', $shoe_id, PDO::PARAM_INT);
-        $stmt->bindParam(':size_id', $variacion['id_size'], PDO::PARAM_INT);
-        $stmt->bindParam(':color_id', $variacion['id_color'], PDO::PARAM_INT);
-        $stmt->execute();
-    }
+    $variaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Mensaje de confirmación
     echo "<h2>Venta registrada exitosamente</h2>";
     echo "<p><strong>Vendedor:</strong> " . $vendedor['namee'] . "</p>";
     echo "<p><strong>Producto:</strong> " . $tenis['model_name'] . "</p>";
-    echo "<p><strong>Tamaño:</strong> " . $variacion['sizeMX'] . " - <strong>Color:</strong> " . $variacion['color'] . "</p>";
+    echo "<p><strong>Tamaño:</strong> " . $variaciones[0]['sizeMX'] . " - <strong>Color:</strong> " . $variaciones[0]['color'] . "</p>";
     echo "<p><strong>Cantidad vendida:</strong> " . $quantity . "</p>";
     echo "<p><strong>Tipo de venta:</strong> " . $venta_tipo . "</p>";
     echo "<p><strong>Precio total:</strong> $" . ($tenis['price'] * $quantity) . "</p>";
     echo "<br><a href='punto_de_venta.php'>Añadir otro producto</a><br>";
+
 } else {
     // Si no se envió el formulario, muestra el formulario
     ?>
@@ -135,6 +113,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
 
                 <div class="mb-3">
+                    <label for="size_id" class="form-label">Selecciona la talla:</label>
+                    <select name="size_id" id="size_id" class="form-select" required>
+                        <option value="">Selecciona una talla</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="color_id" class="form-label">Selecciona el color:</label>
+                    <select name="color_id" id="color_id" class="form-select" required>
+                        <option value="">Selecciona un color</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
                     <label for="quantity" class="form-label">Cantidad:</label>
                     <input type="number" name="quantity" id="quantity" class="form-control" min="1" required>
                 </div>
@@ -158,9 +150,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php include __DIR__ . '/src/footer.php'; ?>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+
+        <script>
+        // Actualización de los selectores de tamaño y color mediante AJAX
+        document.getElementById('shoe_id').addEventListener('change', function() {
+            var shoeId = this.value;
+            if (shoeId) {
+                // Llamar a la API para obtener las variaciones (talla y color)
+                fetch('get_variationsventa.php?shoe_id=' + shoeId)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Actualizar el select de tamaño
+                        var sizeSelect = document.getElementById('size_id');
+                        sizeSelect.innerHTML = '<option value="">Selecciona una talla</option>';
+                        data.forEach(size => {
+                            sizeSelect.innerHTML += `<option value="${size.id_size}">${size.sizeMX}</option>`;
+                        });
+
+                        // Actualizar el select de color
+                        var colorSelect = document.getElementById('color_id');
+                        colorSelect.innerHTML = '<option value="">Selecciona un color</option>';
+                        data.forEach(color => {
+                            colorSelect.innerHTML += `<option value="${color.id_color}">${color.color}</option>`;
+                        });
+                    });
+            }
+        });
+        </script>
     </body>
     </html>
-    
-    <?php
+
+<?php
 }
 ?>
