@@ -48,25 +48,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $img_front = uploadImage($_FILES['img_front']);
     $img_rear = uploadImage($_FILES['img_rear']);
     
-    // Insertar el producto en la base de datos
-    $sql = "INSERT INTO shoes (id_brand, id_genre, model_name, price, descriptionn, img_main, img_profile, img_front, img_rear)
-            VALUES (:brand_id, :genre_id, :model_name, :price, :description, :img_main, :img_profile, :img_front, :img_rear)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':brand_id' => $brand_id,
-        ':genre_id' => $genre_id,
-        ':model_name' => $model_name,
-        ':price' => $price,
-        ':description' => $description,
-        ':img_main' => $img_main,
-        ':img_profile' => $img_profile,
-        ':img_front' => $img_front,
-        ':img_rear' => $img_rear,
-    ]);
+    // Verificar que las imágenes no estén vacías antes de insertar
+    if ($img_main || $img_profile || $img_front || $img_rear) {
+        // Insertar el producto en la base de datos
+        $sql = "INSERT INTO shoes (id_brand, id_genre, model_name, price, descriptionn, img_main, img_profile, img_front, img_rear)
+                VALUES (:brand_id, :genre_id, :model_name, :price, :description, :img_main, :img_profile, :img_front, :img_rear)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':brand_id' => $brand_id,
+            ':genre_id' => $genre_id,
+            ':model_name' => $model_name,
+            ':price' => $price,
+            ':description' => $description,
+            ':img_main' => $img_main ?: null,  // Si la imagen no existe, insertamos NULL
+            ':img_profile' => $img_profile ?: null,
+            ':img_front' => $img_front ?: null,
+            ':img_rear' => $img_rear ?: null,
+        ]);
 
-    // Redirigir a la página de gestión de productos
-    header('Location: productos.php');
-    exit();
+        // Redirigir a la página de gestión de productos
+        header('Location: productos.php');
+        exit();
+    }
 }
 
 // Función para subir las imágenes
@@ -75,22 +78,26 @@ function uploadImage($image) {
         $target_dir = __DIR__ . '/../uploads/';
         $target_file = $target_dir . basename($image['name']);
         
-        // Verificar si el archivo ya existe
+        // Verificar si el archivo ya existe y generar un nombre único
         if (file_exists($target_file)) {
-            return ''; // Si el archivo ya existe, retornamos vacío
+            $target_file = $target_dir . uniqid() . '-' . basename($image['name']);
+        }
+
+        // Verificar el tipo de archivo
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!in_array($image['type'], $allowed_types)) {
+            return ''; // Retornar vacío si no es un tipo de imagen permitido
         }
 
         // Mover la imagen al directorio de uploads
         if (move_uploaded_file($image['tmp_name'], $target_file)) {
-            return '/uploads/' . basename($image['name']); // Retornamos la ruta relativa
+            return '/uploads/' . basename($target_file); // Retornamos la ruta relativa
         } else {
             return ''; // Si no se pudo mover el archivo, retornamos vacío
         }
     }
     return ''; // Si hubo error en la subida, retornamos vacío
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -101,7 +108,7 @@ function uploadImage($image) {
     <title>Insertar Producto | Calzado JJ</title>
     <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="www.calzadojj.net/src/css/style.css"
+    <link href="www.calzadojj.net/src/css/style.css" rel="stylesheet">
 </head>
 <body>
     <!-- Header -->
