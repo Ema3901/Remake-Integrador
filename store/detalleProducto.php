@@ -58,6 +58,14 @@ $stmt_recomendados->closeCursor();
             height: auto;       /* Mantiene la proporción de la imagen */
             object-fit: contain; /* Asegura que la imagen se ajusta proporcionalmente dentro del contenedor */
         }
+
+        /* Estilos para las imágenes de los productos recomendados */
+        .recommended-product-img {
+            width: 100%;         /* Hace que la imagen ocupe el 100% del contenedor */
+            max-width: 250px;    /* Máximo ancho de 250px */
+            max-height: 250px;   /* Máxima altura de 250px */
+            object-fit: cover;   /* Ajusta la imagen sin deformarla */
+        }
     </style>
     <script>
         function textToSpeech() {
@@ -140,7 +148,7 @@ $stmt_recomendados->closeCursor();
                 <?php foreach ($productos_recomendados as $producto_recomendado): ?>
                     <div class="col-md-3 mb-4">
                         <div class="card">
-                            <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto_recomendado['img_principal']) ?>" class="card-img-top" alt="<?= htmlspecialchars($producto_recomendado['modelo']) ?>">
+                            <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto_recomendado['img_principal']) ?>" class="card-img-top recommended-product-img" alt="<?= htmlspecialchars($producto_recomendado['modelo']) ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($producto_recomendado['modelo']) ?></h5>
                                 <p class="card-text">$<?= number_format($producto_recomendado['precio'], 2) ?></p>
