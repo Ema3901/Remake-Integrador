@@ -49,6 +49,16 @@ $stmt_recomendados->closeCursor();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/src/css/style.css">
     <link rel="stylesheet" href="/src/css/footer.css">
+    <style>
+        /* Estilos para la imagen principal */
+        .product-image-container img {
+            max-width: 600px;   /* Ajusta el máximo de ancho */
+            max-height: 400px;  /* Ajusta el máximo de altura */
+            width: 100%;        /* Asegura que la imagen ocupe todo el ancho disponible dentro del límite */
+            height: auto;       /* Mantiene la proporción de la imagen */
+            object-fit: contain; /* Asegura que la imagen se ajusta proporcionalmente dentro del contenedor */
+        }
+    </style>
     <script>
         function textToSpeech() {
             const description = document.getElementById("product-description").textContent;
@@ -56,9 +66,9 @@ $stmt_recomendados->closeCursor();
             window.speechSynthesis.speak(utterance);
         }
 
-        // Función para cambiar la imagen principal
-        function changeMainImage(imageUrl) {
-            document.getElementById('main-image').src = imageUrl;
+        function changeMainImage(imageSrc) {
+            const mainImage = document.getElementById('main-image');
+            mainImage.src = imageSrc;
         }
     </script>
 </head>
@@ -72,13 +82,13 @@ $stmt_recomendados->closeCursor();
             <!-- Thumbnails -->
             <div class="col-md-1 d-flex flex-column align-items-center">
                 <div class="product-thumbnail-container mb-3">
-                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_perfil']) ?>" class="img-fluid" alt="Vista lateral" onclick="changeMainImage('<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_perfil']) ?>')">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_perfil']) ?>" class="img-fluid" alt="Vista lateral" onclick="changeMainImage('https://administracion.calzadojj.net/<?= $producto['img_perfil'] ?>')">
                 </div>
                 <div class="product-thumbnail-container mb-3">
-                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_frontal']) ?>" class="img-fluid" alt="Vista frontal" onclick="changeMainImage('<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_frontal']) ?>')">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_frontal']) ?>" class="img-fluid" alt="Vista frontal" onclick="changeMainImage('https://administracion.calzadojj.net/<?= $producto['img_frontal'] ?>')">
                 </div>
                 <div class="product-thumbnail-container mb-3">
-                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_trasera']) ?>" class="img-fluid" alt="Vista trasera" onclick="changeMainImage('<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_trasera']) ?>')">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_trasera']) ?>" class="img-fluid" alt="Vista trasera" onclick="changeMainImage('https://administracion.calzadojj.net/<?= $producto['img_trasera'] ?>')">
                 </div>
             </div>
 
