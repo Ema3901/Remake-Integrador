@@ -110,58 +110,10 @@ if (isset($_POST['eliminar_del_carrito'])) {
     $_SESSION['carrito'] = array_values($_SESSION['carrito']);
 }
 
-// Pagar (limpiar el carrito sin afectar el stock y registrar la compra)
+// Pagar (limpiar el carrito sin afectar el stock)
 if (isset($_POST['pagar'])) {
-    try {
-        // Iniciar una transacción para asegurar la integridad de los datos
-        $pdo->beginTransaction();
-
-        // Calcular el precio total
-        $total_price = 0;
-        foreach ($_SESSION['carrito'] as $item) {
-            $detalles = obtenerDetallesCarrito($item['id_variation']);
-            $total_price += $detalles['price'];
-        }
-
-        // Insertar la compra en la tabla 'orders'
-        $sql = "INSERT INTO orders (user_id, total_price) VALUES (:user_id, :total_price)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([':user_id' => $_SESSION['user_id'], ':total_price' => $total_price]);
-
-        // Obtener el id de la nueva orden
-        $id_order = $pdo->lastInsertId();
-
-        // Insertar los productos del carrito en la tabla 'order_items'
-        foreach ($_SESSION['carrito'] as $item) {
-            $detalles = obtenerDetallesCarrito($item['id_variation']);
-            $sql_item = "INSERT INTO order_items (id_order, id_variation, price, quantity, sizeMX, color) 
-                        VALUES (:id_order, :id_variation, :price, :quantity, :sizeMX, :color)";
-            $stmt_item = $pdo->prepare($sql_item);
-            $stmt_item->execute([
-                ':id_order' => $id_order,
-                ':id_variation' => $item['id_variation'],
-                ':price' => $detalles['price'],
-                ':quantity' => 1, // Si hay más cantidades, ajustar aquí
-                ':sizeMX' => $detalles['sizeMX'],
-                ':color' => $detalles['color']
-            ]);
-        }
-
-        // Vaciar el carrito
-        unset($_SESSION['carrito']);
-
-        // Confirmar la transacción
-        $pdo->commit();
-
-        // Redirigir a una página de confirmación o éxito
-        header('Location: /compra_exitosa.php');
-        exit();
-
-    } catch (Exception $e) {
-        // Si ocurre un error, hacer un rollback
-        $pdo->rollBack();
-        echo "Error al procesar la compra: " . $e->getMessage();
-    }
+    // Limpiar el carrito después de la compra
+    unset($_SESSION['carrito']);
 }
 
 // Obtener lista de productos
@@ -222,37 +174,36 @@ if (isset($_POST['id_shoe'])) {
                         <option value="<?php echo $producto['id_shoe']; ?>"><?php echo $producto['model_name']; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <button type="submit" class="btn btn-primary mt-2">Mostrar Variaciones</button>
+                <button type="submit" class="btn btn-primary mt-2">Ver Variaciones</button>
             </form>
 
             <?php if ($productoSeleccionado): ?>
-                <h3>Producto Seleccionado: <?php echo $productoSeleccionado['model_name']; ?></h3>
-                <p>Precio: $<?php echo $productoSeleccionado['price']; ?></p>
-                
-                <h4>Variaciones</h4>
+                <h3>Producto: <?php echo $productoSeleccionado['model_name']; ?> - $<?php echo $productoSeleccionado['price']; ?></h3>
+
+                <!-- Mostrar variaciones -->
                 <form method="POST">
-                    <div class="row">
-                        <?php foreach ($variaciones as $variacion): ?>
-                            <div class="col-md-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <p><strong>Tamaño:</strong> <?php echo $variacion['sizeMX']; ?></p>
-                                        <p><strong>Color:</strong> <?php echo $variacion['color']; ?></p>
-                                        <p><strong>Stock Local:</strong> <?php echo $variacion['stock_local']; ?></p>
-                                        <p><strong>Stock Tianguis:</strong> <?php echo $variacion['stock_tianguis']; ?></p>
-                                        <button type="submit" class="btn btn-success" name="agregar_al_carrito" value="agregar" 
-                                        onclick="this.form.id_variation.value='<?php echo $variacion['id_varition']; ?>'; this.form.stock_type.value='local';">Agregar al carrito</button>
-                                        <input type="hidden" name="id_variation" value="">
-                                        <input type="hidden" name="stock_type" value="">
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
+                    <input type="hidden" name="id_shoe" value="<?php echo $_POST['id_shoe']; ?>">
+
+                    <?php foreach ($variaciones as $variacion): ?>
+                        <div class="mb-3">
+                            <h5>Tamaño: <?php echo $variacion['sizeMX']; ?> | Color: <?php echo $variacion['color']; ?></h5>
+                            <p>Stock Local: <?php echo $variacion['stock_local']; ?> | Stock Tianguis: <?php echo $variacion['stock_tianguis']; ?></p>
+
+                            <!-- Selección de stock -->
+                            <label for="stock_type_<?php echo $variacion['id_varition']; ?>">Elegir Stock:</label>
+                            <select name="stock_type" id="stock_type_<?php echo $variacion['id_varition']; ?>" class="form-select" required>
+                                <option value="local">Local</option>
+                                <option value="tianguis">Tianguis</option>
+                            </select>
+
+                            <button type="submit" name="agregar_al_carrito" class="btn btn-success mt-2">Agregar al carrito</button>
+                            <input type="hidden" name="id_variation" value="<?php echo $variacion['id_varition']; ?>">
+                        </div>
+                    <?php endforeach; ?>
                 </form>
             <?php endif; ?>
-            
-            <!-- Carrito -->
+
+            <!-- Mostrar carrito -->
             <h3>Carrito</h3>
             <ul class="list-group">
                 <?php if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])): ?>
@@ -277,9 +228,9 @@ if (isset($_POST['id_shoe'])) {
                 <?php endif; ?>
             </ul>
 
-            <!-- Total y Botón de Pagar -->
+            <!-- Mostrar total y botón de pago -->
             <div class="d-flex justify-content-between align-items-center mt-3">
-                <h4>Total: $<?php echo number_format($total, 2); ?></h4>
+                <h4>Total: $<?php echo $total; ?></h4>
                 <form method="POST">
                     <button type="submit" name="pagar" class="btn btn-success">Pagar</button>
                 </form>
