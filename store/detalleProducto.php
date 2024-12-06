@@ -55,6 +55,11 @@ $stmt_recomendados->closeCursor();
             const utterance = new SpeechSynthesisUtterance(description);
             window.speechSynthesis.speak(utterance);
         }
+
+        // Función para cambiar la imagen principal
+        function changeMainImage(imageUrl) {
+            document.getElementById('main-image').src = imageUrl;
+        }
     </script>
 </head>
 <body>
@@ -67,20 +72,20 @@ $stmt_recomendados->closeCursor();
             <!-- Thumbnails -->
             <div class="col-md-1 d-flex flex-column align-items-center">
                 <div class="product-thumbnail-container mb-3">
-                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_perfil']) ?>" class="img-fluid" alt="Vista lateral">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_perfil']) ?>" class="img-fluid" alt="Vista lateral" onclick="changeMainImage('<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_perfil']) ?>')">
                 </div>
                 <div class="product-thumbnail-container mb-3">
-                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_frontal']) ?>" class="img-fluid" alt="Vista frontal">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_frontal']) ?>" class="img-fluid" alt="Vista frontal" onclick="changeMainImage('<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_frontal']) ?>')">
                 </div>
                 <div class="product-thumbnail-container mb-3">
-                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_trasera']) ?>" class="img-fluid" alt="Vista trasera">
+                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_trasera']) ?>" class="img-fluid" alt="Vista trasera" onclick="changeMainImage('<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_trasera']) ?>')">
                 </div>
             </div>
 
             <!-- Main image -->
             <div class="col-md-7">
                 <div class="product-image-container text-center">
-                    <img src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_principal']) ?>" class="img-fluid" alt="<?= htmlspecialchars($producto['modelo']) ?>">
+                    <img id="main-image" src="<?= htmlspecialchars('https://administracion.calzadojj.net/' . $producto['img_principal']) ?>" class="img-fluid" alt="<?= htmlspecialchars($producto['modelo']) ?>">
                 </div>
             </div>
 
