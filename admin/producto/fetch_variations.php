@@ -2,32 +2,36 @@
 // Incluir el archivo de conexión
 include __DIR__ . '/../../src/database/db.php';
 
-session_start();
+// Verificar que se haya pasado un ID de producto
+$product_id = $_GET['id'] ?? null;
 
-// Si no hay una sesión activa, redirigir a /sesion/sesion.php
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /sesion/sesion.php');  // Cambia esto por la URL de tu página de sesión
+if (!$product_id) {
+    echo json_encode(['success' => false, 'message' => 'No se especificó el producto']);
     exit();
 }
 
-// Verifica si se recibe el ID del producto
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $productId = intval($_GET['id']);
+// Obtener las variaciones del producto
+$sql = "
+    SELECT 
+        sv.id_varition, 
+        sv.stock_local, 
+        sv.stock_tianguis, 
+        s.sizeMX, 
+        c.color, 
+        c.color_code 
+    FROM shoes_variations sv
+    INNER JOIN sizes s ON sv.id_size = s.id_size
+    INNER JOIN colors c ON sv.id_color = c.id_color
+    WHERE sv.id_shoe = :product_id
+";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([':product_id' => $product_id]);
+$variations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    try {
-        // Llamar al procedimiento almacenado
-        $sql = "CALL SP_GET_VARIATIONS(:id)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
-        $stmt->execute();
-        $variations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Retornar las variaciones en formato JSON
-        echo json_encode(['success' => true, 'variations' => $variations]);
-    } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => 'Error al obtener las variaciones', 'error' => $e->getMessage()]);
-    }
+// Devolver las variaciones en formato JSON
+if ($variations) {
+    echo json_encode(['success' => true, 'variations' => $variations]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'ID de producto no válido']);
+    echo json_encode(['success' => false, 'message' => 'No se encontraron variaciones']);
 }
 ?>
