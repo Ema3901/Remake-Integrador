@@ -1,8 +1,14 @@
 <?php
-// insertar_producto.php - Página para insertar nuevos productos
-
 // Incluir el archivo de conexión
 include __DIR__ . '/../../src/database/db.php';
+
+session_start();
+
+// Si no hay una sesión activa, redirigir a /sesion/sesion.php
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /sesion/sesion.php');  // Cambia esto por la URL de tu página de sesión
+    exit();
+}
 
 // Ruta base para guardar imágenes
 $imageBasePath = __DIR__ . "/admin/src/uploads";
