@@ -41,6 +41,9 @@ $stmt->closeCursor(); // Liberar recursos
 <!-- Header -->
 <?php include __DIR__ . '/../src/header.php'; ?>
 
+<!-- Main content -->
+<main style="min-height: 53.5vh;">
+
 <!-- Content -->
 <div class="content">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -114,6 +117,7 @@ $stmt->closeCursor(); // Liberar recursos
         </tbody>
     </table>
 </div>
+</main>
 
 <!-- Footer -->
 <?php include __DIR__ . '/../src/footer.php'; ?>
