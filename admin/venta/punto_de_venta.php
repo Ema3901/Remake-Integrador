@@ -10,12 +10,12 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Función para buscar productos
-function buscarProducto($term) {
+// Función para obtener todos los productos
+function obtenerProductos() {
     global $pdo;
-    $sql = "SELECT id_shoe, model_name FROM shoes WHERE model_name LIKE :term OR id_shoe = :id";
+    $sql = "SELECT id_shoe, model_name FROM shoes";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([':term' => "%$term%", ':id' => $term]);
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -59,11 +59,18 @@ if (isset($_POST['agregar_al_carrito'])) {
     actualizarStock($id_variation, $stock_type);
 }
 
-// Buscar productos cuando se envía el formulario
-$productos = [];
-if (isset($_POST['buscar_producto'])) {
-    $term = $_POST['term'];
-    $productos = buscarProducto($term);
+// Obtener lista de productos
+$productos = obtenerProductos();
+
+// Mostrar variaciones si un producto ha sido seleccionado
+$variaciones = [];
+$productoSeleccionado = null;
+if (isset($_POST['id_shoe'])) {
+    $id_shoe = $_POST['id_shoe'];
+    $variaciones = obtenerVariaciones($id_shoe);
+    $producto = $pdo->prepare("SELECT model_name, price FROM shoes WHERE id_shoe = :id_shoe");
+    $producto->execute([':id_shoe' => $id_shoe]);
+    $productoSeleccionado = $producto->fetch(PDO::FETCH_ASSOC);
 }
 ?>
 
@@ -96,61 +103,43 @@ if (isset($_POST['buscar_producto'])) {
         <div class="container mt-4">
             <h2>Punto de Venta</h2>
 
-            <!-- Formulario de búsqueda de productos -->
+            <!-- Selección de producto -->
             <form method="POST" class="mb-4">
-                <label for="term">Buscar Producto por Nombre o ID:</label>
-                <input type="text" name="term" id="term" class="form-control" required>
-                <button type="submit" name="buscar_producto" class="btn btn-primary mt-2">Buscar</button>
-            </form>
-
-            <?php if (!empty($productos)): ?>
-                <h3>Resultados de la búsqueda</h3>
-                <ul class="list-group">
+                <label for="id_shoe">Seleccionar Producto:</label>
+                <select name="id_shoe" id="id_shoe" class="form-select" required>
+                    <option value="" disabled selected>Selecciona un producto</option>
                     <?php foreach ($productos as $producto): ?>
-                        <li class="list-group-item">
-                            <a href="punto_de_venta.php?id_shoe=<?php echo $producto['id_shoe']; ?>">
-                                <?php echo $producto['model_name']; ?>
-                            </a>
-                        </li>
+                        <option value="<?php echo $producto['id_shoe']; ?>"><?php echo $producto['model_name']; ?></option>
                     <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
-
-            <?php
-            // Mostrar variaciones si un producto ha sido seleccionado
-            if (isset($_GET['id_shoe'])) {
-                $id_shoe = $_GET['id_shoe'];
-                $variaciones = obtenerVariaciones($id_shoe);
-                $producto = $pdo->prepare("SELECT model_name, price FROM shoes WHERE id_shoe = :id_shoe");
-                $producto->execute([':id_shoe' => $id_shoe]);
-                $producto = $producto->fetch(PDO::FETCH_ASSOC);
-            ?>
-
-            <h3>Producto: <?php echo $producto['model_name']; ?> - $<?php echo $producto['price']; ?></h3>
-
-            <!-- Mostrar variaciones -->
-            <form method="POST">
-                <input type="hidden" name="id_shoe" value="<?php echo $id_shoe; ?>">
-
-                <?php foreach ($variaciones as $variacion): ?>
-                    <div class="mb-3">
-                        <h5>Tamaño: <?php echo $variacion['sizeMX']; ?> | Color: <?php echo $variacion['color']; ?></h5>
-                        <p>Stock Local: <?php echo $variacion['stock_local']; ?> | Stock Tianguis: <?php echo $variacion['stock_tianguis']; ?></p>
-
-                        <!-- Selección de stock -->
-                        <label for="stock_type_<?php echo $variacion['id_varition']; ?>">Elegir Stock:</label>
-                        <select name="stock_type" id="stock_type_<?php echo $variacion['id_varition']; ?>" class="form-select" required>
-                            <option value="local">Local</option>
-                            <option value="tianguis">Tianguis</option>
-                        </select>
-
-                        <button type="submit" name="agregar_al_carrito" class="btn btn-success mt-2">Agregar al carrito</button>
-                        <input type="hidden" name="id_variation" value="<?php echo $variacion['id_varition']; ?>">
-                    </div>
-                <?php endforeach; ?>
+                </select>
+                <button type="submit" class="btn btn-primary mt-2">Ver Variaciones</button>
             </form>
 
-            <?php } ?>
+            <?php if ($productoSeleccionado): ?>
+                <h3>Producto: <?php echo $productoSeleccionado['model_name']; ?> - $<?php echo $productoSeleccionado['price']; ?></h3>
+
+                <!-- Mostrar variaciones -->
+                <form method="POST">
+                    <input type="hidden" name="id_shoe" value="<?php echo $_POST['id_shoe']; ?>">
+
+                    <?php foreach ($variaciones as $variacion): ?>
+                        <div class="mb-3">
+                            <h5>Tamaño: <?php echo $variacion['sizeMX']; ?> | Color: <?php echo $variacion['color']; ?></h5>
+                            <p>Stock Local: <?php echo $variacion['stock_local']; ?> | Stock Tianguis: <?php echo $variacion['stock_tianguis']; ?></p>
+
+                            <!-- Selección de stock -->
+                            <label for="stock_type_<?php echo $variacion['id_varition']; ?>">Elegir Stock:</label>
+                            <select name="stock_type" id="stock_type_<?php echo $variacion['id_varition']; ?>" class="form-select" required>
+                                <option value="local">Local</option>
+                                <option value="tianguis">Tianguis</option>
+                            </select>
+
+                            <button type="submit" name="agregar_al_carrito" class="btn btn-success mt-2">Agregar al carrito</button>
+                            <input type="hidden" name="id_variation" value="<?php echo $variacion['id_varition']; ?>">
+                        </div>
+                    <?php endforeach; ?>
+                </form>
+            <?php endif; ?>
 
             <!-- Mostrar carrito -->
             <h3>Carrito</h3>
