@@ -1,10 +1,12 @@
 <?php
-session_start();
-include __DIR__ . '/../../src/database/db.php';  // Conexión a la base de datos
+// Incluir el archivo de conexión
+include __DIR__ . '/../../src/database/db.php';
 
-// Verifica si el usuario está autenticado
+session_start();
+
+// Si no hay una sesión activa, redirigir a /sesion/sesion.php
 if (!isset($_SESSION['user_id'])) {
-    echo "Acceso no autorizado";
+    header('Location: /sesion/sesion.php');  // Cambia esto por la URL de tu página de sesión
     exit();
 }
 
