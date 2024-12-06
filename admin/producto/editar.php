@@ -240,44 +240,47 @@ function uploadImage($image) {
                 </div>
 
                 <!-- Sección de Variaciones -->
-                <div class="mt-4">
-                    <h4>Variaciones</h4>
-                    <div id="variationsContainer">
-                        <?php foreach ($variations as $index => $variation): ?>
-                            <div class="mb-3 variation">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <label for="size_<?= $index ?>" class="form-label">Tamaño</label>
-                                        <select class="form-select" id="size_<?= $index ?>" name="variations[<?= $index ?>][size]">
-                                            <?php foreach ($sizes as $size): ?>
-                                                <option value="<?= $size['id_size'] ?>" <?= $size['id_size'] == $variation['id_size'] ? 'selected' : '' ?>><?= $size['sizeMX'] ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
+<div class="mt-4">
+    <h4>Variaciones</h4>
+    <div id="variationsContainer">
+        <?php foreach ($variations as $index => $variation): ?>
+            <div class="mb-3 variation" data-index="<?= $index ?>">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="size_<?= $index ?>" class="form-label">Tamaño</label>
+                        <select class="form-select" id="size_<?= $index ?>" name="variations[<?= $index ?>][size]">
+                            <?php foreach ($sizes as $size): ?>
+                                <option value="<?= $size['id_size'] ?>" <?= $size['id_size'] == $variation['id_size'] ? 'selected' : '' ?>><?= $size['sizeMX'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                                    <div class="col-md-3">
-                                        <label for="color_<?= $index ?>" class="form-label">Color</label>
-                                        <select class="form-select" id="color_<?= $index ?>" name="variations[<?= $index ?>][color]">
-                                            <?php foreach ($colors as $color): ?>
-                                                <option value="<?= $color['id_color'] ?>" <?= $color['id_color'] == $variation['id_color'] ? 'selected' : '' ?>><?= $color['color'] ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
+                    <div class="col-md-3">
+                        <label for="color_<?= $index ?>" class="form-label">Color</label>
+                        <select class="form-select" id="color_<?= $index ?>" name="variations[<?= $index ?>][color]">
+                            <?php foreach ($colors as $color): ?>
+                                <option value="<?= $color['id_color'] ?>" <?= $color['id_color'] == $variation['id_color'] ? 'selected' : '' ?>><?= $color['color'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                                    <div class="col-md-3">
-                                        <label for="stock_local_<?= $index ?>" class="form-label">Stock Local</label>
-                                        <input type="number" class="form-control" id="stock_local_<?= $index ?>" name="variations[<?= $index ?>][stock_local]" value="<?= $variation['stock_local'] ?>" required>
-                                    </div>
+                    <div class="col-md-3">
+                        <label for="stock_local_<?= $index ?>" class="form-label">Stock Local</label>
+                        <input type="number" class="form-control" id="stock_local_<?= $index ?>" name="variations[<?= $index ?>][stock_local]" value="<?= $variation['stock_local'] ?>" required>
+                    </div>
 
-                                    <div class="col-md-3">
-                                        <label for="stock_tianguis_<?= $index ?>" class="form-label">Stock Tianguis</label>
-                                        <input type="number" class="form-control" id="stock_tianguis_<?= $index ?>" name="variations[<?= $index ?>][stock_tianguis]" value="<?= $variation['stock_tianguis'] ?>" required>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                    <div class="col-md-3">
+                        <label for="stock_tianguis_<?= $index ?>" class="form-label">Stock Tianguis</label>
+                        <input type="number" class="form-control" id="stock_tianguis_<?= $index ?>" name="variations[<?= $index ?>][stock_tianguis]" value="<?= $variation['stock_tianguis'] ?>" required>
                     </div>
                 </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <button type="button" class="btn btn-secondary" id="addVariationBtn">Agregar Variación</button>
+</div>
+
 
                 <!-- Sección de Imágenes -->
                 <div class="mt-4 mb-3">
@@ -334,5 +337,60 @@ function uploadImage($image) {
     <?php include __DIR__ . '/../src/footer.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const addVariationBtn = document.getElementById('addVariationBtn');
+    const variationsContainer = document.getElementById('variationsContainer');
+
+    let variationIndex = <?= count($variations); ?>;  // Contar cuántas variaciones hay al cargar la página
+
+    // Función para agregar una nueva variación
+    addVariationBtn.addEventListener('click', function() {
+        // Crear el nuevo contenedor de variación
+        const newVariation = document.createElement('div');
+        newVariation.classList.add('mb-3', 'variation');
+        newVariation.setAttribute('data-index', variationIndex);
+
+        newVariation.innerHTML = `
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="size_${variationIndex}" class="form-label">Tamaño</label>
+                    <select class="form-select" id="size_${variationIndex}" name="variations[${variationIndex}][size]">
+                        <?php foreach ($sizes as $size): ?>
+                            <option value="<?= $size['id_size'] ?>"><?= $size['sizeMX'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="color_${variationIndex}" class="form-label">Color</label>
+                    <select class="form-select" id="color_${variationIndex}" name="variations[${variationIndex}][color]">
+                        <?php foreach ($colors as $color): ?>
+                            <option value="<?= $color['id_color'] ?>"><?= $color['color'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="stock_local_${variationIndex}" class="form-label">Stock Local</label>
+                    <input type="number" class="form-control" id="stock_local_${variationIndex}" name="variations[${variationIndex}][stock_local]" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="stock_tianguis_${variationIndex}" class="form-label">Stock Tianguis</label>
+                    <input type="number" class="form-control" id="stock_tianguis_${variationIndex}" name="variations[${variationIndex}][stock_tianguis]" required>
+                </div>
+            </div>
+        `;
+
+        // Añadir la nueva variación al contenedor
+        variationsContainer.appendChild(newVariation);
+
+        // Incrementar el índice para la siguiente variación
+        variationIndex++;
+    });
+});
+</script>
+
 </body>
 </html>
