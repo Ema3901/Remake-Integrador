@@ -238,81 +238,80 @@ function uploadImage($image) {
                             <textarea class="form-control" id="description" name="description" rows="3"><?= $product['descriptionn'] ?></textarea>
                         </div>
 
-<!-- Imágenes -->
-<div class="mb-3">
-    <label for="img_main" class="form-label">Imagen Principal</label>
-    <div class="d-flex gap-3">
-        <!-- Imagen Principal -->
-        <div class="d-flex flex-column align-items-center">
-            <input type="file" class="form-control" id="img_main" name="img_main" accept="image/*">
-            <?php if ($product['img_main']): ?>
-                <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid mt-2" width="200">
-            <?php endif; ?>
-        </div>
+                        <!-- Imágenes -->
+                        <!-- Imagen Principal -->
+                        <div class="mb-3">
+                            <label for="img_main" class="form-label">Imagen Principal</label>
+                            <input type="file" class="form-control" id="img_main" name="img_main" accept="image/*">
+                            <?php if ($product['img_main']): ?>
+                                <img src="<?= $product['img_main'] ?>" alt="Imagen Principal" class="img-fluid mt-2" width="200">
+                            <?php endif; ?>
+                        </div>
 
-        <!-- Imagen Perfil -->
-        <div class="d-flex flex-column align-items-center">
-            <label for="img_profile" class="form-label">Imagen Perfil</label>
-            <input type="file" class="form-control" id="img_profile" name="img_profile" accept="image/*">
-            <?php if ($product['img_profile']): ?>
-                <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" class="img-fluid mt-2" width="200">
-            <?php endif; ?>
-        </div>
+                        <!-- Imagen Perfil -->
+                        <div class="mb-3">
+                            <label for="img_profile" class="form-label">Imagen Perfil</label>
+                            <input type="file" class="form-control" id="img_profile" name="img_profile" accept="image/*">
+                            <?php if ($product['img_profile']): ?>
+                                <img src="<?= $product['img_profile'] ?>" alt="Imagen Perfil" class="img-fluid mt-2" width="200">
+                            <?php endif; ?>
+                        </div>
 
-        <!-- Imagen Frontal -->
-        <div class="d-flex flex-column align-items-center">
-            <label for="img_front" class="form-label">Imagen Frontal</label>
-            <input type="file" class="form-control" id="img_front" name="img_front" accept="image/*">
-            <?php if ($product['img_front']): ?>
-                <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" class="img-fluid mt-2" width="200">
-            <?php endif; ?>
-        </div>
+                        <!-- Imagen Frontal -->
+                        <div class="mb-3">
+                            <label for="img_front" class="form-label">Imagen Frontal</label>
+                            <input type="file" class="form-control" id="img_front" name="img_front" accept="image/*">
+                            <?php if ($product['img_front']): ?>
+                                <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" class="img-fluid mt-2" width="200">
+                            <?php endif; ?>
+                        </div>
 
-        <!-- Imagen Trasera -->
-        <div class="d-flex flex-column align-items-center">
-            <label for="img_rear" class="form-label">Imagen Trasera</label>
-            <input type="file" class="form-control" id="img_rear" name="img_rear" accept="image/*">
-            <?php if ($product['img_rear']): ?>
-                <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" class="img-fluid mt-2" width="200">
-            <?php endif; ?>
-        </div>
+                        <!-- Imagen Trasera -->
+                        <div class="mb-3">
+                            <label for="img_rear" class="form-label">Imagen Trasera</label>
+                            <input type="file" class="form-control" id="img_rear" name="img_rear" accept="image/*">
+                            <?php if ($product['img_rear']): ?>
+                                <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" class="img-fluid mt-2" width="200">
+                            <?php endif; ?>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Actualizar Producto</button>
+                    </div>
+
+                    <!-- Variaciones -->
+                    <div class="col-md-6">
+                        <h4>Variaciones</h4>
+                        <div id="variationsContainer">
+                            <?php foreach ($variations as $index => $variation): ?>
+                                <div class="mb-3 variation">
+                                    <label for="size_<?= $index ?>" class="form-label">Tamaño</label>
+                                    <select class="form-select" id="size_<?= $index ?>" name="variations[<?= $index ?>][size]">
+                                        <?php foreach ($sizes as $size): ?>
+                                            <option value="<?= $size['id_size'] ?>" <?= $size['id_size'] == $variation['id_size'] ? 'selected' : '' ?>>
+                                                <?= $size['sizeMX'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label for="color_<?= $index ?>" class="form-label">Color</label>
+                                    <select class="form-select" id="color_<?= $index ?>" name="variations[<?= $index ?>][color]">
+                                        <?php foreach ($colors as $color): ?>
+                                            <option value="<?= $color['id_color'] ?>" <?= $color['id_color'] == $variation['id_color'] ? 'selected' : '' ?>>
+                                                <?= $color['color'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label for="stock_local_<?= $index ?>" class="form-label">Stock Local</label>
+                                    <input type="number" class="form-control" id="stock_local_<?= $index ?>" name="variations[<?= $index ?>][stock_local]" value="<?= $variation['stock_local'] ?>" required>
+                                    <label for="stock_tianguis_<?= $index ?>" class="form-label">Stock Tianguis</label>
+                                    <input type="number" class="form-control" id="stock_tianguis_<?= $index ?>" name="variations[<?= $index ?>][stock_tianguis]" value="<?= $variation['stock_tianguis'] ?>" required>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        <?php endif; ?>
     </div>
-</div>
-
-<button type="submit" class="btn btn-primary">Actualizar Producto</button>
-</div>
-
-<!-- Variaciones -->
-<div class="col-md-6">
-    <h4>Variaciones</h4>
-    <div id="variationsContainer">
-        <?php foreach ($variations as $index => $variation): ?>
-            <div class="mb-3 variation">
-                <label for="size_<?= $index ?>" class="form-label">Tamaño</label>
-                <select class="form-select" id="size_<?= $index ?>" name="variations[<?= $index ?>][size]">
-                    <?php foreach ($sizes as $size): ?>
-                        <option value="<?= $size['id_size'] ?>" <?= $size['id_size'] == $variation['id_size'] ? 'selected' : '' ?>>
-                            <?= $size['sizeMX'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <label for="color_<?= $index ?>" class="form-label">Color</label>
-                <select class="form-select" id="color_<?= $index ?>" name="variations[<?= $index ?>][color]">
-                    <?php foreach ($colors as $color): ?>
-                        <option value="<?= $color['id_color'] ?>" <?= $color['id_color'] == $variation['id_color'] ? 'selected' : '' ?>>
-                            <?= $color['color'] ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <label for="stock_local_<?= $index ?>" class="form-label">Stock Local</label>
-                <input type="number" class="form-control" id="stock_local_<?= $index ?>" name="variations[<?= $index ?>][stock_local]" value="<?= $variation['stock_local'] ?>" required>
-                <label for="stock_tianguis_<?= $index ?>" class="form-label">Stock Tianguis</label>
-                <input type="number" class="form-control" id="stock_tianguis_<?= $index ?>" name="variations[<?= $index ?>][stock_tianguis]" value="<?= $variation['stock_tianguis'] ?>" required>
-            </div>
-        <?php endforeach; ?>
-    </div>
-</div>
-
 
     <!-- Footer -->
     <?php include __DIR__ . '/../src/footer.php'; ?>
