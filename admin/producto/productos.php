@@ -23,7 +23,7 @@ $stmt->closeCursor(); // Liberar recursos
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administracion | Calzado JJ</title>
+    <title>Administración | Calzado JJ</title>
 
     <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
     
@@ -36,9 +36,7 @@ $stmt->closeCursor(); // Liberar recursos
     <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
 
-    <!-- Exclusive Footer CSS -->
-    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
-
+    <!-- Custom CSS para la tabla -->
     <style>
         /* Nuevo estilo para la tabla de productos */
 .product-table {
@@ -128,7 +126,7 @@ $stmt->closeCursor(); // Liberar recursos
     }
 }
 
-    </style>
+    </style> <!-- Cambia la ruta según sea necesario -->
 </head>
 <body>
     
@@ -150,8 +148,8 @@ $stmt->closeCursor(); // Liberar recursos
             </div>
         </div>
 
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
+        <table class="product-table">
+            <thead>
                 <tr>
                     <th>ID</th>
                     <th>Modelo</th>
@@ -187,19 +185,21 @@ $stmt->closeCursor(); // Liberar recursos
                                 <img src="<?= $product['img_front'] ?>" alt="Imagen Frontal" style="max-height: 100px;">
                                 <img src="<?= $product['img_rear'] ?>" alt="Imagen Trasera" style="max-height: 100px;">
                                 <h5>Variaciones:</h5>
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Talla</th>
-                                            <th>Color</th>
-                                            <th>Stock Local</th>
-                                            <th>Stock Tianguis</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                                <div class="table-wrapper">
+                                    <table class="product-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Talla</th>
+                                                <th>Color</th>
+                                                <th>Stock Local</th>
+                                                <th>Stock Tianguis</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -234,7 +234,7 @@ $stmt->closeCursor(); // Liberar recursos
                                 data.variations.forEach(variation => {
                                     const tr = document.createElement('tr');
                                     tr.innerHTML = `
-                                        <td>${variation.sizeMX}</td>
+                                        <td>${variation.size}</td>
                                         <td>${variation.color}</td>
                                         <td>${variation.stock_local}</td>
                                         <td>${variation.stock_tianguis}</td>
