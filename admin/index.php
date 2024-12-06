@@ -10,8 +10,11 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Llamar al procedimiento almacenado para obtener los tickets
-$sql = "CALL GetSalesTickets()"; // Aquí deberías usar el procedimiento almacenado adecuado
+// Consulta SQL para obtener los tickets
+$sql = "SELECT o.id_order, o.created_at, o.total_price, u.name AS user_name 
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id_user"; // Asegúrate de usar el nombre correcto de la columna `id_user` en la tabla `users`
+
 $stmt = $pdo->prepare($sql);
 
 try {
@@ -77,31 +80,21 @@ try {
                         <th>Fecha</th>
                         <th>Total</th>
                         <th>Cliente</th>
-                        <th>Producto</th>
-                        <th>Tamaño</th>
-                        <th>Color</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
                     </tr>
                 </thead>
                 <tbody id="ticketsTableBody">
     <?php if (!empty($tickets)): ?>
         <?php foreach ($tickets as $ticket): ?>
-            <tr data-id="<?= $ticket['id_ticket'] ?>">
-                <td><?= $ticket['id_ticket'] ?></td>
-                <td><?= $ticket['sale_date'] ?></td>
-                <td>$<?= number_format($ticket['total'], 2) ?></td>
-                <td><?= htmlspecialchars($ticket['client_name']) ?></td>
-                <td><?= htmlspecialchars($ticket['product_name']) ?></td>  <!-- Nombre del producto -->
-                <td><?= htmlspecialchars($ticket['sizeMX']) ?></td>  <!-- Tamaño -->
-                <td><?= htmlspecialchars($ticket['color']) ?></td>
-                <td><?= $ticket['quantity'] ?></td>
-                <td>$<?= number_format($ticket['price'], 2) ?></td>
+            <tr data-id="<?= $ticket['id_order'] ?>">
+                <td><?= $ticket['id_order'] ?></td>
+                <td><?= $ticket['created_at'] ?></td>
+                <td>$<?= number_format($ticket['total_price'], 2) ?></td>
+                <td><?= htmlspecialchars($ticket['user_name']) ?></td>
             </tr>
         <?php endforeach; ?>
     <?php else: ?>
         <tr>
-            <td colspan="9" class="text-center">No hay tickets para mostrar.</td>
+            <td colspan="4" class="text-center">No hay tickets para mostrar.</td>
         </tr>
     <?php endif; ?>
 </tbody>
@@ -129,17 +122,12 @@ try {
 
                             data.tickets.forEach((ticket) => {
                                 const row = document.createElement("tr");
-                                row.setAttribute("data-id", ticket.id_ticket);
+                                row.setAttribute("data-id", ticket.id_order);
                                 row.innerHTML = `
-                                    <td>${ticket.id_ticket}</td>
-                                    <td>${ticket.sale_date}</td>
-                                    <td>$${ticket.total.toFixed(2)}</td>
-                                    <td>${ticket.client_name}</td>
-                                    <td>${ticket.product_name}</td>
-                                    <td>${ticket.size}</td>
-                                    <td>${ticket.color}</td>
-                                    <td>${ticket.quantity}</td>
-                                    <td>$${ticket.price.toFixed(2)}</td>
+                                    <td>${ticket.id_order}</td>
+                                    <td>${ticket.created_at}</td>
+                                    <td>$${ticket.total_price.toFixed(2)}</td>
+                                    <td>${ticket.user_name}</td>
                                 `;
                                 ticketsTableBody.appendChild(row);
                             });
