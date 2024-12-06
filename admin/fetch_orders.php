@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../src/database/db.php';
+include __DIR__ . '/../src/database/db.php';
 
 $sql = "SELECT o.id_order, o.order_date, o.total, oi.quantity, oi.price, s.model_name, s.sizeMX, s.color
         FROM orders o
