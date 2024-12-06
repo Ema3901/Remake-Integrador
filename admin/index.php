@@ -19,10 +19,12 @@ try {
     $stmt->execute();
     $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Verificamos si se obtuvieron resultados
+    // Depuración: Verificamos si se obtuvieron resultados
     if (!$tickets) {
         throw new Exception("No se encontraron tickets en la base de datos.");
     }
+    // Depuración: Mostrar los datos obtenidos
+    error_log("Tickets obtenidos: " . print_r($tickets, true));
 
 } catch (Exception $e) {
     // Capturamos cualquier error y lo mostramos
@@ -117,6 +119,9 @@ try {
                 fetch("fetch_sales_tickets.php")
                     .then((response) => response.json())
                     .then((data) => {
+                        // Depuración: Verificar los datos recibidos
+                        console.log("Datos recibidos de fetch_sales_tickets.php:", data);
+
                         if (data.success) {
                             const ticketsTableBody = document.getElementById("ticketsTableBody");
                             ticketsTableBody.innerHTML = "";
