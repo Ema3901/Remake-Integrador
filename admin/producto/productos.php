@@ -74,12 +74,8 @@ $stmt->closeCursor(); // Liberar recursos
         </thead>
         <tbody id="productsTableBody">
             <?php 
-                // Agrupar productos por el id del zapato, mostrando las variaciones solo cuando se expanden
-                $lastProductId = null;
+                // Crear una fila por cada producto, sin duplicarlos por variación
                 foreach ($products as $product): 
-                    // Solo mostrar una fila por producto
-                    if ($lastProductId !== $product['id_shoe']) :
-                        $lastProductId = $product['id_shoe'];
             ?>
                 <tr data-id="<?= $product['id_shoe'] ?>" class="product-row">
                     <td><?= $product['id_shoe'] ?></td>
@@ -115,13 +111,12 @@ $stmt->closeCursor(); // Liberar recursos
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Aquí se cargarán las variaciones con JS -->
                                 </tbody>
                             </table>
                         </div>
                     </td>
                 </tr>
-            <?php endif; endforeach; ?>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </div>
@@ -146,7 +141,7 @@ $stmt->closeCursor(); // Liberar recursos
 
                 // Solo cargar las variaciones si no se han cargado aún
                 if (variationsTable.querySelector('tbody').innerHTML.trim() === '') {
-                    fetch(`fetch_variations.php?id=${productId}`)  // Corregir la URL para incluir el ID
+                    fetch(`fetch_variations.php?id=${productId}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data.success && data.variations.length > 0) {
@@ -177,49 +172,9 @@ $stmt->closeCursor(); // Liberar recursos
         });
     });
 
-    // Configurar botón de eliminar variación
-    function setupDeleteVariation() {
-        document.querySelectorAll('.deleteVariation').forEach(button => {
-            button.addEventListener('click', () => {
-                const variationId = button.getAttribute('data-id');
-                fetch(`delete_variation.php?id=${variationId}`, {
-                    method: 'POST'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        button.closest('tr').remove(); // Eliminar la fila de variación de la tabla
-                    } else {
-                        alert('Error al eliminar la variación.');
-                    }
-                });
-            });
-        });
-    }
-
-    // Configurar botón de eliminar producto
-    document.querySelectorAll('.deleteProduct').forEach(button => {
-        button.addEventListener('click', () => {
-            const productId = button.getAttribute('data-id');
-            if (confirm('¿Estás seguro de eliminar este producto?')) {
-                fetch(`delete_product.php?id=${productId}`, {
-                    method: 'POST'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        button.closest('tr').remove(); // Eliminar el producto de la tabla
-                    } else {
-                        alert('Error al eliminar el producto.');
-                    }
-                });
-            }
-        });
-    });
-
     // Función para actualizar la tabla de productos
     document.getElementById('refreshTable').addEventListener('click', () => {
-        fetch('fetch_products.php')  // Asegúrate de que este archivo devuelva los productos en formato JSON
+        fetch('fetch_products.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -255,28 +210,6 @@ $stmt->closeCursor(); // Liberar recursos
             })
             .catch(error => console.error('Error al actualizar la tabla de productos:', error));
     });
-
-    // Configurar el comportamiento de eliminar productos
-    function setupDeleteProduct() {
-        document.querySelectorAll('.deleteProduct').forEach(button => {
-            button.addEventListener('click', () => {
-                const productId = button.getAttribute('data-id');
-                if (confirm('¿Estás seguro de eliminar este producto?')) {
-                    fetch(`delete_product.php?id=${productId}`, {
-                        method: 'POST'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            button.closest('tr').remove(); // Eliminar el producto
-                        } else {
-                            alert('Error al eliminar el producto.');
-                        }
-                    });
-                }
-            });
-        });
-    }
 </script>
 </body>
 </html>
