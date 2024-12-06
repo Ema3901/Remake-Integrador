@@ -196,7 +196,7 @@ function uploadImage($image) {
         <h2>Editar Producto</h2>
 
         <?php if ($product): ?>
-            <form action="editar_producto.php?id=<?= $product['id_shoe'] ?>" method="POST" enctype="multipart/form-data">
+            <form action="editar.php?id=<?= $product['id_shoe'] ?>" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
                         <!-- Modelo -->
