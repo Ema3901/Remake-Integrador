@@ -29,18 +29,6 @@
                 </div>
             </div>
 
-            <!-- Suscríbete -->
-            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h5 class="text-uppercase mb-4 font-weight-bold">Suscríbete</h5>
-                <form action="/src/include/suscripcion.php" method="POST">
-            <div class="input-group">
-                    <input type="email" name="email" class="form-control" placeholder="correo@ejemplo.com" required>
-                </div>
-                    <button class="btn btn-info mt-2 w-100 rounded-pill" type="submit">Suscribirse</button>
-                </form>
-            </div>
-        </div>
-
         <!-- Derechos de autor -->
         <div class="text-center pt-4">
             <p>© 2024 Calzado JJ. Todos los derechos reservados.</p>
