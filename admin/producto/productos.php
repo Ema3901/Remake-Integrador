@@ -38,6 +38,97 @@ $stmt->closeCursor(); // Liberar recursos
 
     <!-- Exclusive Footer CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
+
+    <style>
+        /* Nuevo estilo para la tabla de productos */
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.product-table th, .product-table td {
+    padding: 12px 16px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.product-table th {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.product-table td {
+    background-color: #fff;
+    color: var(--secondary-color);
+    font-size: 0.95rem;
+}
+
+/* Filas alternadas para mejorar la legibilidad */
+.product-table tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
+
+/* Efecto hover en las filas */
+.product-table tr:hover td {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+/* Estilo de los botones dentro de la tabla */
+.product-table button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.product-table button:hover {
+    background-color: #7c7aa3;
+}
+
+/* Tabla de variaciones */
+.product-details .product-table {
+    margin-top: 20px;
+}
+
+.product-details .product-table th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.product-details .product-table td {
+    background-color: white;
+}
+
+/* Responsividad: Ajustar el tamaño de la tabla en pantallas pequeñas */
+@media (max-width: 768px) {
+    .product-table {
+        font-size: 0.9rem;
+    }
+
+    .product-table th, .product-table td {
+        padding: 8px;
+    }
+
+    .product-details .product-table {
+        margin-top: 15px;
+    }
+
+    /* Contenedor de la tabla con desplazamiento horizontal */
+    .table-wrapper {
+        overflow-x: auto;
+    }
+}
+
+    </style>
 </head>
 <body>
     
