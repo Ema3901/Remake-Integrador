@@ -209,7 +209,7 @@ if (isset($_POST['id_shoe'])) {
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <strong><?php echo $detalles['model_name']; ?></strong> - 
-                                <em><?php echo $detalles['sizeMX']; ?> | <?php echo $detalles['color']; ?></em>
+                                <em><?php echo $detalles['brands']; ?> |<?php echo $detalles['sizeMX']; ?> | <?php echo $detalles['color']; ?></em>
                             </div>
                             <div class="text-end">
                                 <span>$<?php echo $detalles['price']; ?></span>
