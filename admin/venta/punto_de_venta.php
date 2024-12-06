@@ -4,11 +4,6 @@ include __DIR__ . '/../../src/database/db.php';
 
 session_start();
 
-// Habilitar la visualización de errores para depuración (solo en desarrollo)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // Si no hay una sesión activa, redirigir a /sesion/sesion.php
 if (!isset($_SESSION['user_id'])) {
     header('Location: /sesion/sesion.php');  // Cambia esto por la URL de tu página de sesión
@@ -33,7 +28,6 @@ function obtenerProductos() {
 function obtenerVariaciones($id_shoe) {
     global $pdo;
     try {
-        // Corregir el alias para la tabla sizes
         $sql = "SELECT sv.id_varition, sz.id_size, sz.sizeMX, c.color, sv.stock_local, sv.stock_tianguis
                 FROM shoes_variations sv
                 JOIN sizes sz ON sv.id_size = sz.id_size
@@ -47,7 +41,6 @@ function obtenerVariaciones($id_shoe) {
         return [];
     }
 }
-
 
 // Función para actualizar el stock después de una compra
 function actualizarStock($id_variation, $stock_type) {
@@ -82,23 +75,19 @@ if (isset($_POST['agregar_al_carrito'])) {
 
 // Obtener lista de productos
 $productos = obtenerProductos();
-var_dump($productos); // Depuración de la lista de productos
 
 // Mostrar variaciones si un producto ha sido seleccionado
 $variaciones = [];
 $productoSeleccionado = null;
 if (isset($_POST['id_shoe'])) {
     $id_shoe = $_POST['id_shoe'];
-    var_dump($id_shoe); // Depuración del ID del producto seleccionado
 
     $variaciones = obtenerVariaciones($id_shoe);
-    var_dump($variaciones); // Depuración de las variaciones del producto
 
     try {
         $producto = $pdo->prepare("SELECT model_name, price FROM shoes WHERE id_shoe = :id_shoe");
         $producto->execute([':id_shoe' => $id_shoe]);
         $productoSeleccionado = $producto->fetch(PDO::FETCH_ASSOC);
-        var_dump($productoSeleccionado); // Depuración del producto seleccionado
     } catch (Exception $e) {
         echo "Error al obtener el producto: " . $e->getMessage();
     }
