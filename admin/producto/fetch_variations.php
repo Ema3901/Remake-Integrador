@@ -31,9 +31,11 @@ $sql = "
 $stmt = $pdo->prepare($sql);
 $stmt->execute([':product_id' => $product_id]);
 
-// Depuración: Verificar si la consulta se ejecutó
+// Depuración: Verificar si la consulta se ejecutó correctamente
 if ($stmt->errorCode() !== '00000') {
     error_log("Error en la consulta: " . implode(", ", $stmt->errorInfo()));
+    echo json_encode(['success' => false, 'message' => 'Error al obtener las variaciones']);
+    exit();
 }
 
 $variations = $stmt->fetchAll(PDO::FETCH_ASSOC);
