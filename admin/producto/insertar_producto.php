@@ -113,7 +113,6 @@ function uploadImage($image) {
     return ''; // Si hubo error en la subida, retornamos vacío
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -202,75 +201,78 @@ function uploadImage($image) {
                 </div>
             </div>
 
-            <!-- Variaciones -->
-            <div id="variations-container">
-                <div class="variation mb-3">
-                    <label for="size_0" class="form-label">Talla</label>
-                    <select class="form-control" name="variations[0][size]" id="size_0" required>
-                        <option value="">Seleccionar Talla</option>
-                        <?php foreach ($sizes as $size): ?>
-                            <option value="<?= $size['id_size'] ?>"><?= $size['sizeMX'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
+            <div class="mt-5">
+                <h3>Variaciones</h3>
 
-                    <label for="color_0" class="form-label">Color</label>
-                    <select class="form-control" name="variations[0][color]" id="color_0" required>
-                        <option value="">Seleccionar Color</option>
-                        <?php foreach ($colors as $color): ?>
-                            <option value="<?= $color['id_color'] ?>"><?= $color['color'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                <div id="variations-container">
+                    <div class="row variation-group mb-3">
+                        <div class="col-md-3">
+                            <label for="size_1" class="form-label">Talla</label>
+                            <select class="form-control" name="variations[0][size]" required>
+                                <option value="">Seleccionar Talla</option>
+                                <?php foreach ($sizes as $size): ?>
+                                    <option value="<?= $size['id_size'] ?>"><?= $size['sizeMX'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
-                    <label for="stock_local_0" class="form-label">Stock Local</label>
-                    <input type="number" class="form-control" name="variations[0][stock_local]" id="stock_local_0" required>
+                        <div class="col-md-3">
+                            <label for="color_1" class="form-label">Color</label>
+                            <select class="form-control" name="variations[0][color]" required>
+                                <option value="">Seleccionar Color</option>
+                                <?php foreach ($colors as $color): ?>
+                                    <option value="<?= $color['id_color'] ?>"><?= $color['color'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
 
-                    <label for="stock_tianguis_0" class="form-label">Stock Tianguis</label>
-                    <input type="number" class="form-control" name="variations[0][stock_tianguis]" id="stock_tianguis_0" required>
+                        <div class="col-md-2">
+                            <label for="stock_local_1" class="form-label">Stock Local</label>
+                            <input type="number" class="form-control" name="variations[0][stock_local]" required>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="stock_tianguis_1" class="form-label">Stock Tianguis</label>
+                            <input type="number" class="form-control" name="variations[0][stock_tianguis]" required>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger remove-variation" onclick="removeVariation(this)">Eliminar</button>
+                        </div>
+                    </div>
                 </div>
+
+                <button type="button" class="btn btn-primary" id="add-variation">Agregar Variación</button>
             </div>
 
-            <button type="button" class="btn btn-secondary" id="add-variation-btn">Agregar Variación</button>
-
-            <button type="submit" class="btn btn-primary mt-4">Guardar Producto</button>
+            <button type="submit" class="btn btn-success mt-4">Guardar Producto</button>
         </form>
     </div>
 
+    <!-- Footer -->
+    <?php include __DIR__ . '/../src/footer.php'; ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let variationIndex = 1;
 
-        // Función para agregar una nueva variación
-        document.getElementById('add-variation-btn').addEventListener('click', () => {
-            const container = document.getElementById('variations-container');
-            const newVariation = document.createElement('div');
-            newVariation.classList.add('variation', 'mb-3');
+        document.getElementById('add-variation').addEventListener('click', function() {
+            const variationContainer = document.getElementById('variations-container');
+            const variationGroup = document.querySelector('.variation-group').cloneNode(true);
             
-            newVariation.innerHTML = `
-                <label for="size_${variationIndex}" class="form-label">Talla</label>
-                <select class="form-control" name="variations[${variationIndex}][size]" id="size_${variationIndex}" required>
-                    <option value="">Seleccionar Talla</option>
-                    <?php foreach ($sizes as $size): ?>
-                        <option value="<?= $size['id_size'] ?>"><?= $size['sizeMX'] ?></option>
-                    <?php endforeach; ?>
-                </select>
+            // Actualizar el nombre de los campos para que cada variación tenga un índice único
+            variationGroup.querySelectorAll('select, input').forEach(input => {
+                input.name = input.name.replace(/\[\d\]/, `[${variationIndex}]`);
+            });
 
-                <label for="color_${variationIndex}" class="form-label">Color</label>
-                <select class="form-control" name="variations[${variationIndex}][color]" id="color_${variationIndex}" required>
-                    <option value="">Seleccionar Color</option>
-                    <?php foreach ($colors as $color): ?>
-                        <option value="<?= $color['id_color'] ?>"><?= $color['color'] ?></option>
-                    <?php endforeach; ?>
-                </select>
-
-                <label for="stock_local_${variationIndex}" class="form-label">Stock Local</label>
-                <input type="number" class="form-control" name="variations[${variationIndex}][stock_local]" id="stock_local_${variationIndex}" required>
-
-                <label for="stock_tianguis_${variationIndex}" class="form-label">Stock Tianguis</label>
-                <input type="number" class="form-control" name="variations[${variationIndex}][stock_tianguis]" id="stock_tianguis_${variationIndex}" required>
-            `;
-            
-            container.appendChild(newVariation);
+            // Agregar la nueva variación al contenedor
+            variationContainer.appendChild(variationGroup);
             variationIndex++;
         });
+
+        function removeVariation(button) {
+            button.closest('.variation-group').remove();
+        }
     </script>
 </body>
 </html>
