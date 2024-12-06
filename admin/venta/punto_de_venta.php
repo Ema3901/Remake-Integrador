@@ -238,6 +238,11 @@ if (isset($_SESSION['carrito']) && !empty($_SESSION['carrito'])) {
                         <span>$<?php echo number_format($totalCarrito, 2); ?></span>
                     </li>
 
+                    <!-- Botón de pagar -->
+                    <li class="list-group-item text-center">
+                        <a href="pago.php" class="btn btn-success w-100">Pagar</a>
+                    </li>
+
                 <?php else: ?>
                     <li class="list-group-item">No hay productos en el carrito.</li>
                 <?php endif; ?>
