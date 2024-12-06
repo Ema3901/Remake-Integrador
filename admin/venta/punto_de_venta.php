@@ -79,9 +79,6 @@ function actualizarStock($id_variation, $stock_type) {
 
 // Agregar al carrito
 if (isset($_POST['agregar_al_carrito'])) {
-    // Depuración: Ver los datos recibidos
-    echo "<pre>" . print_r($_POST, true) . "</pre>"; // Muestra los datos recibidos
-
     if (isset($_POST['id_variation']) && isset($_POST['stock_type'])) {
         $id_variation = $_POST['id_variation'];
         $stock_type = $_POST['stock_type'];
@@ -91,9 +88,6 @@ if (isset($_POST['agregar_al_carrito'])) {
             'id_variation' => $id_variation,
             'stock_type' => $stock_type
         ];
-
-        // Depuración: Ver el estado del carrito después de agregar
-        echo "<pre>" . print_r($_SESSION['carrito'], true) . "</pre>";
 
         // Actualizar el stock
         actualizarStock($id_variation, $stock_type);
