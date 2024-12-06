@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Función para subir las imágenes
 function uploadImage($image) {
     if ($image['error'] == 0) {
-        $target_dir = __DIR__ . '/../../uploads/';
+        $target_dir = __DIR__ . '/../uploads';
         $target_file = $target_dir . basename($image['name']);
         
         // Mover la imagen al directorio de uploads
