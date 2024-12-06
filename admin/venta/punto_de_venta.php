@@ -73,6 +73,21 @@ if (isset($_POST['agregar_al_carrito'])) {
     actualizarStock($id_variation, $stock_type);
 }
 
+// Eliminar del carrito
+if (isset($_POST['eliminar_del_carrito'])) {
+    $id_variation = $_POST['id_variation'];
+
+    // Buscar el índice del producto en el carrito
+    foreach ($_SESSION['carrito'] as $key => $item) {
+        if ($item['id_variation'] == $id_variation) {
+            unset($_SESSION['carrito'][$key]);  // Eliminar el producto del carrito
+            break;
+        }
+    }
+    // Reindexar el arreglo para evitar índices desordenados
+    $_SESSION['carrito'] = array_values($_SESSION['carrito']);
+}
+
 // Obtener lista de productos
 $productos = obtenerProductos();
 
@@ -81,7 +96,6 @@ $variaciones = [];
 $productoSeleccionado = null;
 if (isset($_POST['id_shoe'])) {
     $id_shoe = $_POST['id_shoe'];
-
     $variaciones = obtenerVariaciones($id_shoe);
 
     try {
@@ -168,6 +182,11 @@ if (isset($_POST['id_shoe'])) {
                     <?php foreach ($_SESSION['carrito'] as $item): ?>
                         <li class="list-group-item">
                             Producto ID Variación: <?php echo $item['id_variation']; ?> | Stock: <?php echo $item['stock_type']; ?>
+                            <!-- Botón para eliminar del carrito -->
+                            <form method="POST" class="d-inline">
+                                <input type="hidden" name="id_variation" value="<?php echo $item['id_variation']; ?>">
+                                <button type="submit" name="eliminar_del_carrito" class="btn btn-danger btn-sm float-end">Eliminar</button>
+                            </form>
                         </li>
                     <?php endforeach; ?>
                 <?php else: ?>
