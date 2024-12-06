@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ]);
 
     // Redirigir a la página de gestión de productos
-    header('Location: gestion_productos.php');
+    header('Location: productos.php');
     exit();
 }
 
