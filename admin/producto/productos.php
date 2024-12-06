@@ -73,7 +73,13 @@ $stmt->closeCursor(); // Liberar recursos
             </tr>
         </thead>
         <tbody id="productsTableBody">
-            <?php foreach ($products as $product): ?>
+            <?php 
+            // Mantén un arreglo para evitar mostrar productos repetidos
+            $shownProductIds = [];
+            foreach ($products as $product): 
+                if (in_array($product['id_shoe'], $shownProductIds)) continue;
+                $shownProductIds[] = $product['id_shoe'];
+            ?>
                 <tr data-id="<?= $product['id_shoe'] ?>" class="product-row">
                     <td><?= $product['id_shoe'] ?></td>
                     <td class="expandable" style="cursor: pointer;">
@@ -107,7 +113,8 @@ $stmt->closeCursor(); // Liberar recursos
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="variationsTable-<?= $product['id_shoe'] ?>">
+                                    <!-- Variaciones se cargarán aquí -->
                                 </tbody>
                             </table>
                         </div>
@@ -133,7 +140,7 @@ $stmt->closeCursor(); // Liberar recursos
             if (detailsRow.style.display === 'none') {
                 detailsRow.style.display = 'table-row';
                 const productId = row.getAttribute('data-id');
-                const variationsTable = detailsRow.querySelector('tbody');
+                const variationsTable = document.getElementById(`variationsTable-${productId}`);
 
                 if (variationsTable.innerHTML.trim() === '') {
                     fetch(`fetch_variations.php?id=${productId}`)
@@ -149,7 +156,7 @@ $stmt->closeCursor(); // Liberar recursos
                                         <td>${variation.stock_local}</td>
                                         <td>${variation.stock_tianguis}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-danger deleteVariation" data-id="${variation.id_varition}">Eliminar</button>
+                                            <button class="btn btn-sm btn-danger deleteVariation" data-id="${variation.id_variation}">Eliminar</button>
                                         </td>
                                     `;
                                     variationsTable.appendChild(tr);
@@ -206,67 +213,6 @@ $stmt->closeCursor(); // Liberar recursos
             }
         });
     });
-
-    // Función para actualizar la tabla de productos
-    document.getElementById('refreshTable').addEventListener('click', () => {
-        fetch('fetch_products.php')  // Asegúrate de que este archivo devuelva los productos en formato JSON
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const tableBody = document.getElementById('productsTableBody');
-                    tableBody.innerHTML = '';  // Limpiar la tabla existente
-
-                    data.products.forEach(product => {
-                        const tr = document.createElement('tr');
-                        tr.setAttribute('data-id', product.id_shoe);
-                        tr.classList.add('product-row');
-                        tr.innerHTML = `
-                            <td>${product.id_shoe}</td>
-                            <td class="expandable" style="cursor: pointer;">
-                                ${product.model_name}
-                            </td>
-                            <td>${product.brand}</td>
-                            <td>${product.gender}</td>
-                            <td>$${product.price}</td>
-                            <td>${product.description}</td>
-                            <td>
-                                <a href="editar.php?id=${product.id_shoe}" class="btn btn-sm btn-warning">Editar</a>
-                                <button class="btn btn-sm btn-danger deleteProduct" data-id="${product.id_shoe}">Eliminar</button>
-                            </td>
-                        `;
-                        tableBody.appendChild(tr);
-                    });
-
-                    // Reconfigurar el comportamiento de eliminar productos
-                    setupDeleteProduct();
-                } else {
-                    alert('Error al actualizar los productos.');
-                }
-            })
-            .catch(error => console.error('Error al actualizar la tabla de productos:', error));
-    });
-
-    // Configurar el comportamiento de eliminar productos
-    function setupDeleteProduct() {
-        document.querySelectorAll('.deleteProduct').forEach(button => {
-            button.addEventListener('click', () => {
-                const productId = button.getAttribute('data-id');
-                if (confirm('¿Estás seguro de eliminar este producto?')) {
-                    fetch(`delete_product.php?id=${productId}`, {
-                        method: 'POST'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            button.closest('tr').remove();
-                        } else {
-                            alert('Error al eliminar el producto.');
-                        }
-                    });
-                }
-            });
-        });
-    }
 </script>
 </body>
 </html>
