@@ -7,7 +7,7 @@
 
     <link rel="icon" type="image/x-icon" href="/src/images/logo/favicon.png">
 
-    <!-- Meta para SEO -->
+    <!--  -->
     <meta name="description" content="Tienda de calzado JJ. Venta de zapatos para hombre, mujer y unisex en Reynosa, Tamaulipas. Descubre nuestras colecciones.">
     <meta name="keywords" content="zapatos, calzado, venta de calzado, tienda de zapatos, Reynosa, hombre, mujer, unisex">
     
