@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mail->setFrom('info@calzadojj.net', 'Calzado JJ'); // Remitente
             $mail->addAddress($email); // Correo del suscriptor
             $mail->isHTML(true); // Permitir contenido HTML en el correo
-            $mail->Subject = 'Gracias por suscribirte al boletín de ofertas'; // Asunto
+            $mail->Subject = 'Gracias por suscribirte al boletin de ofertas'; // Asunto
 
             // Agregar imagen incrustada utilizando __DIR__
             $rutaImagen = __DIR__ . '/../images/promos/promo1.png'; // Cambia 'carpeta_imagenes' por el nombre de tu carpeta
