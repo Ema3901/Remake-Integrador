@@ -1,5 +1,9 @@
 /* Carrusel */
-
+.carousel-inner img {
+    height: auto;
+    max-height: 75vh; /* Ajusta la altura máxima para pantallas pequeñas */
+    object-fit: cover; /* Asegura que las imágenes se adapten correctamente */
+}
 
 /* Controladores */
 .carousel-control-prev-icon,
