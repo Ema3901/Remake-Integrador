@@ -36,27 +36,27 @@
     <div class="carousel-inner">
         <div class="carousel-item active">
             <a href="/store/detalleProducto.php?id=42">
-                <img src="/src/images/index/carrusel/carrusel1.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
+                <img src="/src/images/index/carrusel/car1.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
             <a href="/store/detalleProducto.php?id=13">
-                <img src="/src/images/index/carrusel/carrusel2.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
+                <img src="/src/images/index/carrusel/car2.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
             <a href="/store/detalleProducto.php?id=14">
-                <img src="/src/images/index/carrusel/carrusel3.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
+                <img src="/src/images/index/carrusel/car3.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
             <a href="/store/detalleProducto.php?id=15">
-                <img src="/src/images/index/carrusel/carrusel4.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
+                <img src="/src/images/index/carrusel/car4.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
             <a href="/store/detalleProducto.php?id=16">
-                <img src="/src/images/index/carrusel/carrusel5.png" class="d-block w-100" alt="Nuevas colecciones para hombre">
+                <img src="/src/images/index/carrusel/car5.png" class="d-block w-100" alt="Nuevas colecciones para hombre">
             </a>
         </div>
     </div>
