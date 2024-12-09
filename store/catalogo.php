@@ -153,9 +153,6 @@ $result_productos = $stmt_productos->fetchAll(PDO::FETCH_ASSOC);
     </main>
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
-    <!-- Font Awesome Integration -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
