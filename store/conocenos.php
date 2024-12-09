@@ -43,7 +43,7 @@ include __DIR__ . '/../src/include/header.php';
         <section class="row mb-5">
             <div class="col-md-6">
                 
-                    <img src="/src/images/conocenos/nosotros1.png" alt="Calzado" class="img-fluid">
+                    <img src="/src/images/conocenos/nos1.png" alt="Calzado" class="img-fluid">
                 
             </div>
             <div class="col-md-6 d-flex flex-column justify-content-center">
@@ -64,7 +64,7 @@ include __DIR__ . '/../src/include/header.php';
         <section class="row">
             <div class="col-md-6 order-md-2">
                 
-                    <img src="/src/images/conocenos/nosotros2.png" alt="Calzado" class="img-fluid">
+                    <img src="/src/images/conocenos/nos2.png" alt="Calzado" class="img-fluid">
                 
             </div>
             <div class="col-md-6 d-flex flex-column justify-content-center order-md-1">
@@ -83,9 +83,6 @@ include __DIR__ . '/../src/include/header.php';
     <!-- Footer -->
 </main>
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
-
-    <!-- Font Awesome Integration -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
