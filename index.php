@@ -40,7 +40,7 @@
             </a>
         </div>
         <div class="carousel-item">
-            <a href="/store/detalleProducto.php?id=13">
+            <a href="/store/detalleProducto.php?id=0">
                 <img src="/src/images/index/carrusel/car2.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
