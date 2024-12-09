@@ -36,7 +36,7 @@
     <div class="carousel-inner">
         <div class="carousel-item active">
             <a href="/store/detalleProducto.php?id=42">
-                <img src="/src/images/index/carrusel/carrusel1.png" class="d-block w-100 h-100" alt="Ofertas de Calzado JJ">
+                <img src="/src/images/index/carrusel/carrusel1.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">

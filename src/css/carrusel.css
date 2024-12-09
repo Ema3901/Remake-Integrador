@@ -3,6 +3,7 @@
     height: auto;
     max-height: 75vh; /* Ajusta la altura máxima para pantallas pequeñas */
     object-fit: cover; /* Asegura que las imágenes se adapten correctamente */
+    height: 100%;
 }
 
 /* Controladores */
