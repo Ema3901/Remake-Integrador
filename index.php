@@ -45,17 +45,17 @@
             </a>
         </div>
         <div class="carousel-item">
-            <a href="/store/detalleProducto.php?id=14">
+            <a href="/store/detalleProducto.php?id=43">
                 <img src="/src/images/index/carrusel/car3.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
-            <a href="/store/detalleProducto.php?id=15">
+            <a href="/store/detalleProducto.php?id=52">
                 <img src="/src/images/index/carrusel/car4.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
-            <a href="/store/detalleProducto.php?id=16">
+            <a href="/store/detalleProducto.php?id=82">
                 <img src="/src/images/index/carrusel/car5.png" class="d-block w-100" alt="Nuevas colecciones para hombre">
             </a>
         </div>
