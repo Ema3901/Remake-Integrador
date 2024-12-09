@@ -64,7 +64,7 @@ $stmt->closeCursor(); // Liberar recursos
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
-                <th>Modelo</th>
+                <th>Nombre del modelo</th>
                 <th>Marca</th>
                 <th>Género</th>
                 <th>Precio</th>

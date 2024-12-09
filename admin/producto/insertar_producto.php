@@ -168,7 +168,7 @@ function uploadImage($image) {
                 <div class="col-md-6">
                     <!-- Modelo -->
                     <div class="mb-3">
-                        <label for="model_name" class="form-label">Modelo</label>
+                        <label for="model_name" class="form-label">Nombre del modelo</label>
                         <input type="text" class="form-control" id="model_name" name="model_name" required>
                     </div>
 
