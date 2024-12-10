@@ -35,12 +35,12 @@
 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <a href="/store/detalleProducto.php?id=0">
+            <a href="/store/detalleProducto.php?id=96">
                 <img src="/src/images/index/carrusel/car1.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
         <div class="carousel-item">
-            <a href="/store/detalleProducto.php?id=0">
+            <a href="/store/detalleProducto.php?id=75">
                 <img src="/src/images/index/carrusel/car2.png" class="d-block w-100" alt="Ofertas de Calzado JJ">
             </a>
         </div>
