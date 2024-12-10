@@ -146,25 +146,25 @@ $stmt->closeCursor(); // Liberar recursos
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    let currentVariationId = null; // Variable para almacenar la ID de la variación seleccionada
+
     // Expandir detalles y cargar variaciones dinámicamente
     document.querySelectorAll('.expandable').forEach(cell => {
         cell.addEventListener('click', () => {
             const row = cell.closest('tr');
             const detailsRow = row.nextElementSibling;
 
-            // Verificar si la fila de detalles está oculta o visible
             if (detailsRow.style.display === 'none') {
                 detailsRow.style.display = 'table-row'; // Mostrar detalles del producto
-                const productId = row.getAttribute('data-id'); // Obtener el ID del producto
+                const productId = row.getAttribute('data-id');
                 const variationsTable = document.getElementById(`variationsTable-${productId}`);
 
-                // Solo cargar las variaciones si no se han cargado aún
                 if (variationsTable.querySelector('tbody').innerHTML.trim() === '') {
                     fetch(`fetch_variations.php?id=${productId}`)
                         .then(response => response.json())
                         .then(data => {
                             if (data.success && data.variations.length > 0) {
-                                variationsTable.querySelector('tbody').innerHTML = ''; // Limpiar tabla de variaciones antes de agregar nuevos datos
+                                variationsTable.querySelector('tbody').innerHTML = ''; // Limpiar la tabla
                                 data.variations.forEach(variation => {
                                     const tr = document.createElement('tr');
                                     tr.innerHTML = `
@@ -178,7 +178,7 @@ $stmt->closeCursor(); // Liberar recursos
                                     `;
                                     variationsTable.querySelector('tbody').appendChild(tr);
                                 });
-                                setupDeleteVariation(); // Configurar el evento de eliminación de variación
+                                setupDeleteVariation(); // Configurar el evento de eliminación
                             } else {
                                 variationsTable.querySelector('tbody').innerHTML = `<tr><td colspan="5" class="text-center">No hay variaciones disponibles</td></tr>`;
                             }
@@ -186,7 +186,7 @@ $stmt->closeCursor(); // Liberar recursos
                         .catch(error => console.error('Error al cargar las variaciones:', error));
                 }
             } else {
-                detailsRow.style.display = 'none'; // Ocultar los detalles del producto
+                detailsRow.style.display = 'none'; // Ocultar detalles
             }
         });
     });
@@ -195,27 +195,39 @@ $stmt->closeCursor(); // Liberar recursos
     function setupDeleteVariation() {
         document.querySelectorAll('.deleteVariation').forEach(button => {
             button.addEventListener('click', function () {
-                const variationId = this.getAttribute('data-id');
-                if (confirm('¿Estás seguro de que quieres eliminar esta variación?')) {
-                    fetch(`delete_variation.php?id=${variationId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert(data.message); // Mostrar mensaje de éxito
-                                // Eliminar la fila de la variación del DOM
-                                this.closest('tr').remove();
-                            } else {
-                                alert(data.message); // Mostrar mensaje de error
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error al eliminar la variación:', error);
-                            alert('Hubo un error al intentar eliminar la variación.');
-                        });
-                }
+                currentVariationId = this.getAttribute('data-id'); // Obtener la ID de la variación
+                // Mostrar el modal de confirmación
+                const modal = new bootstrap.Modal(document.getElementById('confirmDeleteVariationModal'));
+                modal.show();
             });
         });
     }
+
+    // Configurar el botón de confirmación en el modal
+    document.getElementById('confirmDeleteVariationButton').addEventListener('click', function () {
+        if (currentVariationId) {
+            fetch(`delete_variation.php?id=${currentVariationId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message); // Mostrar mensaje de éxito
+                        // Eliminar la fila de la variación del DOM
+                        document.querySelector(`.deleteVariation[data-id="${currentVariationId}"]`).closest('tr').remove();
+                    } else {
+                        alert(data.message); // Mostrar mensaje de error
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al eliminar la variación:', error);
+                    alert('Hubo un error al intentar eliminar la variación.');
+                })
+                .finally(() => {
+                    currentVariationId = null; // Reiniciar la variable
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteVariationModal'));
+                    modal.hide(); // Cerrar el modal
+                });
+        }
+    });
 
     // Actualizar la tabla de productos
     document.getElementById('refreshTable').addEventListener('click', () => {
@@ -224,7 +236,7 @@ $stmt->closeCursor(); // Liberar recursos
             .then(data => {
                 if (data.success) {
                     const tableBody = document.getElementById('productsTableBody');
-                    tableBody.innerHTML = ''; // Limpiar la tabla existente
+                    tableBody.innerHTML = ''; // Limpiar la tabla
 
                     data.products.forEach(product => {
                         const tr = document.createElement('tr');
@@ -247,8 +259,7 @@ $stmt->closeCursor(); // Liberar recursos
                         tableBody.appendChild(tr);
                     });
 
-                    // Reconfigurar el comportamiento de eliminar productos
-                    setupDeleteProduct();
+                    setupDeleteProduct(); // Reconfigurar eliminar productos
                 } else {
                     alert('Error al actualizar los productos.');
                 }
@@ -256,6 +267,28 @@ $stmt->closeCursor(); // Liberar recursos
             .catch(error => console.error('Error al actualizar la tabla de productos:', error));
     });
 </script>
+
+<!-- Modal de Confirmación para Variaciones -->
+<div class="modal fade" id="confirmDeleteVariationModal" tabindex="-1" aria-labelledby="confirmDeleteVariationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteVariationModalLabel">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que quieres eliminar esta variación? Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteVariationButton">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 </body>
 </html>
