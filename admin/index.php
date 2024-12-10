@@ -38,7 +38,7 @@ try {
 <body>
 
     <!-- Header -->
-    <?php include __DIR__ . '/src/header.php'; ?>
+    <?php include __DIR__ . '/../src/header.php'; ?>
 
     <!-- Main Content -->
     <main class="container mt-5">
@@ -113,7 +113,7 @@ try {
     </div>
 
     <!-- Footer -->
-    <?php include __DIR__ . '/src/footer.php'; ?>
+    <?php include __DIR__ . '/../src/footer.php'; ?>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -139,15 +139,14 @@ try {
                         data: { id_order: ticketToDelete },
                         success: function (response) {
                             if (response.success) {
-                                alert('Ticket eliminado correctamente.');
                                 $(`tr[data-id="${ticketToDelete}"]`).remove();
                                 $('#deleteTicketModal').modal('hide');
                             } else {
-                                alert('Error al eliminar el ticket.');
+                                $('#deleteTicketModal .modal-body').text('Error al eliminar el ticket. Por favor, inténtalo de nuevo.');
                             }
                         },
                         error: function () {
-                            alert('Error al procesar la solicitud.');
+                            $('#deleteTicketModal .modal-body').text('Error al procesar la solicitud. Verifica tu conexión.');
                         }
                     });
                 }
@@ -185,7 +184,7 @@ try {
                         }
                     },
                     error: function () {
-                        alert('Error al obtener los detalles del ticket.');
+                        $('#orderItemsTableBody').html('<tr><td colspan="6" class="text-center">Error al obtener los detalles del ticket.</td></tr>');
                     }
                 });
             });
