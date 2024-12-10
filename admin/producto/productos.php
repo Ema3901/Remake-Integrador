@@ -145,172 +145,6 @@ $stmt->closeCursor(); // Liberar recursos
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    let currentProductId = null; // Variable para almacenar la ID del producto seleccionado
-    let currentVariationId = null; // Variable para almacenar la ID de la variación seleccionada
-
-    // Expandir detalles y cargar variaciones dinámicamente
-    document.querySelectorAll('.expandable').forEach(cell => {
-        cell.addEventListener('click', () => {
-            const row = cell.closest('tr');
-            const detailsRow = row.nextElementSibling;
-
-            if (detailsRow.style.display === 'none') {
-                detailsRow.style.display = 'table-row'; // Mostrar detalles del producto
-                const productId = row.getAttribute('data-id');
-                const variationsTable = document.getElementById(`variationsTable-${productId}`);
-
-                if (variationsTable.querySelector('tbody').innerHTML.trim() === '') {
-                    fetch(`fetch_variations.php?id=${productId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success && data.variations.length > 0) {
-                                variationsTable.querySelector('tbody').innerHTML = ''; // Limpiar la tabla
-                                data.variations.forEach(variation => {
-                                    const tr = document.createElement('tr');
-                                    tr.innerHTML = `
-                                        <td>${variation.sizeMX}</td>
-                                        <td>${variation.color}</td>
-                                        <td>${variation.stock_local}</td>
-                                        <td>${variation.stock_tianguis}</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-danger deleteVariation" data-id="${variation.id_varition}">Eliminar</button>
-                                        </td>
-                                    `;
-                                    variationsTable.querySelector('tbody').appendChild(tr);
-                                });
-                                setupDeleteVariation(); // Configurar el evento de eliminación
-                            } else {
-                                variationsTable.querySelector('tbody').innerHTML = `<tr><td colspan="5" class="text-center">No hay variaciones disponibles</td></tr>`;
-                            }
-                        })
-                        .catch(error => console.error('Error al cargar las variaciones:', error));
-                }
-            } else {
-                detailsRow.style.display = 'none'; // Ocultar detalles
-            }
-        });
-    });
-
-    // Configurar el evento para eliminar variaciones
-    function setupDeleteVariation() {
-        document.querySelectorAll('.deleteVariation').forEach(button => {
-            button.addEventListener('click', function () {
-                currentVariationId = this.getAttribute('data-id'); // Obtener la ID de la variación
-                // Mostrar el modal de confirmación
-                const modal = new bootstrap.Modal(document.getElementById('confirmDeleteVariationModal'));
-                modal.show();
-            });
-        });
-    }
-
-    // Configurar el botón de confirmación en el modal para variaciones
-    document.getElementById('confirmDeleteVariationButton').addEventListener('click', function () {
-        if (currentVariationId) {
-            fetch(`delete_variation.php?id=${currentVariationId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message); // Mostrar mensaje de éxito
-                        // Eliminar la fila de la variación del DOM
-                        document.querySelector(`.deleteVariation[data-id="${currentVariationId}"]`).closest('tr').remove();
-                    } else {
-                        alert(data.message); // Mostrar mensaje de error
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al eliminar la variación:', error);
-                    alert('Hubo un error al intentar eliminar la variación.');
-                })
-                .finally(() => {
-                    currentVariationId = null; // Reiniciar la variable
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteVariationModal'));
-                    modal.hide(); // Cerrar el modal
-                });
-        }
-    });
-
-    // Configurar el evento para eliminar productos
-    document.querySelectorAll('.deleteProduct').forEach(button => {
-        button.addEventListener('click', function () {
-            currentProductId = this.getAttribute('data-id'); // Obtener la ID del producto
-            // Mostrar el modal de confirmación
-            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteProductModal'));
-            modal.show();
-        });
-    });
-
-    // Configurar el botón de confirmación en el modal para productos
-    document.getElementById('confirmDeleteProductButton').addEventListener('click', function () {
-        if (currentProductId) {
-            fetch('delete_product.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `id=${currentProductId}`
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message); // Mostrar mensaje de éxito
-                        // Eliminar la fila del producto de la tabla
-                        document.querySelector(`.deleteProduct[data-id="${currentProductId}"]`).closest('tr').remove();
-                    } else {
-                        alert(data.message); // Mostrar mensaje de error
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al eliminar el producto:', error);
-                    alert('Hubo un error al intentar eliminar el producto.');
-                })
-                .finally(() => {
-                    currentProductId = null; // Reiniciar la variable
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteProductModal'));
-                    modal.hide(); // Cerrar el modal
-                });
-        }
-    });
-
-    // Actualizar la tabla de productos
-    document.getElementById('refreshTable').addEventListener('click', () => {
-        fetch('fetch_products.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const tableBody = document.getElementById('productsTableBody');
-                    tableBody.innerHTML = ''; // Limpiar la tabla
-
-                    data.products.forEach(product => {
-                        const tr = document.createElement('tr');
-                        tr.setAttribute('data-id', product.id_shoe);
-                        tr.classList.add('product-row');
-                        tr.innerHTML = `
-                            <td>${product.id_shoe}</td>
-                            <td class="expandable" style="cursor: pointer;">
-                                ${product.model_name}
-                            </td>
-                            <td>${product.brand}</td>
-                            <td>${product.gender}</td>
-                            <td>$${product.price}</td>
-                            <td>${product.description}</td>
-                            <td>
-                                <a href="editar.php?id=${product.id_shoe}" class="btn btn-sm btn-warning">Editar</a>
-                                <button class="btn btn-sm btn-danger deleteProduct" data-id="${product.id_shoe}">Eliminar</button>
-                            </td>
-                        `;
-                        tableBody.appendChild(tr);
-                    });
-
-                    setupDeleteProduct(); // Reconfigurar eliminar productos
-                } else {
-                    alert('Error al actualizar los productos.');
-                }
-            })
-            .catch(error => console.error('Error al actualizar la tabla de productos:', error));
-    });
-</script>
-
 <!-- Modal de Confirmación para Variaciones -->
 <div class="modal fade" id="confirmDeleteVariationModal" tabindex="-1" aria-labelledby="confirmDeleteVariationModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -348,6 +182,42 @@ $stmt->closeCursor(); // Liberar recursos
     </div>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let currentProductId = null; // Variable para productos
+    let currentVariationId = null; // Variable para variaciones
+
+    // Configurar el evento para eliminar productos
+    document.querySelectorAll('.deleteProduct').forEach(button => {
+        button.addEventListener('click', function () {
+            currentProductId = this.getAttribute('data-id');
+            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteProductModal'));
+            modal.show();
+        });
+    });
+
+    document.getElementById('confirmDeleteProductButton').addEventListener('click', function () {
+        if (currentProductId) {
+            fetch('delete_product.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id=${currentProductId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const row = document.querySelector(`.deleteProduct[data-id="${currentProductId}"]`).closest('tr');
+                    const detailsRow = row.nextElementSibling;
+                    row.remove();
+                    if (detailsRow && detailsRow.classList.contains('product-details')) detailsRow.remove();
+                    alert(data.message);
+                } else alert(data.message);
+            })
+            .catch(console.error);
+        }
+    });
+</script>
 
 
 

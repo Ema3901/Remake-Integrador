@@ -10,11 +10,28 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Verificar que la solicitud sea POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+    exit();
+}
+
 // Verificar si se proporciona un ID de producto
 if (isset($_POST['id']) && is_numeric($_POST['id'])) {
     $productId = (int)$_POST['id'];
 
     try {
+        // Verificar si el producto existe antes de eliminarlo
+        $checkProduct = "SELECT COUNT(*) FROM shoes WHERE id_shoe = :id";
+        $stmtCheck = $pdo->prepare($checkProduct);
+        $stmtCheck->bindParam(':id', $productId, PDO::PARAM_INT);
+        $stmtCheck->execute();
+
+        if ($stmtCheck->fetchColumn() == 0) {
+            echo json_encode(['success' => false, 'message' => 'El producto no existe']);
+            exit();
+        }
+
         // Iniciar una transacción para manejar dependencias
         $pdo->beginTransaction();
 
