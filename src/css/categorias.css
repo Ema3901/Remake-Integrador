@@ -15,14 +15,15 @@
     cursor: pointer;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     margin-bottom: 1rem; /* Añadir margen entre filas */
+    height: 100%; /* Ajustar altura para ocupar el espacio asignado */
 }
 
 /* Imagen de categoría */
 .category-box img {
     width: 100%; /* Las imágenes ocuparán el 100% del ancho de su contenedor */
-    height: 100%;
+    height: auto; /* Mantener proporciones originales */
     border-radius: 10px;
-    object-fit: cover;
+    object-fit: cover; /* Recortar imágenes para que se vean bien en contenedores */
     transition: transform 0.3s ease-in-out;
 }
 
@@ -57,7 +58,7 @@
 }
 
 /* ============================================================
-   MEDIA QUERIES PARA DISPOSITIVOS MÓVILES Y PANTALLAS PEQUEÑAS
+   MEDIA QUERIES PARA DISPOSITIVOS MÓVILES
    ============================================================ */
 
 /* Pantallas menores a 768px (tablets y móviles en orientación horizontal) */
@@ -65,11 +66,15 @@
     .categorias {
         padding: 1rem 0;
     }
+    .categorias .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
     .category-box {
         margin-bottom: 0.5rem; /* Reducir espacio entre filas */
     }
     .category-title {
-        font-size: 1rem; /* Reducir aún más el tamaño del texto */
+        font-size: 1rem; /* Reducir tamaño del texto */
     }
 }
 
@@ -79,7 +84,7 @@
         margin-bottom: 0.75rem; /* Ajustar márgenes */
     }
     .category-title {
-        font-size: 0.9rem; /* Reducir el tamaño del texto para pantallas muy pequeñas */
+        font-size: 0.9rem; /* Reducir aún más el tamaño del texto */
     }
 }
 
