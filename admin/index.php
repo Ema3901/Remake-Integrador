@@ -6,31 +6,20 @@ session_start();
 
 // Si no hay una sesión activa, redirigir a /sesion/sesion.php
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /sesion/sesion.php');  // Cambia esto por la URL de tu página de sesión
+    header('Location: /sesion/sesion.php');
     exit();
 }
 
-// Llamar al procedimiento almacenado para obtener los tickets
-$sql = "CALL GetSalesTickets()"; // Aquí deberías usar el procedimiento almacenado adecuado
+// Obtener los tickets (tabla `orders`)
+$sql = "SELECT id_order, user_id, total_price, created_at FROM orders ORDER BY created_at DESC";
 $stmt = $pdo->prepare($sql);
 
 try {
-    // Intentamos ejecutar la consulta
     $stmt->execute();
     $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Depuración: Verificamos si se obtuvieron resultados
-    if (!$tickets) {
-        throw new Exception("No se encontraron tickets en la base de datos.");
-    }
-    // Depuración: Mostrar los datos obtenidos
-    error_log("Tickets obtenidos: " . print_r($tickets, true));
-
 } catch (Exception $e) {
-    // Capturamos cualquier error y lo mostramos
     error_log("Error al obtener los tickets: " . $e->getMessage());
-    $tickets = [];  // Si ocurre un error, establecemos una variable vacía para evitar que el código se rompa
-    $error_message = "Hubo un problema al obtener los tickets. Intenta más tarde.";
+    $tickets = [];
 }
 ?>
 
@@ -39,126 +28,94 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administración | Calzado JJ</title>
-
-    <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
-    
-    <!-- Bootstrap 5.3 CDN -->
+    <title>Gestión de Tickets</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
-    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
-    <!-- Header -->
-    <?php include __DIR__ . '/src/header.php'; ?>
-
-    <main style="min-height: 53.6vh;">
-        <div class="container mt-5">
-            <h2>Gestión de Tickets de Venta</h2>
-
-            <button class="btn btn-secondary mb-3" id="refreshTable">
-                <i class="fas fa-sync-alt"></i> Actualizar
-            </button>
-
-            <!-- Mensaje de error si ocurre -->
-            <?php if (isset($error_message)): ?>
-                <div class="alert alert-danger">
-                    <?= $error_message ?>
-                </div>
-            <?php endif; ?>
-
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID Ticket</th>
-                        <th>Fecha</th>
-                        <th>Total</th>
-                        <th>Cliente</th>
-                        <th>Producto</th>
-                        <th>Tamaño</th>
-                        <th>Color</th>
-                        <th>Cantidad</th>
-                        <th>Precio Unitario</th>
+    <div class="container mt-5">
+        <h2>Gestión de Tickets</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID Ticket</th>
+                    <th>Usuario</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody id="ticketsTableBody">
+                <?php foreach ($tickets as $ticket): ?>
+                    <tr data-id="<?= $ticket['id_order'] ?>">
+                        <td><?= $ticket['id_order'] ?></td>
+                        <td><?= htmlspecialchars($ticket['user_id']) ?></td>
+                        <td>$<?= number_format($ticket['total_price'], 2) ?></td>
+                        <td><?= $ticket['created_at'] ?></td>
                     </tr>
-                </thead>
-                <tbody id="ticketsTableBody">
-    <?php if (!empty($tickets)): ?>
-        <?php foreach ($tickets as $ticket): ?>
-            <tr data-id="<?= $ticket['id_ticket'] ?>">
-                <td><?= $ticket['id_ticket'] ?></td>
-                <td><?= $ticket['sale_date'] ?></td>
-                <td>$<?= number_format($ticket['total'], 2) ?></td>
-                <td><?= htmlspecialchars($ticket['client_name']) ?></td>
-                <td><?= htmlspecialchars($ticket['product_name']) ?></td>  <!-- Nombre del producto -->
-                <td><?= htmlspecialchars($ticket['sizeMX']) ?></td>  <!-- Tamaño -->
-                <td><?= htmlspecialchars($ticket['color']) ?></td>
-                <td><?= $ticket['quantity'] ?></td>
-                <td>$<?= number_format($ticket['price'], 2) ?></td>
-            </tr>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr>
-            <td colspan="9" class="text-center">No hay tickets para mostrar.</td>
-        </tr>
-    <?php endif; ?>
-</tbody>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 
-            </table>
-        </div>
-    </main>
+        <h3 class="mt-5">Detalles del Ticket</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID Item</th>
+                    <th>Variación</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Tamaño</th>
+                    <th>Color</th>
+                </tr>
+            </thead>
+            <tbody id="orderItemsTableBody">
+                <tr>
+                    <td colspan="6" class="text-center">Seleccione un ticket para ver los detalles.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <!-- Footer -->
-    <?php include __DIR__ . '/src/footer.php'; ?>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function setupRefreshTable() {
-            document.getElementById("refreshTable").addEventListener("click", () => {
-                fetch("fetch_sales_tickets.php")
-                    .then((response) => response.json())
-                    .then((data) => {
-                        // Depuración: Verificar los datos recibidos
-                        console.log("Datos recibidos de fetch_sales_tickets.php:", data);
+        $(document).ready(function () {
+            // Cargar los detalles de un ticket al hacer clic en la fila
+            $('#ticketsTableBody').on('click', 'tr', function () {
+                const orderId = $(this).data('id');
+
+                // Obtener los detalles del ticket
+                $.ajax({
+                    url: 'get_order_items.php',
+                    type: 'GET',
+                    data: { id_order: orderId },
+                    dataType: 'json',
+                    success: function (data) {
+                        const tableBody = $('#orderItemsTableBody');
+                        tableBody.empty(); // Limpiar la tabla
 
                         if (data.success) {
-                            const ticketsTableBody = document.getElementById("ticketsTableBody");
-                            ticketsTableBody.innerHTML = "";
-
-                            data.tickets.forEach((ticket) => {
-                                const row = document.createElement("tr");
-                                row.setAttribute("data-id", ticket.id_ticket);
-                                row.innerHTML = `
-                                    <td>${ticket.id_ticket}</td>
-                                    <td>${ticket.sale_date}</td>
-                                    <td>$${ticket.total.toFixed(2)}</td>
-                                    <td>${ticket.client_name}</td>
-                                    <td>${ticket.product_name}</td>
-                                    <td>${ticket.size}</td>
-                                    <td>${ticket.color}</td>
-                                    <td>${ticket.quantity}</td>
-                                    <td>$${ticket.price.toFixed(2)}</td>
+                            data.items.forEach(item => {
+                                const row = `
+                                    <tr>
+                                        <td>${item.id_item}</td>
+                                        <td>${item.id_variation}</td>
+                                        <td>$${item.price}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${item.sizeMX}</td>
+                                        <td>${item.color}</td>
+                                    </tr>
                                 `;
-                                ticketsTableBody.appendChild(row);
+                                tableBody.append(row);
                             });
                         } else {
-                            alert("Error al actualizar la tabla: " + data.message);
+                            tableBody.append('<tr><td colspan="6" class="text-center">No se encontraron detalles para este ticket.</td></tr>');
                         }
-                    })
-                    .catch((error) => {
-                        console.error("Error al actualizar la tabla:", error);
-                        alert("Ocurrió un error al intentar actualizar la tabla.");
-                    });
+                    },
+                    error: function () {
+                        alert('Error al obtener los detalles del ticket.');
+                    }
+                });
             });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            setupRefreshTable();
         });
     </script>
 </body>
