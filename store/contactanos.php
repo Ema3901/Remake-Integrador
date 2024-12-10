@@ -7,7 +7,7 @@
 
     <link rel="icon" type="image/x-icon" href="/src/images/logo/favicon.png">
 
-    <!--  -->
+    <!-- Meta etiquetas -->
     <meta name="description" content="Tienda de calzado JJ. Venta de zapatos para hombre, mujer y unisex en Reynosa, Tamaulipas. Descubre nuestras colecciones.">
     <meta name="keywords" content="zapatos, calzado, venta de calzado, tienda de zapatos, Reynosa, hombre, mujer, unisex">
     
@@ -25,7 +25,6 @@
 
     <!-- Header -->
     <?php
-        // Incluir el header
         include __DIR__ . '/../src/include/header.php';
     ?>
 
@@ -36,7 +35,7 @@
         <!-- Formulario de contacto -->
         <div class="col-md-6 mb-4">
             <h4>Envíanos un mensaje</h4>
-            <form id="contactForm" action="/src/include/send_email.php" method="POST">
+            <form id="contactForm" method="POST">
                 <div class="mb-3">
                     <label for="email" class="form-label">
                         <i class="fas fa-envelope"></i> Correo electrónico
@@ -102,7 +101,6 @@
 </div>
 
     <!-- Footer -->
-</main>
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
 <!-- Font Awesome Integration -->
@@ -112,14 +110,37 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
-<!-- Script de confirmación -->
+<!-- Script de envío con AJAX -->
 <script>
     document.getElementById('confirmSendButton').addEventListener('click', function () {
-        document.getElementById('contactForm').submit(); // Enviar el formulario
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        if (email.trim() === '' || message.trim() === '') {
+            alert('Por favor, completa todos los campos.');
+            return;
+        }
+
+        fetch('/src/include/send_email.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ email: email, message: message }),
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert(data);
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+            modal.hide();
+
+            document.getElementById('contactForm').reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ocurrió un error al enviar el mensaje. Intenta nuevamente.');
+        });
     });
 </script>
 
 </body>
 </html>
-
-<!-- version 0.0.6 -->
