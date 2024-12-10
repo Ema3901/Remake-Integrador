@@ -38,7 +38,7 @@ try {
 <body>
 
     <!-- Header -->
-    <?php include __DIR__ . '/../src/include/header.php'; ?>
+    <?php include __DIR__ . '/src/include/header.php'; ?>
 
     <!-- Main Content -->
     <main class="container mt-5">
@@ -88,7 +88,7 @@ try {
     </main>
 
     <!-- Footer -->
-    <?php include __DIR__ . '/../src/include/footer.php'; ?>
+    <?php include __DIR__ . '/src/include/footer.php'; ?>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
