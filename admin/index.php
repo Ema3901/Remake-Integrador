@@ -113,7 +113,7 @@ try {
     </div>
 
     <!-- Footer -->
-    <?php include __DIR__ . '/../src/footer.php'; ?>
+    <?php include __DIR__ . '/src/footer.php'; ?>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
