@@ -93,6 +93,25 @@ try {
         </table>
     </main>
 
+    <!-- Modal de Confirmación -->
+    <div class="modal fade" id="deleteTicketModal" tabindex="-1" aria-labelledby="deleteTicketModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTicketModalLabel">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que deseas eliminar este ticket?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <?php include __DIR__ . '/src/footer.php'; ?>
 
@@ -102,11 +121,42 @@ try {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            let ticketToDelete = null;
+
+            // Abrir modal para confirmar eliminación
+            $('#ticketsTableBody').on('click', '.delete-ticket-btn', function (e) {
+                e.stopPropagation(); // Evitar que se dispare el evento de clic en la fila
+                ticketToDelete = $(this).data('id');
+                $('#deleteTicketModal').modal('show');
+            });
+
+            // Confirmar eliminación
+            $('#confirmDeleteButton').on('click', function () {
+                if (ticketToDelete) {
+                    $.ajax({
+                        url: 'delete_ticket.php',
+                        type: 'POST',
+                        data: { id_order: ticketToDelete },
+                        success: function (response) {
+                            if (response.success) {
+                                alert('Ticket eliminado correctamente.');
+                                $(`tr[data-id="${ticketToDelete}"]`).remove();
+                                $('#deleteTicketModal').modal('hide');
+                            } else {
+                                alert('Error al eliminar el ticket.');
+                            }
+                        },
+                        error: function () {
+                            alert('Error al procesar la solicitud.');
+                        }
+                    });
+                }
+            });
+
             // Cargar los detalles de un ticket al hacer clic en la fila
             $('#ticketsTableBody').on('click', 'tr', function () {
                 const orderId = $(this).data('id');
 
-                // Obtener los detalles del ticket
                 $.ajax({
                     url: 'get_order_items.php',
                     type: 'GET',
@@ -114,7 +164,7 @@ try {
                     dataType: 'json',
                     success: function (data) {
                         const tableBody = $('#orderItemsTableBody');
-                        tableBody.empty(); // Limpiar la tabla
+                        tableBody.empty();
 
                         if (data.success) {
                             data.items.forEach(item => {
@@ -138,31 +188,6 @@ try {
                         alert('Error al obtener los detalles del ticket.');
                     }
                 });
-            });
-
-            // Manejar la eliminación de un ticket
-            $('#ticketsTableBody').on('click', '.delete-ticket-btn', function (e) {
-                e.stopPropagation(); // Evitar que se dispare el evento de clic en la fila
-                const orderId = $(this).data('id');
-
-                if (confirm('¿Estás seguro de que deseas eliminar este ticket?')) {
-                    $.ajax({
-                        url: 'delete_ticket.php',
-                        type: 'POST',
-                        data: { id_order: orderId },
-                        success: function (response) {
-                            if (response.success) {
-                                alert('Ticket eliminado correctamente.');
-                                $(`tr[data-id="${orderId}"]`).remove();
-                            } else {
-                                alert('Error al eliminar el ticket.');
-                            }
-                        },
-                        error: function () {
-                            alert('Error al procesar la solicitud.');
-                        }
-                    });
-                }
             });
         });
     </script>
