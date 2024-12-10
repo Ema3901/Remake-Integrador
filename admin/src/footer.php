@@ -4,18 +4,16 @@
         <div class="row">
             <!-- Categorías -->
             <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h5 class="text-uppercase mb-4 font-weight-bold">Categorías</h5>
-                <p><a href="/store/catalogo.php?genero=1" class="text-white text-decoration-none">Hombre</a></p>
-                <p><a href="/store/catalogo.php?genero=2" class="text-white text-decoration-none">Mujer</a></p>
-                <p><a href="/store/catalogo.php?genero=3" class="text-white text-decoration-none">Unisex</a></p>
+                <h5 class="text-uppercase mb-4 font-weight-bold">Ventas</h5>
+                <p><a href="/venta/punto_de_venta.php" class="text-white text-decoration-none">Punto de venta</a></p>
+                <p><a href="/index.php" class="text-white text-decoration-none">Panel de tickets</a></p>
             </div>
 
             <!-- Ayuda -->
             <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h5 class="text-uppercase mb-4 font-weight-bold">Ayuda</h5>
-                <p><a href="/store/conocenos.php" class="text-white text-decoration-none">Sobre Nosotros</a></p>
-                <p><a href="/store/contactanos.php" class="text-white text-decoration-none">Contacto</a></p>
-                <p><a href="/store/sesion.php" class="text-white text-decoration-none">Cuenta</a></p>
+                <h5 class="text-uppercase mb-4 font-weight-bold">Datos</h5>
+                <p><a href="/producto/productos.php" class="text-white text-decoration-none">Productos</a></p>
+                <p><a href="/usuarios/cuentas.php" class="text-white text-decoration-none">Usuarios</a></p>
             </div>
 
             <!-- Contact Info -->
