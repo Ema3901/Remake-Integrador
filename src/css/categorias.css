@@ -57,5 +57,38 @@
 }
 
 /* ============================================================
-   MEDIA QUERIES PARA DISPOSITIVOS MÓVILES
+   MEDIA QUERIES PARA DISPOSITIVOS MÓVILES Y PANTALLAS PEQUEÑAS
    ============================================================ */
+
+/* Pantallas menores a 768px (tablets y móviles en orientación horizontal) */
+@media (max-width: 768px) {
+    .categorias {
+        padding: 1rem 0;
+    }
+    .category-box {
+        margin-bottom: 0.5rem; /* Reducir espacio entre filas */
+    }
+    .category-title {
+        font-size: 1rem; /* Reducir aún más el tamaño del texto */
+    }
+}
+
+/* Pantallas menores a 576px (móviles) */
+@media (max-width: 576px) {
+    .category-box {
+        margin-bottom: 0.75rem; /* Ajustar márgenes */
+    }
+    .category-title {
+        font-size: 0.9rem; /* Reducir el tamaño del texto para pantallas muy pequeñas */
+    }
+}
+
+/* Pantallas muy pequeñas (menores a 400px) */
+@media (max-width: 400px) {
+    .category-title {
+        font-size: 0.8rem; /* Asegurar la legibilidad en pantallas extremadamente pequeñas */
+    }
+    .category-box img {
+        border-radius: 5px; /* Reducir el radio del borde para adaptarse mejor al tamaño reducido */
+    }
+}
