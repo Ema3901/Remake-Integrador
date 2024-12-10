@@ -137,58 +137,41 @@ try {
                         url: 'delete_ticket.php',
                         type: 'POST',
                         data: { id_order: ticketToDelete },
+                        dataType: 'json',
                         success: function (response) {
                             if (response.success) {
-                                alert('Ticket eliminado correctamente.');
+                                createToast('Ticket eliminado correctamente.', 'success');
                                 $(`tr[data-id="${ticketToDelete}"]`).remove();
                                 $('#deleteTicketModal').modal('hide');
                             } else {
-                                alert('Error al eliminar el ticket.');
+                                createToast(`Error al eliminar el ticket: ${response.error || 'desconocido'}`, 'danger');
                             }
                         },
                         error: function () {
-                            alert('Error al procesar la solicitud.');
+                            createToast('Error al procesar la solicitud.', 'danger');
                         }
                     });
                 }
             });
 
-            // Cargar los detalles de un ticket al hacer clic en la fila
-            $('#ticketsTableBody').on('click', 'tr', function () {
-                const orderId = $(this).data('id');
+            // Crear notificación tipo Toast
+            function createToast(message, type) {
+                const toastContainer = document.createElement('div');
+                toastContainer.className = `toast-container position-fixed bottom-0 end-0 p-3`;
+                const toast = document.createElement('div');
+                toast.className = `toast text-bg-${type} border-0 show`;
+                toast.innerHTML = `
+                    <div class="toast-body">
+                        ${message}
+                    </div>`;
+                toastContainer.appendChild(toast);
+                document.body.appendChild(toastContainer);
 
-                $.ajax({
-                    url: 'get_order_items.php',
-                    type: 'GET',
-                    data: { id_order: orderId },
-                    dataType: 'json',
-                    success: function (data) {
-                        const tableBody = $('#orderItemsTableBody');
-                        tableBody.empty();
-
-                        if (data.success) {
-                            data.items.forEach(item => {
-                                const row = `
-                                    <tr>
-                                        <td>${item.id_item}</td>
-                                        <td>${item.id_variation}</td>
-                                        <td>$${item.price}</td>
-                                        <td>${item.quantity}</td>
-                                        <td>${item.sizeMX}</td>
-                                        <td>${item.color}</td>
-                                    </tr>
-                                `;
-                                tableBody.append(row);
-                            });
-                        } else {
-                            tableBody.append('<tr><td colspan="6" class="text-center">No se encontraron detalles para este ticket.</td></tr>');
-                        }
-                    },
-                    error: function () {
-                        alert('Error al obtener los detalles del ticket.');
-                    }
-                });
-            });
+                // Eliminar el toast después de 3 segundos
+                setTimeout(() => {
+                    toastContainer.remove();
+                }, 3000);
+            }
         });
     </script>
 </body>
