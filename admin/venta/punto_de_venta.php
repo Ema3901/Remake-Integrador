@@ -6,7 +6,7 @@ session_start();
 
 // Si no hay una sesión activa, redirigir a /sesion/sesion.php
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /sesion/sesion.php');  // Cambia esto por la URL de tu página de sesión
+    header('Location: /sesion/sesion.php');
     exit();
 }
 
@@ -65,11 +65,9 @@ function obtenerDetallesCarrito($id_variation) {
 function actualizarStock($id_variation, $stock_type) {
     global $pdo;
     try {
-        if ($stock_type == 'local') {
-            $sql = "UPDATE shoes_variations SET stock_local = stock_local + 1 WHERE id_varition = :id_variation";
-        } else {
-            $sql = "UPDATE shoes_variations SET stock_tianguis = stock_tianguis + 1 WHERE id_varition = :id_variation";
-        }
+        $sql = $stock_type == 'local' 
+            ? "UPDATE shoes_variations SET stock_local = stock_local + 1 WHERE id_varition = :id_variation"
+            : "UPDATE shoes_variations SET stock_tianguis = stock_tianguis + 1 WHERE id_varition = :id_variation";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':id_variation' => $id_variation]);
     } catch (Exception $e) {
@@ -77,20 +75,31 @@ function actualizarStock($id_variation, $stock_type) {
     }
 }
 
+// Función para reducir el stock después de registrar una venta
+function reducirStock($id_variation, $stock_type) {
+    global $pdo;
+    try {
+        $sql = $stock_type == 'local' 
+            ? "UPDATE shoes_variations SET stock_local = stock_local - 1 WHERE id_varition = :id_variation"
+            : "UPDATE shoes_variations SET stock_tianguis = stock_tianguis - 1 WHERE id_varition = :id_variation";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':id_variation' => $id_variation]);
+    } catch (Exception $e) {
+        echo "Error al reducir stock: " . $e->getMessage();
+    }
+}
+
 // Función para registrar la venta en la tabla orders y order_items
 function registrarVenta($user_id, $total_price, $carrito) {
     global $pdo;
     try {
-        // Iniciar transacción
         $pdo->beginTransaction();
 
-        // Insertar en la tabla orders
         $sql = "INSERT INTO orders (user_id, total_price) VALUES (:user_id, :total_price)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':user_id' => $user_id, ':total_price' => $total_price]);
-        $order_id = $pdo->lastInsertId(); // Obtener el ID de la orden insertada
+        $order_id = $pdo->lastInsertId();
 
-        // Insertar en la tabla order_items
         foreach ($carrito as $item) {
             $detalles = obtenerDetallesCarrito($item['id_variation']);
             $sql_item = "INSERT INTO order_items (id_order, id_variation, price, quantity, sizeMX, color) 
@@ -100,16 +109,16 @@ function registrarVenta($user_id, $total_price, $carrito) {
                 ':id_order' => $order_id,
                 ':id_variation' => $item['id_variation'],
                 ':price' => $detalles['price'],
-                ':quantity' => 1, // Suponiendo que es 1 por producto
+                ':quantity' => 1,
                 ':sizeMX' => $detalles['sizeMX'],
                 ':color' => $detalles['color']
             ]);
+
+            reducirStock($item['id_variation'], $item['stock_type']);
         }
 
-        // Confirmar transacción
         $pdo->commit();
     } catch (Exception $e) {
-        // Si ocurre un error, revertir la transacción
         $pdo->rollBack();
         echo "Error al registrar la venta: " . $e->getMessage();
     }
@@ -121,7 +130,6 @@ if (isset($_POST['agregar_al_carrito'])) {
         $id_variation = $_POST['id_variation'];
         $stock_type = $_POST['stock_type'];
 
-        // Agregar producto al carrito en sesión
         $_SESSION['carrito'][] = [
             'id_variation' => $id_variation,
             'stock_type' => $stock_type
@@ -134,21 +142,19 @@ if (isset($_POST['eliminar_del_carrito'])) {
     $id_variation = $_POST['id_variation'];
     $stock_type = $_POST['stock_type'];
 
-    // Actualizar el stock antes de eliminar del carrito
     actualizarStock($id_variation, $stock_type);
 
-    // Buscar el índice del producto en el carrito
     foreach ($_SESSION['carrito'] as $key => $item) {
         if ($item['id_variation'] == $id_variation) {
-            unset($_SESSION['carrito'][$key]);  // Eliminar el producto del carrito
+            unset($_SESSION['carrito'][$key]);
             break;
         }
     }
-    // Reindexar el arreglo para evitar índices desordenados
+
     $_SESSION['carrito'] = array_values($_SESSION['carrito']);
 }
 
-// Pagar (limpiar el carrito sin afectar el stock y registrar la venta)
+// Pagar (registrar la venta y limpiar el carrito)
 if (isset($_POST['pagar'])) {
     $total = 0;
     foreach ($_SESSION['carrito'] as $item) {
@@ -156,17 +162,13 @@ if (isset($_POST['pagar'])) {
         $total += $detalles['price'];
     }
 
-    // Registrar la venta en las tablas orders y order_items
     registrarVenta($_SESSION['user_id'], $total, $_SESSION['carrito']);
-
-    // Limpiar el carrito después de la compra
     unset($_SESSION['carrito']);
 }
 
 // Obtener lista de productos
 $productos = obtenerProductos();
 
-// Mostrar variaciones si un producto ha sido seleccionado
 $variaciones = [];
 $productoSeleccionado = null;
 if (isset($_POST['id_shoe'])) {
@@ -191,21 +193,16 @@ if (isset($_POST['id_shoe'])) {
     <title>Punto de Venta | Calzado JJ</title>
 
     <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
-    
-    <!-- Bootstrap 5.3 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
-    <link rel="stylesheet" href="https://calzadojj.net/src/css/footer.css">
 </head>
 <body>
 
-    <!-- Header -->
+
     <?php include __DIR__ . '/../src/header.php'; ?>
+
+
 
     <!-- Main content -->
     <main style="min-height: 53.6vh;">
