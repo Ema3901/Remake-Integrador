@@ -191,14 +191,40 @@ $stmt->closeCursor(); // Liberar recursos
         });
     });
 
-    // Función para actualizar la tabla de productos
+    // Configurar el evento para eliminar variaciones
+    function setupDeleteVariation() {
+        document.querySelectorAll('.deleteVariation').forEach(button => {
+            button.addEventListener('click', function () {
+                const variationId = this.getAttribute('data-id');
+                if (confirm('¿Estás seguro de que quieres eliminar esta variación?')) {
+                    fetch(`delete_variation.php?id=${variationId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(data.message); // Mostrar mensaje de éxito
+                                // Eliminar la fila de la variación del DOM
+                                this.closest('tr').remove();
+                            } else {
+                                alert(data.message); // Mostrar mensaje de error
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error al eliminar la variación:', error);
+                            alert('Hubo un error al intentar eliminar la variación.');
+                        });
+                }
+            });
+        });
+    }
+
+    // Actualizar la tabla de productos
     document.getElementById('refreshTable').addEventListener('click', () => {
         fetch('fetch_products.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     const tableBody = document.getElementById('productsTableBody');
-                    tableBody.innerHTML = '';  // Limpiar la tabla existente
+                    tableBody.innerHTML = ''; // Limpiar la tabla existente
 
                     data.products.forEach(product => {
                         const tr = document.createElement('tr');
@@ -229,53 +255,7 @@ $stmt->closeCursor(); // Liberar recursos
             })
             .catch(error => console.error('Error al actualizar la tabla de productos:', error));
     });
-
-    // Eliminar productos con confirmación en el modal
-    document.querySelectorAll('.deleteProduct').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
-            
-            // Mostrar el modal de confirmación
-            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-            modal.show();
-
-            // Cuando el usuario haga clic en el botón "Eliminar" del modal
-            document.getElementById('confirmDeleteButton').onclick = function() {
-                // Enviar la solicitud de eliminación al servidor
-                fetch('delete_product.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: `id=${productId}`
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);  // Mostrar mensaje de éxito
-                        // Eliminar el producto de la tabla sin recargar la página
-                        const row = document.querySelector(`tr[data-id="${productId}"]`);
-                        if (row) {
-                            row.remove();
-                        }
-                    } else {
-                        alert(data.message);  // Mostrar mensaje de error
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al eliminar el producto:', error);
-                    alert('Hubo un error al intentar eliminar el producto.');
-                });
-                // Cerrar el modal después de la acción
-                modal.hide();
-            };
-
-            // Cerrar el modal si el usuario hace clic en "Cancelar"
-            document.querySelector('.btn-secondary').addEventListener('click', function() {
-                modal.hide();
-            });
-        });
-    });
 </script>
+
 </body>
 </html>
