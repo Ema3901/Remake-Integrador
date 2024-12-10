@@ -1,6 +1,6 @@
 <?php
 // Incluir el archivo de conexión
-include __DIR__ . '/../src/database/db.php';
+include __DIR__ . '/../../src/database/db.php';
 
 session_start();
 
@@ -28,7 +28,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio | Calzado JJ</title>
+    <title>Punto de Venta | Calzado JJ</title>
 
     <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -38,7 +38,7 @@ try {
 <body>
 
     <!-- Header -->
-    <?php include __DIR__ . '/../src/include/header.php'; ?>
+    <?php include __DIR__ . '/../src/header.php'; ?>
 
     <!-- Main Content -->
     <main class="container mt-5">
@@ -88,7 +88,7 @@ try {
     </main>
 
     <!-- Footer -->
-    <?php include __DIR__ . '/../src/include/footer.php'; ?>
+    <?php include __DIR__ . '/../src/footer.php'; ?>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
