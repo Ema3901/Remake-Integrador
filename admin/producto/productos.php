@@ -146,6 +146,7 @@ $stmt->closeCursor(); // Liberar recursos
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    let currentProductId = null; // Variable para almacenar la ID del producto seleccionado
     let currentVariationId = null; // Variable para almacenar la ID de la variación seleccionada
 
     // Expandir detalles y cargar variaciones dinámicamente
@@ -203,7 +204,7 @@ $stmt->closeCursor(); // Liberar recursos
         });
     }
 
-    // Configurar el botón de confirmación en el modal
+    // Configurar el botón de confirmación en el modal para variaciones
     document.getElementById('confirmDeleteVariationButton').addEventListener('click', function () {
         if (currentVariationId) {
             fetch(`delete_variation.php?id=${currentVariationId}`)
@@ -224,6 +225,48 @@ $stmt->closeCursor(); // Liberar recursos
                 .finally(() => {
                     currentVariationId = null; // Reiniciar la variable
                     const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteVariationModal'));
+                    modal.hide(); // Cerrar el modal
+                });
+        }
+    });
+
+    // Configurar el evento para eliminar productos
+    document.querySelectorAll('.deleteProduct').forEach(button => {
+        button.addEventListener('click', function () {
+            currentProductId = this.getAttribute('data-id'); // Obtener la ID del producto
+            // Mostrar el modal de confirmación
+            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteProductModal'));
+            modal.show();
+        });
+    });
+
+    // Configurar el botón de confirmación en el modal para productos
+    document.getElementById('confirmDeleteProductButton').addEventListener('click', function () {
+        if (currentProductId) {
+            fetch('delete_product.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `id=${currentProductId}`
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message); // Mostrar mensaje de éxito
+                        // Eliminar la fila del producto de la tabla
+                        document.querySelector(`.deleteProduct[data-id="${currentProductId}"]`).closest('tr').remove();
+                    } else {
+                        alert(data.message); // Mostrar mensaje de error
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al eliminar el producto:', error);
+                    alert('Hubo un error al intentar eliminar el producto.');
+                })
+                .finally(() => {
+                    currentProductId = null; // Reiniciar la variable
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteProductModal'));
                     modal.hide(); // Cerrar el modal
                 });
         }
@@ -286,6 +329,26 @@ $stmt->closeCursor(); // Liberar recursos
     </div>
   </div>
 </div>
+
+<!-- Modal de Confirmación para Productos -->
+<div class="modal fade" id="confirmDeleteProductModal" tabindex="-1" aria-labelledby="confirmDeleteProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteProductModalLabel">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que quieres eliminar este producto? Se eliminarán también todas las variaciones asociadas. Esta acción no se puede deshacer.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteProductButton">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
