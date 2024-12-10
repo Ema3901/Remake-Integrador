@@ -1,3 +1,28 @@
+<?php
+// Incluir el archivo de conexión
+include __DIR__ . '/../src/database/db.php';
+
+session_start();
+
+// Si no hay una sesión activa, redirigir a /sesion/sesion.php
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /sesion/sesion.php');
+    exit();
+}
+
+// Obtener los tickets (tabla `orders`)
+$sql = "SELECT id_order, user_id, total_price, created_at FROM orders ORDER BY created_at DESC";
+$stmt = $pdo->prepare($sql);
+
+try {
+    $stmt->execute();
+    $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    error_log("Error al obtener los tickets: " . $e->getMessage());
+    $tickets = [];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,87 +32,123 @@
 
     <link rel="icon" type="image/x-icon" href="/src/images/logo/favicon.png">
 
-    <!--  -->
+    <!-- Meta Tags -->
     <meta name="description" content="Tienda de calzado JJ. Venta de zapatos para hombre, mujer y unisex en Reynosa, Tamaulipas. Descubre nuestras colecciones.">
     <meta name="keywords" content="zapatos, calzado, venta de calzado, tienda de zapatos, Reynosa, hombre, mujer, unisex">
-    
+
     <!-- Bootstrap 5.3 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="/src/include/bootstrap5_3/bootstrap.min.css">
-
 
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- Google Fonts para el logo -->
-<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/src/css/style.css">
     <link rel="stylesheet" href="/src/css/footer.css">
-
 </head>
 <body>
 
     <!-- Header -->
-    <?php
-// Incluir el header
-include __DIR__ . '/../src/include/header.php';
-?>
+    <?php include __DIR__ . '/../src/include/header.php'; ?>
 
-    <!-- Main content -->
-<main style="min-height: 53.6vh;">
-    <main class="container my-5">
-        <!-- Primera Sección: ¿Quiénes Somos? -->
-        <section class="row mb-5">
-            <div class="col-md-6">
-                
-                    <img src="/src/images/conocenos/nos1.png" alt="Calzado" class="img-fluid">
-                
-            </div>
-            <div class="col-md-6 d-flex flex-column justify-content-center">
-                <h2 class="mb-4">Nuestra historia</h2>
-                <p>En Calzado JJ, nuestra historia comenzó con una visión clara y un compromiso con la calidad y el servicio. Todo empezó hace 5 años, el 19 de julio de 2019, cuando inauguramos nuestro primer puesto en el Tianguis Los Muros. </p>
-                <br>
-                <h2 class="mb-4">Humildes comienzos</h2>
-                <p>Con pocos modelos de calzado, pero con una gran pasión por el diseño y la  calidad , nos lanzamos al mercado con la misión de ofrecer calzado de alta calidad a precios accesibles. Nuestros clientes nos respaldaron desde el principio, y pronto nos dimos cuenta de que estábamos en el camino correcto.</p>
-                <br>
-                <h2 class="mb-4">Crecimiento exponencial</h2>
-                <p>para diciembre de 2020, nuestra popularidad creció tanto que nos vimos obligados a expandirnos a 2 puestos. Este crecimiento nos permitió aumentar nuestra oferta de productos y mejorar nuestra atención al cliente.
-                </p>
-            
-            </div>
-        </section>
+    <!-- Main Content -->
+    <main class="container mt-5">
+        <h2 class="mb-4">Gestión de Tickets</h2>
+        
+        <!-- Tabla de Tickets -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID Ticket</th>
+                    <th>Usuario</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody id="ticketsTableBody">
+                <?php foreach ($tickets as $ticket): ?>
+                    <tr data-id="<?= $ticket['id_order'] ?>">
+                        <td><?= $ticket['id_order'] ?></td>
+                        <td><?= htmlspecialchars($ticket['user_id']) ?></td>
+                        <td>$<?= number_format($ticket['total_price'], 2) ?></td>
+                        <td><?= $ticket['created_at'] ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 
-        <!-- Segunda Sección: Texto e Imagen -->
-        <section class="row">
-            <div class="col-md-6 order-md-2">
-                
-                    <img src="/src/images/conocenos/nos2.png" alt="Calzado" class="img-fluid">
-                
-            </div>
-            <div class="col-md-6 d-flex flex-column justify-content-center order-md-1">
-                <h2 class="mb-4">Nueva etapa</h2>
-                <p>En 2023, nos mudamos a un puesto más grande dentro del Tianguis Los Muros, lo que nos permitió mostrar nuestra amplia variedad de calzado de manera aún más impresionante.</p>
-                <br>
-                <h2 class="mb-4">Expansión y consolidación</h2>
-                <p>En 2021, abrimos nuestra segunda ubicación en Calle Querétaro 25, Colonia Los Muros, consolidando nuestra presencia en el mercado y reafirmando nuestro compromiso con la comunidad.</p>
-                <br>
-                <h2 class="mb-4">Hoy</h2>
-                <p>Hoy en día, Calzado JJ es sinónimo de calidad, estilo. Nuestra historia es una prueba de que la dedicación, la innovación y la atención al cliente pueden llevar a un crecimiento sostenible y exitoso. ¡Gracias por ser parte de nuestra historia!</p>
-            </div>
-        </section>
+        <h3 class="mt-5">Detalles del Ticket</h3>
+        <!-- Tabla de Detalles del Ticket -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID Item</th>
+                    <th>Variación</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Tamaño</th>
+                    <th>Color</th>
+                </tr>
+            </thead>
+            <tbody id="orderItemsTableBody">
+                <tr>
+                    <td colspan="6" class="text-center">Seleccione un ticket para ver los detalles.</td>
+                </tr>
+            </tbody>
+        </table>
     </main>
 
     <!-- Footer -->
-</main>
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
-    <!-- Bootstrap JS -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Cargar los detalles de un ticket al hacer clic en la fila
+            $('#ticketsTableBody').on('click', 'tr', function () {
+                const orderId = $(this).data('id');
+
+                // Obtener los detalles del ticket
+                $.ajax({
+                    url: 'get_order_items.php',
+                    type: 'GET',
+                    data: { id_order: orderId },
+                    dataType: 'json',
+                    success: function (data) {
+                        const tableBody = $('#orderItemsTableBody');
+                        tableBody.empty(); // Limpiar la tabla
+
+                        if (data.success) {
+                            data.items.forEach(item => {
+                                const row = `
+                                    <tr>
+                                        <td>${item.id_item}</td>
+                                        <td>${item.id_variation}</td>
+                                        <td>$${item.price}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${item.sizeMX}</td>
+                                        <td>${item.color}</td>
+                                    </tr>
+                                `;
+                                tableBody.append(row);
+                            });
+                        } else {
+                            tableBody.append('<tr><td colspan="6" class="text-center">No se encontraron detalles para este ticket.</td></tr>');
+                        }
+                    },
+                    error: function () {
+                        alert('Error al obtener los detalles del ticket.');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
-
-<!-- version 0.0.5 -->
