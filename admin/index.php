@@ -38,7 +38,7 @@ try {
 <body>
 
     <!-- Header -->
-    <?php include __DIR__ . '/src/include/header.php'; ?>
+    <?php include __DIR__ . '/../src/header.php'; ?>
 
     <!-- Main Content -->
     <main class="container mt-5">
