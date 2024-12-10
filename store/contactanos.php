@@ -20,6 +20,35 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/src/css/style.css">
     <link rel="stylesheet" href="/src/css/footer.css">
+
+    <!-- Estilos personalizados para el modal de éxito -->
+    <style>
+        #successModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1050;
+        }
+        #successModal h5 {
+            margin: 0;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+        }
+    </style>
 </head>
 <body>
 
@@ -100,6 +129,12 @@
     </div>
 </div>
 
+<!-- Modal de éxito -->
+<div id="overlay"></div>
+<div id="successModal">
+    <h5>Mensaje enviado con éxito</h5>
+</div>
+
     <!-- Footer -->
     <?php include __DIR__ . '/../src/include/footer.php'; ?>
 
@@ -128,12 +163,21 @@
         })
         .then(response => response.text())
         .then(data => {
-            alert(data);
-
+            // Ocultar el modal de confirmación
             const modal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
             modal.hide();
 
-            document.getElementById('contactForm').reset();
+            // Mostrar modal de éxito
+            document.getElementById('overlay').style.display = 'block';
+            const successModal = document.getElementById('successModal');
+            successModal.style.display = 'block';
+
+            // Cerrar automáticamente el modal después de 3 segundos
+            setTimeout(() => {
+                successModal.style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('contactForm').reset();
+            }, 3000);
         })
         .catch(error => {
             console.error('Error:', error);
