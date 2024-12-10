@@ -14,8 +14,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    margin-bottom: 1rem; /* Añadir margen entre filas */
-    height: 100%; /* Ajustar altura para ocupar el espacio asignado */
+    margin-bottom: 1.5rem; /* Separar más las cajas */
 }
 
 /* Imagen de categoría */
@@ -51,7 +50,7 @@
 .category-title {
     color: var(--text-color-light);
     font-family: var(--font-secondary);
-    font-size: 1.2rem; /* Reducción del tamaño del texto */
+    font-size: 1.2rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin: 0;
@@ -71,27 +70,32 @@
         margin-right: 0;
     }
     .category-box {
-        margin-bottom: 0.5rem; /* Reducir espacio entre filas */
+        margin-bottom: 1.25rem; /* Separar más las cajas */
     }
     .category-title {
-        font-size: 1rem; /* Reducir tamaño del texto */
+        font-size: 1rem;
     }
 }
 
 /* Pantallas menores a 576px (móviles) */
 @media (max-width: 576px) {
     .category-box {
-        margin-bottom: 0.75rem; /* Ajustar márgenes */
+        margin-bottom: 1rem; /* Ajustar márgenes */
     }
     .category-title {
-        font-size: 0.9rem; /* Reducir aún más el tamaño del texto */
+        font-size: 0.9rem;
+    }
+
+    /* Asegurar que las imágenes no se recorten */
+    .category-box img {
+        height: auto; /* Asegurarse de que la altura sea dinámica */
     }
 }
 
 /* Pantallas muy pequeñas (menores a 400px) */
 @media (max-width: 400px) {
     .category-title {
-        font-size: 0.8rem; /* Asegurar la legibilidad en pantallas extremadamente pequeñas */
+        font-size: 0.8rem;
     }
     .category-box img {
         border-radius: 5px; /* Reducir el radio del borde para adaptarse mejor al tamaño reducido */
