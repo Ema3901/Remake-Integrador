@@ -52,6 +52,7 @@ try {
                     <th>Usuario</th>
                     <th>Total</th>
                     <th>Fecha</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="ticketsTableBody">
@@ -61,6 +62,11 @@ try {
                         <td><?= htmlspecialchars($ticket['user_id']) ?></td>
                         <td>$<?= number_format($ticket['total_price'], 2) ?></td>
                         <td><?= $ticket['created_at'] ?></td>
+                        <td>
+                            <button class="btn btn-danger btn-sm delete-ticket-btn" data-id="<?= $ticket['id_order'] ?>">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </button>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -132,6 +138,31 @@ try {
                         alert('Error al obtener los detalles del ticket.');
                     }
                 });
+            });
+
+            // Manejar la eliminación de un ticket
+            $('#ticketsTableBody').on('click', '.delete-ticket-btn', function (e) {
+                e.stopPropagation(); // Evitar que se dispare el evento de clic en la fila
+                const orderId = $(this).data('id');
+
+                if (confirm('¿Estás seguro de que deseas eliminar este ticket?')) {
+                    $.ajax({
+                        url: 'delete_ticket.php',
+                        type: 'POST',
+                        data: { id_order: orderId },
+                        success: function (response) {
+                            if (response.success) {
+                                alert('Ticket eliminado correctamente.');
+                                $(`tr[data-id="${orderId}"]`).remove();
+                            } else {
+                                alert('Error al eliminar el ticket.');
+                            }
+                        },
+                        error: function () {
+                            alert('Error al procesar la solicitud.');
+                        }
+                    });
+                }
             });
         });
     </script>
