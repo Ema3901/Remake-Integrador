@@ -10,21 +10,34 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Obtener el ID del producto desde la solicitud POST
-if (isset($_POST['id'])) {
-    $productId = $_POST['id'];
+// Verificar si se proporciona un ID de producto
+if (isset($_POST['id']) && is_numeric($_POST['id'])) {
+    $productId = (int)$_POST['id'];
 
-    // Preparar y ejecutar la consulta de eliminación
-    $sql = "DELETE FROM shoes WHERE id_shoe = :id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':id', $productId, PDO::PARAM_INT);
+    try {
+        // Iniciar una transacción para manejar dependencias
+        $pdo->beginTransaction();
 
-    if ($stmt->execute()) {
+        // Eliminar variaciones asociadas al producto
+        $deleteVariations = "DELETE FROM shoes_variations WHERE id_shoe = :id";
+        $stmtVariations = $pdo->prepare($deleteVariations);
+        $stmtVariations->bindParam(':id', $productId, PDO::PARAM_INT);
+        $stmtVariations->execute();
+
+        // Eliminar el producto principal
+        $deleteProduct = "DELETE FROM shoes WHERE id_shoe = :id";
+        $stmtProduct = $pdo->prepare($deleteProduct);
+        $stmtProduct->bindParam(':id', $productId, PDO::PARAM_INT);
+        $stmtProduct->execute();
+
+        $pdo->commit();
+
         echo json_encode(['success' => true, 'message' => 'Producto eliminado correctamente']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Error al eliminar el producto']);
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        echo json_encode(['success' => false, 'message' => 'Error al eliminar el producto: ' . $e->getMessage()]);
     }
 } else {
-    echo json_encode(['success' => false, 'message' => 'ID de producto no proporcionado']);
+    echo json_encode(['success' => false, 'message' => 'ID de producto no proporcionado o inválido']);
 }
 ?>
