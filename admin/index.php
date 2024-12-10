@@ -86,8 +86,6 @@ try {
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>ID Item</th>
-                    <th>Variación</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
                     <th>Tamaño</th>
