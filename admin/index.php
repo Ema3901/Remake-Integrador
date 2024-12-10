@@ -28,27 +28,12 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda de Zapatos | Calzado JJ</title>
+    <title>Inicio | Calzado JJ</title>
 
-    <link rel="icon" type="image/x-icon" href="/src/images/logo/favicon.png">
-
-    <!-- Meta Tags -->
-    <meta name="description" content="Tienda de calzado JJ. Venta de zapatos para hombre, mujer y unisex en Reynosa, Tamaulipas. Descubre nuestras colecciones.">
-    <meta name="keywords" content="zapatos, calzado, venta de calzado, tienda de zapatos, Reynosa, hombre, mujer, unisex">
-
-    <!-- Bootstrap 5.3 CDN -->
+    <link rel="icon" type="image/x-icon" href="https://calzadojj.net/src/images/logo/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/src/include/bootstrap5_3/bootstrap.min.css">
-
-    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- Google Fonts para el logo -->
-    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/src/css/style.css">
-    <link rel="stylesheet" href="/src/css/footer.css">
+    <link rel="stylesheet" href="https://calzadojj.net/src/css/style.css">
 </head>
 <body>
 
@@ -86,6 +71,8 @@ try {
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>ID Item</th>
+                    <th>Variación</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
                     <th>Tamaño</th>
