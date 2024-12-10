@@ -18,6 +18,17 @@ if (!$variation_id) {
     exit();
 }
 
+// Verificar que la variación existe
+$sql = "SELECT * FROM shoes_variations WHERE id_varition = :variation_id";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([':variation_id' => $variation_id]);
+$variation = $stmt->fetch();
+
+if (!$variation) {
+    echo json_encode(['success' => false, 'message' => 'La variación no existe']);
+    exit();
+}
+
 // Eliminar la variación de la base de datos
 $sql = "DELETE FROM shoes_variations WHERE id_varition = :variation_id";
 $stmt = $pdo->prepare($sql);
